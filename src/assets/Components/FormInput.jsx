@@ -26,8 +26,9 @@ const FormInput = ({
     {type === "select" ? (
       <select
         id={id}
-        className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg"  onChange={onChange}
-      >
+        className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg"  onChange={onChange} required={required}
+      > 
+        <option value="">Please select...</option>
         {options.map((option, index) => (
           <option key={index} value={option}>
             {option}

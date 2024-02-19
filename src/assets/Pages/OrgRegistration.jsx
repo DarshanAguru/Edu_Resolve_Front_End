@@ -6,7 +6,7 @@ const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },
   {
     label: "Email",
-    id: "email",
+    id: "emailId",
     placeholder: "Enter email",
     required: true,
     type: "email",
@@ -81,7 +81,6 @@ const OrgRegistration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     try {
       const response = await axios.post(
         "http://localhost:9000/localadmins/register",
