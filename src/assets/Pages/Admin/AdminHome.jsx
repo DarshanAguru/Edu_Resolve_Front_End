@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 import Table from "../../Components/Table";
 import axios from "axios";
-const localadmins = [
-  {
-    id: 1,
-    name: "Raghava",
-    email: "sairaghava032@gmail.com",
-    institution: "Nalanda",
-
-    status: "Accepted",
-  },
-];
 const mentors = [
   {
     id: 2,
@@ -23,13 +13,16 @@ const mentors = [
 ];
 const AdminHome = () => {
   const [localAdmins, setLocalAdmins] = React.useState([]);
+  const [mentors, setMentors] = React.useState([]);
   const [table, setTable] = useState(true);
+  const { _id, token } = JSON.parse(localStorage.getItem("admin"));
   React.useEffect(() => {
-    async function fetchData() {
+    async function fetchLocalAdminsData() {
       try {
-        axios.defaults.withCredentials = true;
+        // axios.defaults.withCredentials = true;
         const res = await axios.post(
-          "http://localhost:9000/globaladmins/getAllLocalAdmins"
+          "http://localhost:9000/globaladmins/getAllLocalAdmins",
+          { token: token, id: _id }
         );
         console.log(res.data);
         setLocalAdmins(res.data);
@@ -38,9 +31,24 @@ const AdminHome = () => {
         console.log("My eroor", error);
       }
     }
-    fetchData();
+    fetchLocalAdminsData();
   }, []);
-
+  React.useEffect(() => {
+    async function fetchMentorsData() {
+      try {
+        // axios.defaults.withCredentials = true;
+        const res = await axios.post(
+          "http://localhost:9000/globaladmins/getAllMentors",
+          { token: token, id: _id }
+        );
+        console.log(res.data);
+        setMentors(res.data);
+      } catch (error) {
+        console.log("My eroor", error);
+      }
+    }
+    fetchMentorsData();
+  }, []);
   function toggle() {
     setTable((prev) => !prev);
   }

@@ -15,7 +15,7 @@ const Table = ({ users, type }) => {
       });
     } else {
       return users.map((user) => {
-        user.status === "verified" && user;
+        user.status === "pending" && user;
       });
     }
   };
@@ -54,7 +54,7 @@ const Table = ({ users, type }) => {
         <tbody>
           {users.map((user, index) => (
             <tr
-              key={user.id}
+              key={index}
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
               <th className="px-6 py-4">{index + 1}.</th>
@@ -77,7 +77,7 @@ const Table = ({ users, type }) => {
               </td>
               <td className="px-6 py-4">
                 <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
+                  <div className={`h-2.5 w-2.5 rounded-full ${(user.verificationStatus === 'verified')?'bg-green-500':(user.verificationStatus === 'pending')?'bg-amber-300':'bg-red-500'} me-2`}></div>{" "}
                   {user.verificationStatus}
                 </div>
               </td>
