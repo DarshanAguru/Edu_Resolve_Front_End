@@ -1,31 +1,51 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
-
-const Table = ({ users, type }) => {
-  // console.log(users);
-  const [view, setView] = useState("all");
+import FormInput from "./FormInput";
+const Table = ({ users, type, refreshData }) => {
+  const [status, setStatus] = useState(users);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
-  const selectUsers = (users) => {
-    if (view === "all") {
-      return users;
-    } else if (view === "verified") {
-      return users.map((user) => {
-        user.status === "verified" && user;
-      });
-    } else {
-      return users.map((user) => {
-        user.status === "pending" && user;
-      });
-    }
-  };
-  // console.log(selectUsers)
   const handleViewUser = (user) => {
     setSelectedUser(user);
     setIsModalOpen(true);
   };
+  React.useEffect(() => {
+    setStatus(users);
+  }, [users]);
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    if (value === "rejected") {
+      const rej_users = users.filter(
+        (user) => user.verificationStatus === "rejected"
+      );
+      setStatus(rej_users);
+    } else if (value === "verified") {
+      const ver_users = users.filter(
+        (user) => user.verificationStatus === "verified"
+      );
+      setStatus(ver_users);
+    } else if (value === "pending") {
+      const pen_users = users.filter(
+        (user) => user.verificationStatus === "pending"
+      );
+      setStatus(pen_users);
+    } else {
+      setStatus(users);
+    }
+  };
   return (
-    <div className="relative overflow-x-auto m-10 shadow-md sm:rounded-lg">
+    <div className=" overflow-x-auto m-10 shadow-md sm:rounded-lg">
+      <FormInput
+        label="Gender"
+        id="gender"
+        type="select"
+        options={["verified", "pending", "rejected"]}
+        required={true}
+        is="dashboard"
+        placeholder="all"
+        onChange={handleChange}
+      />
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         {/* Table Headings */}
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -52,7 +72,7 @@ const Table = ({ users, type }) => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => (
+          {status.map((user, index) => (
             <tr
               key={index}
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -71,13 +91,16 @@ const Table = ({ users, type }) => {
               </th>
               <td className="px-6 py-4">
                 {type === "org" && user.institution}
-                {(type === "mentors" || type === "teachers") &&
-                  user.subjectExpertise.join(", ")}
+                {type === "mentors" || type === "teachers" ? 
+  user.subjectExpertise && Array.isArray(user.subjectExpertise) ? user.subjectExpertise.join(", ") : "No expertise provided"
+: null}
                 {type === "students" && user.grade}
               </td>
               <td className="px-6 py-4">
                 <div className="flex items-center">
-                  <div className={`h-2.5 w-2.5 rounded-full ${(user.verificationStatus === 'verified')?'bg-green-500':(user.verificationStatus === 'pending')?'bg-amber-300':'bg-red-500'} me-2`}></div>{" "}
+                  <div
+                    className={`h-2.5 w-2.5 rounded-full ${user.verificationStatus === "verified" ? "bg-green-500" : user.verificationStatus === "pending" ? "bg-amber-300" : "bg-red-500"} me-2`}
+                  ></div>{" "}
                   {user.verificationStatus}
                 </div>
               </td>
@@ -98,6 +121,7 @@ const Table = ({ users, type }) => {
         onClose={() => setIsModalOpen(false)}
         user={selectedUser}
         type={type}
+        refreshUsers={refreshData}
       />
     </div>
   );

@@ -4,17 +4,22 @@ const FormInput = ({
   id,
   type = "text",
   options,
-  placeholder,
   comment,
   onChange,
   required,
   pattern,
-  title
+  title,
+  is = "",
+  placeholder = "",
 }) => (
   <div className="mt-10 xl:mt-3">
     <label
       htmlFor={id}
-      className="text-2xl xl:text-xl xl:flex xl:gap-4  xl:items-center font-Montserrat cursor-pointer"
+      className={
+        is === "dashboard"
+          ? `hidden`
+          : `text-2xl xl:text-xl xl:flex xl:gap-4  xl:items-center font-Montserrat cursor-pointer`
+      }
     >
       {label}
       {comment ? (
@@ -26,9 +31,15 @@ const FormInput = ({
     {type === "select" ? (
       <select
         id={id}
-        className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg"  onChange={onChange} required={required}
-      > 
-        <option value="">Please select...</option>
+        className={
+          is === "dashboard"
+            ? `form-select absolute top-48 right-auto left-auto font-Montserrat border-[#D3C9C9] bg-white shadow-lg py-2 px-2  xl:top-32 xl:right-20 `
+            : `form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg`
+        }
+        onChange={onChange}
+        required={required}
+      >
+        <option value="">{placeholder || "Please select..."}</option>
         {options.map((option, index) => (
           <option key={index} value={option}>
             {option}

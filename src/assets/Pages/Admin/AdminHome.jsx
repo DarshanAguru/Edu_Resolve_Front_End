@@ -1,52 +1,38 @@
 import React, { useState } from "react";
 import Table from "../../Components/Table";
 import axios from "axios";
-const mentors = [
-  {
-    id: 2,
-    name: "Raghava",
-    email: "sairaghava032@gmail.com",
-    subjectExpertise: ["Maths", "Science", "Social"],
-    status: "Accepted",
-  },
-  // Add more users as needed
-];
 const AdminHome = () => {
   const [localAdmins, setLocalAdmins] = React.useState([]);
   const [mentors, setMentors] = React.useState([]);
   const [table, setTable] = useState(true);
   const { _id, token } = JSON.parse(localStorage.getItem("admin"));
-  React.useEffect(() => {
-    async function fetchLocalAdminsData() {
-      try {
-        // axios.defaults.withCredentials = true;
-        const res = await axios.post(
-          "http://localhost:9000/globaladmins/getAllLocalAdmins",
-          { token: token, id: _id }
-        );
-        console.log(res.data);
-        setLocalAdmins(res.data);
-        // console.log(localAdmins);
-      } catch (error) {
-        console.log("My eroor", error);
-      }
+  const fetchLocalAdminsData = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:9000/globaladmins/getAllLocalAdmins",
+        { token: token, id: _id }
+      );
+      setLocalAdmins(res.data);
+    } catch (error) {
+      console.log("My error", error);
     }
+  };
+  const fetchMentorsData = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:9000/globaladmins/getAllMentors",
+        { token: token, id: _id }
+      );
+      setMentors(res.data);
+    } catch (error) {
+      console.log("My error", error);
+    }
+  };
+
+  React.useEffect(() => {
     fetchLocalAdminsData();
   }, []);
   React.useEffect(() => {
-    async function fetchMentorsData() {
-      try {
-        // axios.defaults.withCredentials = true;
-        const res = await axios.post(
-          "http://localhost:9000/globaladmins/getAllMentors",
-          { token: token, id: _id }
-        );
-        console.log(res.data);
-        setMentors(res.data);
-      } catch (error) {
-        console.log("My eroor", error);
-      }
-    }
     fetchMentorsData();
   }, []);
   function toggle() {
@@ -74,10 +60,22 @@ const AdminHome = () => {
           </button>
         </li>
       </ul>
-      {console.log(table)}
+      {/* {console.log(table)} */}
       {table
-        ? localAdmins && <Table users={mentors} type="mentors" />
-        : localAdmins && <Table users={localAdmins} type="org" />}
+        ? localAdmins && (
+            <Table
+              users={mentors}
+              type="mentors"
+              refreshData={fetchMentorsData}
+            />
+          )
+        : localAdmins && (
+            <Table
+              users={localAdmins}
+              type="org"
+              refreshData={fetchLocalAdminsData}
+            />
+          )}
     </>
   );
 };

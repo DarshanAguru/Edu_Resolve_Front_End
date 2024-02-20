@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-const Modal = ({ isOpen, onClose, user, type }) => {
+import axios from "axios";
+const Modal = ({ isOpen, onClose, user, type, refreshUsers }) => {
   if (!isOpen) return null;
-  const [data, setData] = useState("");
+  const [data, setData] = useState(null);
   useEffect(() => {
     setData(JSON.parse(localStorage.getItem("admin")));
-  }, [setData]);
+  }, []);
   async function acceptData() {
     try {
       const userType =
@@ -14,7 +15,8 @@ const Modal = ({ isOpen, onClose, user, type }) => {
             ? "verifyMentor"
             : "verfiyTeacher";
       const status = await axios.post(
-        "http://localhost:9000/globaladmins/${userType}/${user._id}, {token: data.token, id:data._id}"
+        `http://localhost:9000/globaladmins/${userType}/${user._id}`,
+        { token: data.token, id: data._id }
       );
       // console.log(status);
       if (status.data.message === "Verified") {
@@ -22,6 +24,7 @@ const Modal = ({ isOpen, onClose, user, type }) => {
       } else {
         console.log(status.data.message);
       }
+      refreshUsers();
     } catch (err) {
       console.log(err);
     }
@@ -36,14 +39,15 @@ const Modal = ({ isOpen, onClose, user, type }) => {
             ? "rejectMentor"
             : "rejectTeacher";
       const status = await axios.post(
-        "http://localhost:9000/globaladmins/${userType}/${user._id}, {token: data.token, id:data._id}"
+        `http://localhost:9000/globaladmins/${userType}/${user._id}`,
+        { token: data.token, id: data._id }
       );
-      // console.log(status);
       if (status.data.message === "Rejected") {
         console.log("Rejected");
       } else {
         console.log(status.data.message);
       }
+      refreshUsers();
     } catch (err) {
       console.log(err);
     }
@@ -79,20 +83,26 @@ const Modal = ({ isOpen, onClose, user, type }) => {
             </p>
           </div>
           <div className="items-center px-4 py-3">
-            <button
-              id="ok-btn"
-              className="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300"
-              onClick={() => acceptData()}
-            >
-              Accept
-            </button>
-            <button
-              id="cancel-btn"
-              className="mt-3 px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300"
-              onClick={() => deleteData()}
-            >
-              Reject
-            </button>
+            {(user.verificationStatus === "pending" ||
+              user.verificationStatus === "rejected") && (
+              <button
+                id="ok-btn"
+                className="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+                onClick={() => acceptData()}
+              >
+                Accept
+              </button>
+            )}
+            {(user.verificationStatus === "pending" ||
+              user.verificationStatus === "verified") && (
+              <button
+                id="cancel-btn"
+                className="mt-3 px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300"
+                onClick={() => deleteData()}
+              >
+                Reject
+              </button>
+            )}
           </div>
         </div>
       </div>
