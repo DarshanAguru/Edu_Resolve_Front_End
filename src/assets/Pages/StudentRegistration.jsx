@@ -23,7 +23,6 @@ const formFields = [
   {
     label: "School",
     id: "school",
-    placeholder: "Enter School",
     required: true,
   },
   {
@@ -53,8 +52,9 @@ const formFields = [
 ];
 
 const StudentRegistration = () => {
+  const [institutions, setInstitutions] = useState([]);
   const [formData, setFormData] = useState({
-    phonenumber: "",
+    phoneNumber: "",
     name: "",
     emailId: "",
     grade: "",
@@ -63,6 +63,16 @@ const StudentRegistration = () => {
     school: "",
     password: "",
   });
+  React.useEffect(() => {
+    async function fetchSchools() {
+      const res = await axios.get(
+        "http://localhost:9000/students/getAllSchools"
+      );
+      setInstitutions(res.data);
+    }
+    fetchSchools();
+  }, []);
+
   const navigate = useNavigate();
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -94,9 +104,34 @@ const StudentRegistration = () => {
         onSubmit={handleSubmit}
         className="mx-10 my-2 xl:grid xl:grid-cols-2 gap-4"
       >
-        {formFields.map((field) => (
-          <FormInput key={field.id} {...field} onChange={handleChange} />
-        ))}
+        {formFields.map((field, index) =>
+          field.id === "school" ? (
+            <div key={index} className="mt-10 xl:mt-3">
+              <label
+                htmlFor={field.id}
+                className="text-2xl xl:text-xl xl:flex xl:gap-4 xl:items-center font-Montserrat cursor-pointer"
+              >
+                {field.label}
+              </label>
+              <select
+                id={field.id}
+                className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg"
+                onChange={handleChange}
+                value={formData[field.id]}
+                required={field.required}
+              >
+                <option value="">Please select...</option>
+                {institutions.map((ele, index) => (
+                  <option key={index} value={ele.institution}>
+                    {ele.institution}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <FormInput key={field.id} {...field} onChange={handleChange} />
+          )
+        )}
         <Button
           type="submit"
           style="border-none text-white font-Montserrat text-3xl xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 mt-2 shadow-lg w-full py-4 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"

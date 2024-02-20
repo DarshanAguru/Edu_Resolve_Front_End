@@ -16,10 +16,13 @@ import StudentLayout from "./assets/Layout/StudentLayout";
 import MentorLayout from "./assets/Layout/MentorLayout";
 import OrganisationLayout from "./assets/Layout/OrganisationLayout";
 import TeacherLayout from "./assets/Layout/TeacherLayout";
-import StudentHome from "./assets/Pages/Student/StudentHome";
-import OrganisationHome from "./assets/Pages/Organisation/OrganisationHome";
 import AdminLayout from "./assets/Layout/AdminLayout";
+import StudentHome from "./assets/Pages/Student/StudentHome";
+import MentorHome from "./assets/Pages/Mentor/MentorHome";
+import TeacherHome from "./assets/Pages/Teacher/TeacherHome";
+import OrganisationHome from "./assets/Pages/Organisation/OrganisationHome";
 import AdminHome from "./assets/Pages/Admin/AdminHome";
+
 const App = () => {
   return (
     <Routes>
@@ -38,8 +41,12 @@ const App = () => {
       <Route path="student" element={<StudentLayout />}>
         <Route index element={<StudentHome />} />
       </Route>
-      <Route path="mentor" element={<MentorLayout />}></Route>
-      <Route path="teacher" element={<TeacherLayout />}></Route>
+      <Route path="mentor" element={<MentorLayout />}>
+        <Route index element={<MentorHome />} />
+      </Route>
+      <Route path="teacher" element={<TeacherLayout />}>
+        <Route index element={<TeacherHome />}/>
+      </Route>
       <Route path="organisation" element={<OrganisationLayout />}>
         <Route index element={<OrganisationHome />} />
       </Route>

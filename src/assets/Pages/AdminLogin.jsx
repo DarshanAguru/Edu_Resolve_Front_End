@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Login from "../Components/Login";
 import axios from "axios";
+import "../../../src/index.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

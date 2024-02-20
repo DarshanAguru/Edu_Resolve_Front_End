@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "../Components/Button";
+import { useNavigate } from "react-router-dom";
 import FormInput from "../Components/FormInput";
 import FormCheckboxGroup from "../Components/FormCheckBoxGroup";
 import axios from "axios";
@@ -48,7 +48,6 @@ const formFields = [
   {
     label: "Institution",
     id: "institution",
-    placeholder: "Enter institution",
     required: true,
   },
   {
@@ -70,6 +69,17 @@ const formFields = [
   },
 ];
 const TeacherRegistration = () => {
+  const navigate = useNavigate();
+  const [institutions, setInstitutions] = useState([]);
+  React.useEffect(() => {
+    async function fetchSchools() {
+      const res = await axios.get(
+        "http://localhost:9000/teachers/getAllSchools"
+      );
+      setInstitutions(res.data);
+    }
+    fetchSchools();
+  }, []);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -77,7 +87,7 @@ const TeacherRegistration = () => {
     gender: "",
     qualification: "",
     subjectExpertise: [],
-    resumeLink: "",
+    institution: "",
     phoneNumber: "",
     password: "",
   });
@@ -120,6 +130,7 @@ const TeacherRegistration = () => {
         formData
       );
       console.log("Form Data submitted successfully", res.data);
+      navigate("/teacherLogin");
     } catch (error) {
       console.log("Error submitting registration form", error);
     }
@@ -135,7 +146,32 @@ const TeacherRegistration = () => {
         className="mx-10 my-2 xl:grid xl:grid-cols-2  gap-4"
       >
         {formFields.map((field, index) =>
-          field.type === "checkbox" ? (
+          field.id === "institution" ? (
+            <div key={index} className="mt-10 xl:mt-3">
+              <label
+                htmlFor={field.id}
+                className="text-2xl xl:text-xl xl:flex xl:gap-4 xl:items-center font-Montserrat cursor-pointer"
+              >
+                {field.label}
+              </label>
+              <select
+                id={field.id}
+                className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg"
+                onChange={handleChange}
+                value={formData[field.id]}
+                required={field.required}
+              >
+                <option value="">
+                   Please select...
+                </option>
+                {institutions.map((ele, index) => (
+                  <option key={index} value={ele.institution}>
+                    {ele.institution}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : field.type === "checkbox" ? (
             <FormCheckboxGroup
               key={index}
               {...field}
