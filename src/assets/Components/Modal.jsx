@@ -3,9 +3,16 @@ import axios from "axios";
 const Modal = ({ isOpen, onClose, user, type, refreshUsers }) => {
   if (!isOpen) return null;
   const [data, setData] = useState(null);
-  useEffect(() => {
-    setData(JSON.parse(localStorage.getItem("admin")));
-  }, []);
+  if (type == "teachers") {
+    useEffect(() => {
+      setData(JSON.parse(localStorage.getItem("localAdmin")));
+    }, []);
+  } else {
+    useEffect(() => {
+      setData(JSON.parse(localStorage.getItem("admin")));
+    }, []);
+  }
+
   async function acceptData() {
     try {
       const userType =
@@ -13,17 +20,15 @@ const Modal = ({ isOpen, onClose, user, type, refreshUsers }) => {
           ? "verifyLocalAdmin"
           : type === "mentors"
             ? "verifyMentor"
-            : "verfiyTeacher";
+            : "verifyTeacher";
+
+      const admin =
+        userType === "verifyTeacher" ? "localadmins" : "globaladmins";
       const status = await axios.post(
-        `http://localhost:9000/globaladmins/${userType}/${user._id}`,
+        `http://localhost:9000/${admin}/${userType}/${user._id}`,
         { token: data.token, id: data._id }
       );
-      // console.log(status);
-      if (status.data.message === "Verified") {
-        console.log("verified");
-      } else {
-        console.log(status.data.message);
-      }
+
       refreshUsers();
     } catch (err) {
       console.log(err);
@@ -38,20 +43,16 @@ const Modal = ({ isOpen, onClose, user, type, refreshUsers }) => {
           : type === "mentors"
             ? "rejectMentor"
             : "rejectTeacher";
+      const admin =
+        userType === "rejectTeacher" ? "localadmins" : "globaladmins";
       const status = await axios.post(
-        `http://localhost:9000/globaladmins/${userType}/${user._id}`,
+        `http://localhost:9000/${admin}/${userType}/${user._id}`,
         { token: data.token, id: data._id }
       );
-      if (status.data.message === "Rejected") {
-        console.log("Rejected");
-      } else {
-        console.log(status.data.message);
-      }
       refreshUsers();
     } catch (err) {
       console.log(err);
     }
-    console.log("Rejected");
   }
   return (
     <div
@@ -67,13 +68,16 @@ const Modal = ({ isOpen, onClose, user, type, refreshUsers }) => {
           <div className="mt-2 px-7 py-3">
             <p className="text-sm text-gray-500">Email: {user.emailId}</p>
             <p className="text-sm text-gray-500">
-              {`Institution: ${type === "org" && user.institution}`}
-              {type === "students" && user.grade}
-              {(type === "mentors" || type === "teachers") &&
-                user.subjectExpertise.join(", ")}
+              {`Institution: ${(type === "org" || type === "teachers") && user.institution}`}
             </p>
             <p className="text-sm text-gray-500">
               VerificationStatus: {user.verificationStatus}
+            </p>
+            <p className="text-sm text-gray-500">
+              {`Subjects Expertised in ${
+                (type === "mentors" || type === "teachers") &&
+                user.subjectExpertise.join(", ")
+              }`}
             </p>
             <p className="text-sm text-gray-500">
               phoneNumber: {user.phoneNumber}

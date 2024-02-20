@@ -22,7 +22,7 @@ const StudentLogin = () => {
         formData
       );
       console.log("From server", response.data);
-      localStorage.setItem("user", response.data);
+      localStorage.setItem("student", JSON.stringify(response.data));
       navigate("/student");
     } catch (error) {
       notify("Invalid Username Or Password");

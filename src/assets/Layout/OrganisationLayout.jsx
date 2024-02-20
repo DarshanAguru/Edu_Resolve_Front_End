@@ -1,13 +1,13 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import OrgHeader from '../Components/OrgHeader'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import AdminNavbar from "../Components/AdminNavbar";
 const OrganisationLayout = () => {
   return (
     <>
-   <OrgHeader />
-   <Outlet />
-   </>
-  )
-}
+      <AdminNavbar user="localAdmin" />
+      <Outlet />
+    </>
+  );
+};
 
-export default OrganisationLayout
+export default OrganisationLayout;

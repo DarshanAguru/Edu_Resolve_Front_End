@@ -1,24 +1,43 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-const AdminNavbar = () => {
+const AdminNavbar = ({ user }) => {
   const navigate = useNavigate();
   async function logout() {
-    const data = JSON.parse(localStorage.getItem("admin"));
-    try {
-      const status = await axios.post(
-        `http://localhost:9000/globaladmins/logout/${data._id}`,
-        { token: data.token }
-      );
-      if (status.data.message === "Logged out Successfully!") {
-        localStorage.clear();
-        console.log("logged out successfully");
-        navigate("/adminLogin");
-      } else {
-        console.log(status.data.message);
+    if (user === "globalAdmin") {
+      const data = JSON.parse(localStorage.getItem("admin"));
+      try {
+        const status = await axios.post(
+          `http://localhost:9000/globaladmins/logout/${data._id}`,
+          { token: data.token }
+        );
+        if (status.data.message === "Logged out Successfully!") {
+          localStorage.clear();
+          console.log("logged out successfully");
+          navigate("/adminLogin");
+        } else {
+          console.log(status.data.message);
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
+    } else {
+      const data = JSON.parse(localStorage.getItem("localAdmin"));
+      try {
+        const status = await axios.post(
+          `http://localhost:9000/localadmins/logout/${data._id}`,
+          { token: data.token }
+        );
+        if (status.data.message === "Logged out Successfully!") {
+          localStorage.clear();
+          console.log("logged out successfully from organisation");
+          navigate("/organisationLogin");
+        } else {
+          console.log(status.data.message);
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
   return (

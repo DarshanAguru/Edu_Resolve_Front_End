@@ -22,7 +22,7 @@ const TeacherLogin = () => {
         formData
       );
       console.log("From server", response.data);
-      localStorage.setItem("user", response.data);
+      localStorage.setItem("teacher", JSON.stringify(response.data));
       navigate("/teacher");
     } catch (error) {
       notify("Invalid Username Or Password");

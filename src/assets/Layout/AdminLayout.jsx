@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 const AdminLayout = () => {
   return (
     <>
-      <AdminNavbar />
+      <AdminNavbar user="globalAdmin"/>
       <Outlet />
     </>
   );

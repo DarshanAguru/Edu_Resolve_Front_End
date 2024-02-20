@@ -7,14 +7,14 @@ const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },
   {
     label: "Email",
-    id: "email",
+    id: "emailId",
     placeholder: "Enter email",
     required: true,
     type: "email",
   },
   {
     label: "Age",
-    id: "Age",
+    id: "age",
     placeholder: "Enter Age",
     required: true,
     type: "number",
@@ -53,7 +53,7 @@ const formFields = [
   },
   {
     label: "Phone number",
-    id: "phone number",
+    id: "phoneNumber",
     placeholder: "Enter Phone number",
     required: true,
     pattern: "\\d{10}",
@@ -115,9 +115,11 @@ const TeacherRegistration = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:3301/", formData);
+      const res = await axios.post(
+        "http://localhost:9000/teachers/register",
+        formData
+      );
       console.log("Form Data submitted successfully", res.data);
-      // Optionally reset form or redirect user after successful submission
     } catch (error) {
       console.log("Error submitting registration form", error);
     }
@@ -145,9 +147,12 @@ const TeacherRegistration = () => {
           )
         )}
 
-        <Button style="border-none text-white font-Montserrat text-3xl xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 mt-2 shadow-lg w-full py-4 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2">
+        <button
+          className="border-none text-white font-Montserrat text-3xl xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 mt-2 shadow-lg w-full py-4 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
+          type="submit"
+        >
           Sign up
-        </Button>
+        </button>
       </form>
     </div>
   );

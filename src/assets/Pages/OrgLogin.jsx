@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const OrgLogin = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const notify = (message) => toast.error(message);
   const [formData, setFormData] = useState({
     phoneNumber: "",
@@ -14,7 +14,7 @@ const OrgLogin = () => {
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
@@ -22,7 +22,7 @@ const OrgLogin = () => {
         formData
       );
       console.log("From server", response.data);
-      localStorage.setItem("user", response.data);
+      localStorage.setItem("localAdmin", JSON.stringify(response.data));
       navigate("/organisation");
     } catch (error) {
       notify("Invalid Username Or Password");
@@ -44,12 +44,12 @@ const OrgLogin = () => {
         pauseOnHover
         theme="light"
       />
-    <Login
-      user="organisation"
-      data={formData}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-    />
+      <Login
+        user="organisation"
+        data={formData}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+      />
     </>
   );
 };

@@ -22,7 +22,7 @@ const MentorLogin = () => {
         formData
       );
       console.log("From server", response.data);
-      localStorage.setItem("user", response.data);
+      localStorage.setItem("mentor", JSON.stringify(response.data));
       navigate("/mentor");
     } catch (error) {
       notify("Invalid Username Or Password");

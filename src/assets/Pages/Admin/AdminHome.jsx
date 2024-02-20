@@ -31,10 +31,9 @@ const AdminHome = () => {
 
   React.useEffect(() => {
     fetchLocalAdminsData();
-  }, []);
-  React.useEffect(() => {
     fetchMentorsData();
   }, []);
+
   function toggle() {
     setTable((prev) => !prev);
   }
