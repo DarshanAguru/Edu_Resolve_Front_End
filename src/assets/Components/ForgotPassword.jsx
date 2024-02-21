@@ -6,7 +6,7 @@ import { IoMdArrowBack } from "react-icons/io";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const forgotPasswordFields = [
+const requestOtpFields = [
   {
     label: "Phone No.",
     id: "phoneNo",
@@ -23,6 +23,9 @@ const forgotPasswordFields = [
     type: "email",
     title: "Please enter a valid email-Id",
   },
+];
+
+const resetPasswordFields = [
   {
     label: "OTP",
     id: "otp",
@@ -51,7 +54,7 @@ const forgotPasswordFields = [
   },
 ];
 
-// eslint-disable-next-line react/prop-types
+
 const ForgotPassword = ({ goBack, user }) => {
   const [otpVis, setOtpVis] = useState(true);
   const [userId, setUserId] = useState("");
@@ -123,7 +126,6 @@ const ForgotPassword = ({ goBack, user }) => {
         query: "verifyOTP&Reset",
         userId: userId,
       });
-      // console.log(response.data);
       if (!response.data) {
         toast.error("Failed to reset password");
         return;
@@ -139,7 +141,7 @@ const ForgotPassword = ({ goBack, user }) => {
   };
 
   return (
-    <div className="py-5 xl:py-0 xl:mx-auto relative">
+    <div className="py-5 xl:py-10 xl:mx-auto relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -159,40 +161,46 @@ const ForgotPassword = ({ goBack, user }) => {
         className="absolute xl:top-0 xl:left-0 flex items-center gap-1 font-Montserrat text-amber-700 underline py-2 px-2 text-2xl xl:text-lg top-0"
         onClick={() => goBack()}
       >
-        <IoMdArrowBack /> Go back{" "}
+        <IoMdArrowBack /> Go back
         <span className="hidden xl:block">to login</span>
       </button>
-      <form
-        onSubmit={handleSubmit}
-        className="mx-10 lg:grid lg:grid-cols-2 lg:gap-4"
-      >
-        {forgotPasswordFields.map((field) => (
-          <FormInput
-            key={field.id}
-            {...field}
-            value={data[field.id]}
-            onChange={handleChange}
-          />
-        ))}
-        {otpVis && (
-          <button
-            className={
-              "border-none text-white font-Montserrat text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 py-2 mt-10 shadow-lg w-full hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
-            }
-            onClick={(e) => sendOTP(e)}
-            type="button"
+
+      {otpVis && (
+        <form onSubmit={sendOTP} className="mx-10 flex flex-col gap-5">
+          {requestOtpFields.map((field) => (
+            <FormInput
+              key={field.id}
+              {...field}
+              value={data[field.id]}
+              onChange={handleChange}
+            />
+          ))}
+          <Button
+            style="border-none text-white font-Montserrat text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10  shadow-lg w-full py-2 hover:bg-[#282323] hover:font-bold cursor-pointer"
+            type="submit"
           >
             Send OTP
-          </button>
-        )}
-
-        <Button
-          style="border-none text-white font-Montserrat text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10  shadow-lg w-full py-2 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
-          type="submit"
-        >
-          Reset Password
-        </Button>
-      </form>
+          </Button>
+        </form>
+      )}
+      {!otpVis && (
+        <form onSubmit={handleSubmit} className="mx-10">
+          {resetPasswordFields.map((field) => (
+            <FormInput
+              key={field.id}
+              {...field}
+              value={data[field.id]}
+              onChange={handleChange}
+            />
+          ))}
+          <Button
+            style="border-none text-white font-Montserrat text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10  shadow-lg w-full py-2 hover:bg-[#282323] hover:font-bold cursor-pointer"
+            type="submit"
+          >
+            Reset Password
+          </Button>
+        </form>
+      )}
     </div>
   );
 };

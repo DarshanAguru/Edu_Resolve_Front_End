@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa"; // Importing icons from react-icons
-
+import { FaBars, FaTimes } from "react-icons/fa"; 
+import axios from "axios";
 const StudentNavbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,13 +11,24 @@ const StudentNavbar = () => {
   };
 
   async function logout() {
-    // Implement logout logic here, similar to the AdminNavbar
-    localStorage.clear();
-    console.log("logged out successfully");
-    navigate("/login");
+    const data = JSON.parse(localStorage.getItem("student"));
+    try {
+      const status = await axios.post(
+        `http://localhost:9000/globaladmins/logout/${data._id}`,
+        { token: data.token }
+      );
+      if (status.data.message === "Logged out Successfully!") {
+        localStorage.clear();
+        console.log("logged out successfully");
+        navigate("/studentLogin");
+      } else {
+        console.log(status.data.message);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  // Adding simple animation style for the menu
   const menuAnimationStyle = {
     transition: "transform 300ms ease-in-out",
     transform: isMenuOpen ? "translateX(0)" : "translateX(-100%)",
@@ -36,7 +47,7 @@ const StudentNavbar = () => {
           )}
         </button>
       </div>
-      {/* Mobile Menu with animation */}
+      {/* Mobile Menu*/}
       <div
         className={`${isMenuOpen ? "block" : "hidden"}  absolute top-16 left-0 w-full bg-[#917A68] md:hidden`}
         style={menuAnimationStyle}
