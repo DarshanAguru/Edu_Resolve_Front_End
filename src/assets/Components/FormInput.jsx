@@ -12,7 +12,7 @@ const FormInput = ({
   is = "",
   placeholder = "",
 }) => (
-  <div className="mt-10 xl:mt-3">
+  <div className={`mt-10 xl:mt-3  xl:${id === "otp" && "col-span-2"}`}>
     <label
       htmlFor={id}
       className={
@@ -50,7 +50,7 @@ const FormInput = ({
       <input
         type={type}
         id={id}
-        className="form-input border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg"
+        className={`form-input  border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg`}
         placeholder={placeholder}
         onChange={onChange}
         required={required}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "./Button";
 import FormInput from "./FormInput";
 
@@ -23,6 +23,8 @@ const formFields = [
     title: "Password must be at least 8 characters long",
   },
 ];
+
+// eslint-disable-next-line react/prop-types
 const Login = ({ user, onChange, data, onSubmit, isAdmin = false }) => {
   const [forgot, setForgot] = useState(false);
   return (
@@ -69,7 +71,7 @@ const Login = ({ user, onChange, data, onSubmit, isAdmin = false }) => {
           </form>
         </div>
       )}
-      {forgot && <ForgotPassword goBack={() => setForgot((prev) => !prev)} />}
+      {forgot && <ForgotPassword goBack={() => setForgot((prev) => !prev)} user={user} />}
     </>
   );
 };

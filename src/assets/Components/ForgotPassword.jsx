@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "./Button";
 import FormInput from "./FormInput";
 import axios from "axios";
@@ -7,6 +7,22 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const forgotPasswordFields = [
+  {
+    label: "Phone No.",
+    id: "phoneNo",
+    placeholder: "Enter your Phone Number",
+    required: true,
+    pattern: "\\d{10}",
+    title: "Please enter a valid phone Number",
+  },
+  {
+    label: "Email Id.",
+    id: "email",
+    placeholder: "Enter your email-Id",
+    required: true,
+    type: "email",
+    title: "Please enter a valid email-Id",
+  },
   {
     label: "OTP",
     id: "otp",
@@ -35,8 +51,14 @@ const forgotPasswordFields = [
   },
 ];
 
-const ForgotPassword = ({ goBack }) => {
+// eslint-disable-next-line react/prop-types
+const ForgotPassword = ({ goBack, user }) => {
+  const [otpVis, setOtpVis] = useState(true);
+  const [userId, setUserId] = useState("");
   const [data, setData] = useState({
+    email: "",
+    phoneNo: "",
+    type: user,
     otp: "",
     newPassword: "",
     confirmNewPassword: "",
@@ -50,20 +72,66 @@ const ForgotPassword = ({ goBack }) => {
     }));
   };
 
+  const sendOTP = async (e) => {
+    e.preventDefault();
+    console.log(data);
+    const emailFormat = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    if (!data.email || !data.email.match(emailFormat)) {
+      toast.error("Please enter your valid Email Id");
+      return;
+    }
+
+    if (!data.phoneNo || !data.phoneNo.match(/\d{10}/)) {
+      toast.error("Please enter a valid phone number");
+      return;
+    }
+
+    const otpUrl = "http://localhost:9000/global/forgotPassword";
+    try {
+      const response = await axios.post(otpUrl, {
+        email: data.email,
+        type: data.type,
+        query: "generateOTP",
+        phoneNo: data.phoneNo,
+      });
+
+      if (!response.data) {
+        toast.error("Failed to send OTP.");
+        return;
+      }
+      setOtpVis(!otpVis);
+      setUserId(response.data.userId);
+      toast.success("OTP sent!");
+    } catch (e) {
+      console.error("Error falied to send OTP", e);
+      toast.error("Failed to send OTP");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (data.newPassword !== data.confirmNewPassword) {
       toast.error("Passwords do not match");
       return;
     }
-    const resetPasswordUrl = "http://localhost:9000/reset-password";
+    const resetPasswordUrl = "http://localhost:9000/global/forgotPassword";
     try {
       const response = await axios.post(resetPasswordUrl, {
+        type: data.type,
         otp: data.otp,
-        newPassword: data.newPassword,
+        password: data.newPassword,
+        query: "verifyOTP&Reset",
+        userId: userId,
       });
-      console.log(response.data);
+      // console.log(response.data);
+      if (!response.data) {
+        toast.error("Failed to reset password");
+        return;
+      }
       toast.success("Password reset successfully");
+      setTimeout(() => {
+        goBack();
+      }, 4000);
     } catch (error) {
       console.error("Error resetting password", error);
       toast.error("Failed to reset password");
@@ -71,7 +139,7 @@ const ForgotPassword = ({ goBack }) => {
   };
 
   return (
-    <div className="xl:mx-auto relative">
+    <div className="py-5 xl:py-0 xl:mx-auto relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -88,12 +156,16 @@ const ForgotPassword = ({ goBack }) => {
         Forgot Password
       </p>
       <button
-        className="absolute top-0 left-0 flex items-center gap-1 font-Montserrat text-amber-700 underline py-2 px-2"
+        className="absolute xl:top-0 xl:left-0 flex items-center gap-1 font-Montserrat text-amber-700 underline py-2 px-2 text-2xl xl:text-lg top-0"
         onClick={() => goBack()}
       >
-        <IoMdArrowBack /> Go back to login
+        <IoMdArrowBack /> Go back{" "}
+        <span className="hidden xl:block">to login</span>
       </button>
-      <form onSubmit={handleSubmit} className="mx-10">
+      <form
+        onSubmit={handleSubmit}
+        className="mx-10 lg:grid lg:grid-cols-2 lg:gap-4"
+      >
         {forgotPasswordFields.map((field) => (
           <FormInput
             key={field.id}
@@ -102,8 +174,20 @@ const ForgotPassword = ({ goBack }) => {
             onChange={handleChange}
           />
         ))}
+        {otpVis && (
+          <button
+            className={
+              "border-none text-white font-Montserrat text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 py-2 mt-10 shadow-lg w-full hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
+            }
+            onClick={(e) => sendOTP(e)}
+            type="button"
+          >
+            Send OTP
+          </button>
+        )}
+
         <Button
-          style="border-none text-white font-Montserrat text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 py-1 mt-10 shadow-lg w-full py-4 hover:bg-[#282323] hover:font-bold cursor-pointer"
+          style="border-none text-white font-Montserrat text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10  shadow-lg w-full py-2 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
           type="submit"
         >
           Reset Password
