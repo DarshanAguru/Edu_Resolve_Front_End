@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa"; 
+import { FaBars, FaTimes } from "react-icons/fa";
 import axios from "axios";
 const StudentNavbar = () => {
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const StudentNavbar = () => {
       </div>
       {/* Mobile Menu*/}
       <div
-        className={`${isMenuOpen ? "block" : "hidden"}  absolute top-16 left-0 w-full bg-[#917A68] md:hidden`}
+        className={`${isMenuOpen ? "block" : "hidden"} z-50 absolute top-16 left-0 w-full bg-[#917A68] md:hidden`}
         style={menuAnimationStyle}
       >
         <a

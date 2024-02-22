@@ -1,13 +1,13 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import StudentNavbar from '../Pages/Student/StudentNavbar'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import StudentNavbar from "../Pages/Student/StudentNavbar";
 const StudentLayout = () => {
   return (
     <>
-    <StudentNavbar />
-    <Outlet />
+      <StudentNavbar />
+      <Outlet />
     </>
-  )
-}
+  );
+};
 
-export default StudentLayout
+export default StudentLayout;
