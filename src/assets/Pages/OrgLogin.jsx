@@ -44,7 +44,8 @@ const OrgLogin = () => {
         pauseOnHover
         theme="light"
       />
-      <Login
+      <Log
+        in
         user="organisation"
         data={formData}
         onChange={handleChange}
