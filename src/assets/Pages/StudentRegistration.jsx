@@ -88,8 +88,7 @@ const StudentRegistration = () => {
         formData
       );
       console.log("From server", response.data);
-      localStorage.setItem("user", response.data);
-      navigate("/student");
+      navigate("/studentLogin");
     } catch (error) {
       console.error("Error submitting form", error);
     }
