@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { data } from "../../data/facts";
 import { quotes } from "../../data/quotes";
 import PostCard from "../../Components/PostCard";
+import { TiUpload } from "react-icons/ti";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
@@ -17,6 +18,7 @@ const StudentHome = () => {
   const [formData, setFormData] = useState({ postText: "", imageUrl: "" });
   const [randomData, setRandomData] = useState("");
   const [randomQuote, setRandomQuote] = useState("");
+  const [refresh, setRefresh] = useState(false);
   const { _id, name, token, gender, school } = JSON.parse(
     localStorage.getItem("student")
   );
@@ -24,20 +26,23 @@ const StudentHome = () => {
   useEffect(() => {
     setRandomData(data[Math.floor(Math.random() * data.length)]);
     setRandomQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+  }, []);
+
+  useEffect(() => {
     async function getMessages() {
       try {
         const { data } = await axios.post(
           `http://localhost:9000/messages/getAllMessages`,
           { token: token, id: _id }
         );
-        console.log(data); 
-        setMessages(data); 
+        console.log(data);
+        setMessages(data.reverse());
       } catch (e) {
         console.log("Messages are not retreived", e);
       }
     }
     getMessages();
-  }, []);
+  }, [refresh]);
 
   const handleUploadImageClick = () => {
     setShowImageUpload((prev) => !prev);
@@ -71,6 +76,7 @@ const StudentHome = () => {
       data
     );
     setFormData({ postText: "", imageUrl: "" });
+    setRefresh((prev) => !prev);
   };
 
   return (
@@ -102,41 +108,27 @@ const StudentHome = () => {
           <textarea
             name="postText"
             placeholder="Post the queries here"
-            className="bg-white rounded-lg border resize-none border-gray-300 shadow-lg w-full py-2 px-2 text-lg"
+            className="bg-white pl-2 pt-2 border box-border resize-none border-gray-300 shadow-lg w-full text-lg"
             value={formData.postText}
             onChange={handleInputChange}
             required
           ></textarea>
           <div>
             <div
-              className={`absolute top-3 right-3 cursor-pointer ${showImageUpload ? " text-cyan-700 animate-bounce" : " text-cyan-400"}`}
+              className={`absolute top-5 right-3 cursor-pointer ${showImageUpload ? " text-cyan-700 animate-bounce" : " text-cyan-500"}`}
               onClick={handleUploadImageClick}
             >
-              {/* Image Upload Icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0L8 12m4-4v12"
-                />
-              </svg>
+              <TiUpload className=" text-xl text-[#917a68d2]" />
             </div>
             {showImageUpload && (
-              <div className="flex gap-10">
+              <div>
                 <input
                   type="text"
                   name="imageUrl"
-                  placeholder="Enter image URL here"
+                  placeholder="Enter image URL here (optional)"
                   value={formData.imageUrl}
                   onChange={handleInputChange}
-                  className="border border-gray-300 shadow-lg py-2 px-2 text-lg w-3/4"
+                  className="border border-gray-300 shadow-lg py-2 px-2 text-lg w-full"
                 />
               </div>
             )}
@@ -145,7 +137,7 @@ const StudentHome = () => {
             type="submit"
             className="border-none text-white text-xl leading-normal rounded bg-[#917A68] mx-auto py-1 mt-2 shadow-lg w-full hover:bg-[#282323] hover:font-bold cursor-pointer"
           >
-            Submit
+            upload
           </button>
         </form>
         <div

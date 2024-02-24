@@ -10,6 +10,9 @@ export default {
       backgroundImage: {
         homeImage: "url('./src/assets/images/homepageimg.jpg')",
       },
+      boxShadow: {
+        custom: "0 0px 10px rgba(0, 0, 0, 0.15)",
+      },
     },
   },
   plugins: [],
