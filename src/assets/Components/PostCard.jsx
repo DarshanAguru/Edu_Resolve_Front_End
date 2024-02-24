@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+import React, { useEffect, useState } from "react";
+import { AiOutlineLike, AiOutlineDislike, AiFillLike, AiFillDislike } from "react-icons/ai";
 import { RiQuestionAnswerLine } from "react-icons/ri";
 import axios from "axios";
 import { IoMdSend } from "react-icons/io";
@@ -8,11 +8,14 @@ import Male from "../images/boy.png";
 import Female from "../images/girl.png";
 import PostCardComments from "./PostCardComments";
 
+
 export default function PostCard({ user, refresh }) {
   const { _id, name, gender, token } = JSON.parse(
     localStorage.getItem("student")
   );
   const [showComments, setShowComments] = React.useState(false);
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
   const {
     messageData,
     messageSenderGender,
@@ -24,6 +27,12 @@ export default function PostCard({ user, refresh }) {
     downvote,
   } = user;
   console.log(replies);
+
+  useEffect(()=>{
+    setLiked(upvote.filter(user => user === _id).length > 0)
+    setDisliked(downvote.filter(user => user === _id).length > 0)
+  },[upvote,downvote, _id])
+
   // UseStates
   const [showImage, setShowImage] = useState(false);
   const [commentData, setCommentData] = useState({ comment: "", imageURL: "" });
@@ -62,21 +71,23 @@ export default function PostCard({ user, refresh }) {
 
   //Handle Like
   const handleLike = async () => {
+    // e.preventDefault();
     const res = await axios.post(
-      `http://localhost:9000/messages/upvote/${messageId}`,
+     ` http://localhost:9000/messages/upvote/${messageId}`,
       { token: token, id: _id, userId: _id }
     );
-    console.log(res);
+    console.log(res.data) ;
     refresh();
   };
 
   //Handle DisLike
   const handleDisLike = async () => {
+    // e.preventDefault();
     const res = await axios.post(
       `http://localhost:9000/messages/downvote/${messageId}`,
       { token: token, id: _id, userId: _id }
     );
-    console.log(res);
+    console.log(res.data);
     refresh();
   };
 
@@ -95,12 +106,14 @@ export default function PostCard({ user, refresh }) {
       </div>
       <p>{messageData} </p>
       <div className="flex items-center gap-2.5">
-        <button onClick={handleLike}>
-          <AiOutlineLike className="text-blue-500 text-xl" />
+        <button onClick={()=>handleLike()}>
+          {!liked && <AiOutlineLike className="text-blue-500 text-xl" />}
+          {liked && <AiFillLike className="text-blue-500 text-xl" />}
         </button>
         <p>{upvote.length}</p>
-        <button onClick={handleDisLike}>
-          <AiOutlineDislike className="text-red-500 text-xl" />
+        <button onClick={()=>handleDisLike()}>
+          {!disliked && <AiOutlineDislike className="text-red-500 text-xl" />}
+          {disliked && <AiFillDislike className="text-red-500 text-xl" />}
         </button>
 
         <p>{downvote.length}</p>
@@ -149,6 +162,6 @@ export default function PostCard({ user, refresh }) {
             <PostCardComments key={index} reply={reply} />
           ))}
       </div>
-    </div>
+      </div>
   );
 }
