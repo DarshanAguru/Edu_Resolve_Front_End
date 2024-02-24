@@ -22,7 +22,6 @@ const StudentHome = () => {
   );
   const [messages, setMessages] = useState([]);
   useEffect(() => {
-    // Randomly select data and quotes on component mount
     setRandomData(data[Math.floor(Math.random() * data.length)]);
     setRandomQuote(quotes[Math.floor(Math.random() * quotes.length)]);
     async function getMessages() {
@@ -31,8 +30,8 @@ const StudentHome = () => {
           `http://localhost:9000/messages/getAllMessages`,
           { token: token, id: _id }
         );
-        console.log(data); // Now 'messages' should contain the actual messages
-        setMessages(data); // Assuming you have a state setter function 'setMessages'
+        console.log(data); 
+        setMessages(data); 
       } catch (e) {
         console.log("Messages are not retreived", e);
       }
@@ -50,19 +49,6 @@ const StudentHome = () => {
       ...prevFormData,
       [name]: value,
     }));
-  };
-
-  const handleImageUpload = () => {
-    if (formData.imageUrl) {
-      toast.success("Image uploaded successfully!", {
-        position: "top-center",
-      });
-      setShowImageUpload(false);
-    } else {
-      toast.error("Please enter an image URL", {
-        position: "top-center",
-      });
-    }
   };
 
   const handleFormSubmit = async (e) => {
@@ -119,10 +105,11 @@ const StudentHome = () => {
             className="bg-white rounded-lg border resize-none border-gray-300 shadow-lg w-full py-2 px-2 text-lg"
             value={formData.postText}
             onChange={handleInputChange}
+            required
           ></textarea>
           <div>
             <div
-              className={`absolute top-3 right-3 cursor-pointer ${showImageUpload && "animate-bounce"}`}
+              className={`absolute top-3 right-3 cursor-pointer ${showImageUpload ? " text-cyan-700 animate-bounce" : " text-cyan-400"}`}
               onClick={handleUploadImageClick}
             >
               {/* Image Upload Icon */}
@@ -151,13 +138,6 @@ const StudentHome = () => {
                   onChange={handleInputChange}
                   className="border border-gray-300 shadow-lg py-2 px-2 text-lg w-3/4"
                 />
-                <button
-                  type="button"
-                  onClick={handleImageUpload}
-                  className="border-none text-white text-xl leading-normal rounded bg-[#917A68] py-1 px-4 hover:bg-[#282323] hover:font-bold cursor-pointer flex-none"
-                >
-                  Upload
-                </button>
               </div>
             )}
           </div>
