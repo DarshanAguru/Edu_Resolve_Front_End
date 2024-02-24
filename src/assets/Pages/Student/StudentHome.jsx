@@ -147,8 +147,9 @@ const StudentHome = () => {
             marginTop: "10px",
           }}
         >
+          {console.log(messages)}
           {messages.map((message) => (
-            <PostCard key={message._id} user={message} />
+            <PostCard key={message.messageId} user={message} refresh={()=>setRefresh(prev=>!prev)} />
           ))}
         </div>
       </div>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import { RiQuestionAnswerLine } from "react-icons/ri";
-import { LiaHandsHelpingSolid } from "react-icons/lia";
 import axios from "axios";
 import { IoMdSend } from "react-icons/io";
 import { TiUpload } from "react-icons/ti";
@@ -9,7 +8,10 @@ import Male from "../images/boy.png";
 import Female from "../images/girl.png";
 import PostCardComments from "./PostCardComments";
 
-export default function PostCard({ post = false, user }) {
+export default function PostCard({ user, refresh }) {
+  const { _id, name, gender, token } = JSON.parse(
+    localStorage.getItem("student")
+  );
   const [showComments, setShowComments] = React.useState(false);
   const {
     messageData,
@@ -38,9 +40,7 @@ export default function PostCard({ post = false, user }) {
   // Reply handling
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { _id, name, gender, token } = JSON.parse(
-      localStorage.getItem("student")
-    );
+
     const { comment, imageURL } = commentData;
     const res = await axios.post(
       `http://localhost:9000/messages/addreply/${messageId}`,
@@ -57,7 +57,29 @@ export default function PostCard({ post = false, user }) {
     );
     console.log(res);
     setCommentData({ comment: "", imageURL: "" });
+    refresh();
   };
+
+  //Handle Like
+  const handleLike = async () => {
+    const res = await axios.post(
+      `http://localhost:9000/messages/upvote/${messageId}`,
+      { token: token, id: _id, userId: _id }
+    );
+    console.log(res);
+    refresh();
+  };
+
+  //Handle DisLike
+  const handleDisLike = async () => {
+    const res = await axios.post(
+      `http://localhost:9000/messages/downvote/${messageId}`,
+      { token: token, id: _id, userId: _id }
+    );
+    console.log(res);
+    refresh();
+  };
+
   return (
     <div className=" bg-white shadow-custom p-2 px-5 flex flex-col gap-6 mt-5 mb-10 mx-2 rounded-md">
       <div className="flex items-center gap-2.5">
@@ -66,28 +88,26 @@ export default function PostCard({ post = false, user }) {
           alt="profile-img"
           className="w-10 h-10"
         />
-        <p className="font-bold">{messageSenderName}</p>
+        <div>
+          <p className="font-bold">{messageSenderName}</p>
+          <p className="text-sm font-light">{school}</p>
+        </div>
       </div>
       <p>{messageData} </p>
       <div className="flex items-center gap-2.5">
-        <button>
+        <button onClick={handleLike}>
           <AiOutlineLike className="text-blue-500 text-xl" />
         </button>
-        <p>112</p>
-        <button>
+        <p>{upvote.length}</p>
+        <button onClick={handleDisLike}>
           <AiOutlineDislike className="text-red-500 text-xl" />
         </button>
 
-        <p>2</p>
+        <p>{downvote.length}</p>
         <button onClick={() => setShowComments((prev) => !prev)}>
           <RiQuestionAnswerLine className="text-xl" />
         </button>
-        <p>2 answered</p>
-        {post && (
-          <>
-            <LiaHandsHelpingSolid className="text-green-500" />
-          </>
-        )}
+        <p>{replies.length} answered</p>
       </div>
       <div className={`${!showComments && "hidden"}`}>
         <p className="font-bold">Comments</p>
@@ -124,10 +144,10 @@ export default function PostCard({ post = false, user }) {
             </button>
           </div>
         </form>
-        {replies.length>0 &&
-          replies.map((reply) => {
-            <PostCardComments reply={reply} />;
-          })}
+        {replies.length > 0 &&
+          replies.map((reply, index) => (
+            <PostCardComments key={index} reply={reply} />
+          ))}
       </div>
     </div>
   );
