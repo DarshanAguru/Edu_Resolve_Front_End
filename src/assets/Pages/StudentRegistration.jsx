@@ -19,7 +19,13 @@ const formFields = [
     required: true,
     type: "number",
   },
-  { label: "Grade", id: "grade", placeholder: "Enter Grade", required: true },
+  {
+    label: "Grade",
+    id: "grade",
+    type: "select",
+    options: ["6th", "7th", "8th", "9th", "10th"],
+    required: true,
+  },
   {
     label: "School",
     id: "school",
@@ -65,9 +71,10 @@ const StudentRegistration = () => {
   });
   React.useEffect(() => {
     async function fetchSchools() {
-      const res = await axios.get(
+      const res = await axios.post(
         "http://localhost:9000/students/getAllSchools"
       );
+      console.log(res.data);
       setInstitutions(res.data);
     }
     fetchSchools();
