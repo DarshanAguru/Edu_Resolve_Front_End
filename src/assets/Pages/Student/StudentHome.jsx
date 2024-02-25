@@ -35,7 +35,6 @@ const StudentHome = () => {
           `http://localhost:9000/messages/getAllMessages`,
           { token: token, id: _id }
         );
-        console.log(data);
         setMessages(data.reverse());
       } catch (e) {
         console.log("Messages are not retreived", e);
@@ -59,7 +58,7 @@ const StudentHome = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     toast.info("Post submitted!", { position: "top-center" });
-    console.log("Submitted Data:", formData);
+   
     const data = {
       token: token,
       id: _id,
@@ -70,7 +69,7 @@ const StudentHome = () => {
       imageLink: formData.imageUrl,
       tags: "",
     };
-    console.log(data);
+   
     await axios.post(
       `http://localhost:9000/messages/addMessage/${_id}@${uuidv4()}`,
       data

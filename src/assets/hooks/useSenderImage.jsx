@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Male from "../images/boy.png";
 import Female from "../images/girl.png";
 import MentorMale from "../images/mentorMale.png";
@@ -7,6 +7,7 @@ import TeacherMale from "../images/teacherMale.png";
 import TeacherFemale from "../images/teacherFemale.png";
 
 const useSenderImage = (senderGender, senderType) => {
+  console.log(senderGender, senderType);
   let imageSrc = React.useMemo(() => {
     if (senderGender === "Male") {
       switch (senderType) {
