@@ -12,6 +12,7 @@ export default {
       },
       boxShadow: {
         custom: "0 0px 10px rgba(0, 0, 0, 0.15)",
+        navbar: "0 0 10px 1px rgba(0,0,0,0.5)",
       },
     },
   },

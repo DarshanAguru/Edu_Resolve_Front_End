@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineLike, AiOutlineDislike, AiFillLike, AiFillDislike } from "react-icons/ai";
+import {
+  AiOutlineLike,
+  AiOutlineDislike,
+  AiFillLike,
+  AiFillDislike,
+} from "react-icons/ai";
 import { RiQuestionAnswerLine } from "react-icons/ri";
 import axios from "axios";
 import { IoMdSend } from "react-icons/io";
 import { TiUpload } from "react-icons/ti";
-import Male from "../images/boy.png";
-import Female from "../images/girl.png";
-import PostCardComments from "./PostCardComments";
 
+import PostCardComments from "./PostCardComments";
+import useSenderImage from "../hooks/useSenderImage";
 
 export default function PostCard({ user, refresh }) {
   const { _id, name, gender, token } = JSON.parse(
     localStorage.getItem("student")
   );
+  const profileImg = useSenderImage(gender, "students");
   const [showComments, setShowComments] = React.useState(false);
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
@@ -28,10 +33,10 @@ export default function PostCard({ user, refresh }) {
   } = user;
   console.log(replies);
 
-  useEffect(()=>{
-    setLiked(upvote.filter(user => user === _id).length > 0)
-    setDisliked(downvote.filter(user => user === _id).length > 0)
-  },[upvote,downvote, _id])
+  useEffect(() => {
+    setLiked(upvote.filter((user) => user === _id).length > 0);
+    setDisliked(downvote.filter((user) => user === _id).length > 0);
+  }, [upvote, downvote, _id]);
 
   // UseStates
   const [showImage, setShowImage] = useState(false);
@@ -73,10 +78,10 @@ export default function PostCard({ user, refresh }) {
   const handleLike = async () => {
     // e.preventDefault();
     const res = await axios.post(
-     ` http://localhost:9000/messages/upvote/${messageId}`,
+      ` http://localhost:9000/messages/upvote/${messageId}`,
       { token: token, id: _id, userId: _id }
     );
-    console.log(res.data) ;
+    console.log(res.data);
     refresh();
   };
 
@@ -94,11 +99,7 @@ export default function PostCard({ user, refresh }) {
   return (
     <div className=" bg-white shadow-custom p-2 px-5 flex flex-col gap-6 mt-5 mb-10 mx-2 rounded-md">
       <div className="flex items-center gap-2.5">
-        <img
-          src={messageSenderGender === "Male" ? Male : Female}
-          alt="profile-img"
-          className="w-10 h-10"
-        />
+        <img src={profileImg} alt="profile-img" className="w-10 h-10" />
         <div>
           <p className="font-bold">{messageSenderName}</p>
           <p className="text-sm font-light">{school}</p>
@@ -106,14 +107,20 @@ export default function PostCard({ user, refresh }) {
       </div>
       <p>{messageData} </p>
       <div className="flex items-center gap-2.5">
-        <button onClick={()=>handleLike()}>
-          {!liked && <AiOutlineLike className="text-blue-500 text-xl" />}
-          {liked && <AiFillLike className="text-blue-500 text-xl" />}
+        <button onClick={() => handleLike()}>
+          {!liked ? (
+            <AiOutlineLike className="text-blue-500 text-xl" />
+          ) : (
+            <AiFillLike className="text-blue-500 text-xl" />
+          )}
         </button>
         <p>{upvote.length}</p>
-        <button onClick={()=>handleDisLike()}>
-          {!disliked && <AiOutlineDislike className="text-red-500 text-xl" />}
-          {disliked && <AiFillDislike className="text-red-500 text-xl" />}
+        <button onClick={() => handleDisLike()}>
+          {!disliked ? (
+            <AiOutlineDislike className="text-red-500 text-xl" />
+          ) : (
+            <AiFillDislike className="text-red-500 text-xl" />
+          )}
         </button>
 
         <p>{downvote.length}</p>
@@ -135,23 +142,22 @@ export default function PostCard({ user, refresh }) {
               onChange={handleChange}
             />
           )}
-          <div className="flex">
+          <div className="flex ">
             <div className="relative w-full">
-              <input
-                type="text"
+              <textarea
                 name="comment"
                 onChange={handleChange}
                 value={commentData.comment}
-                className="border border-[#917a686f]   py-2 pl-4 text-lg w-full "
+                className="border border-[#917a686f] pl-4 pt-2 text-lg w-full resize-none box-border h-16"
                 placeholder="Enter your answer here"
               />
               <button type="button" onClick={handleImageUpload}>
-                <TiUpload className="absolute top-0 bottom-0 right-3 my-auto text-xl text-[#917a68d2]" />
+                <TiUpload className={`absolute top-0 bottom-0 right-3 my-auto text-xl text-[#917a68d2] ${showImage&&"animate-bounce"}`} />
               </button>
             </div>
             <button
               type="submit"
-              className="text-[#917A68] border border-[#917a686f] rounded-r-full px-5 hover:bg-[#917A68] hover:text-white"
+              className="text-[#917A68] border border-[#917a686f] rounded-r-full  px-5 h-16  hover:bg-[#917A68] hover:text-white"
             >
               <IoMdSend />
             </button>
@@ -162,6 +168,6 @@ export default function PostCard({ user, refresh }) {
             <PostCardComments key={index} reply={reply} />
           ))}
       </div>
-      </div>
+    </div>
   );
 }

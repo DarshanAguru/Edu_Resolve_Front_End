@@ -1,6 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { FaRegBell, FaBell } from "react-icons/fa6";
+import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
+import { BiNotepad } from "react-icons/bi";
+import { BiSolidNotepad } from "react-icons/bi";
+import {
+  RiHome3Line,
+  RiHome3Fill,
+  RiLoginBoxLine,
+} from "react-icons/ri";
 import axios from "axios";
 const StudentNavbar = () => {
   const navigate = useNavigate();
@@ -8,6 +17,12 @@ const StudentNavbar = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+  const activeStyle = {
+    color: "#917A68",
+    boxShadow: "0.5px 0.5px 20px 1px rgba(0,0,0,0.1)",
+    borderRadius: "50%",
+    padding: "6px",
   };
 
   async function logout() {
@@ -29,14 +44,11 @@ const StudentNavbar = () => {
     }
   }
 
-  const menuAnimationStyle = {
-    transition: "transform 300ms ease-in-out",
-    transform: isMenuOpen ? "translateX(0)" : "translateX(-100%)",
-  };
-
   return (
-    <nav className="bg-white text-black p-2 shadow-lg flex justify-between items-center">
-      <div className="text-xl font-MajorMono">Edu Resolve</div>
+    <nav className="bg-white text-black  shadow-lg flex justify-between items-center px-2 md:px-8">
+      <div className="text-xl font-MajorMono">
+        Edu <span className="font-extrabold">R</span>esolve
+      </div>
       {/* Toggle button */}
       <div className="md:hidden flex items-center p-5">
         <button onClick={toggleMenu}>
@@ -49,59 +61,97 @@ const StudentNavbar = () => {
       </div>
       {/* Mobile Menu*/}
       <div
-        className={`${isMenuOpen ? "block" : "hidden"} z-50 absolute top-16 left-0 w-full bg-[#917A68] md:hidden`}
-        style={menuAnimationStyle}
+        className={`${isMenuOpen ? "block" : "hidden"} z-50 absolute top-[3.5rem] w-full left-0 right-0  bg-[#615353]  md:hidden rounded-sm py-4 `}
       >
-        <a
-          href="#"
-          className="block py-2 px-4 text-sm font-Montserrat text-white hover:bg-gray-700"
+        <NavLink
+          to="."
+          end
+          className={({ isActive }) =>
+            isActive
+              ? "block py-2 px-4 text-lg underline font-Montserrat text-white hover:text-lg"
+              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-lg"
+          }
         >
           Home
-        </a>
-        <a
-          href="#"
-          className="block py-2 px-4 text-sm font-Montserrat text-white hover:bg-gray-700"
-        >
-          Notifications
-        </a>
-        <a
-          href="#"
-          className="block py-2 px-4 text-sm text-white hover:bg-gray-700"
+        </NavLink>
+
+        <NavLink
+          to="profile"
+          className={({ isActive }) =>
+            isActive
+              ? "block py-2 px-4 text-lg underline font-Montserrat text-white hover:text-lg"
+              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-lg"
+          }
         >
           Profile
-        </a>
+        </NavLink>
+        <NavLink
+          to="assessments"
+          className={({ isActive }) =>
+            isActive
+              ? "block py-2 px-4 text-lg underline font-Montserrat text-white hover:text-lg"
+              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-lg"
+          }
+        >
+          Assessments
+        </NavLink>
         <button
           onClick={logout}
-          className="w-full text-left py-2 px-4 text-sm text-white hover:bg-gray-700"
+          className="w-full text-left py-2 px-4 text-sm font-Montserrat text-white hover:text-lg "
         >
           Logout
         </button>
       </div>
       {/* Desktop Menu */}
-      <div className="hidden md:flex items-center space-x-1">
-        <a
-          href="#"
-          className="py-5 px-3 text-black font-Montserrat hover:underline"
+      <div className="hidden md:flex py-2 items-center justify-center  gap-10 box-border">
+        <NavLink
+          to="."
+          end
+          style={({ isActive }) => (isActive ? activeStyle : null)}
         >
-          Home
-        </a>
-        <a
-          href="#"
-          className="py-5 px-3 text-black font-Montserrat hover:underline"
+          {({ isActive }) =>
+            isActive ? (
+              <RiHome3Fill className="text-3xl" />
+            ) : (
+              <RiHome3Line className="text-xl" />
+            )
+          }
+        </NavLink>
+
+        <NavLink
+          to="profile"
+          style={({ isActive }) => (isActive ? activeStyle : null)}
         >
-          Notifications
-        </a>
-        <a
-          href="#"
-          className="py-5 px-3 text-black font-Montserrat hover:underline"
+          {({ isActive }) =>
+            isActive ? (
+              <FaUserCircle className="text-3xl" />
+            ) : (
+              <FaRegUserCircle className="text-xl" />
+            )
+          }
+        </NavLink>
+
+        <NavLink
+          to="assessments"
+          style={({ isActive }) => (isActive ? activeStyle : null)}
         >
-          Profile
-        </a>
+          {({ isActive }) =>
+            isActive ? (
+              <BiSolidNotepad className="text-3xl" />
+            ) : (
+              <BiNotepad className="text-xl" />
+            )
+          }
+        </NavLink>
+
+        <button className="py-5 px-3 text-black font-Montserrat hover:underline">
+          <FaRegBell className="text-xl" />
+        </button>
         <button
           onClick={logout}
-          className=" font-Montserrat py-2 px-3 bg-red-600 hover:bg-red-700 rounded text-white transition duration-300"
+          className=" font-Montserrat py-2 px-3 bg-red-600 hover:bg-red-700 rounded text-white hover:text-lg transition duration-300 text-xl"
         >
-          Logout
+          <RiLoginBoxLine />
         </button>
       </div>
     </nav>
