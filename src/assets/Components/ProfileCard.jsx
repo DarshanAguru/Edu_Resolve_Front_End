@@ -102,10 +102,10 @@ const ProfileCard = ({ data, userType, setRefresh }) => {
       {/* Profile display and edit button */}
 
       {isEditing ? (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit} className="flex flex-col flex-wrap gap-3">
           {formFields.map((field) => (
-            <React.Fragment key={field.id}>
-              <label className="text-xl font-Montserrat font-bold">
+            <div key={field.id}>
+              <label className="text-sm font-Montserrat font-bold ">
                 {field.label}:
               </label>
               {field.type === "select" ? (
@@ -114,7 +114,7 @@ const ProfileCard = ({ data, userType, setRefresh }) => {
                   value={formData[field.id]}
                   onChange={handleChange}
                   required={field.required}
-                  className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full py-2 px-2 text-lg"
+                  className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full  text-sm py-1 px-1 mt-2"
                 >
                   <option value="">
                     {field.placeholder || "Please select..."}
@@ -135,14 +135,14 @@ const ProfileCard = ({ data, userType, setRefresh }) => {
                   onChange={handleChange}
                   placeholder={field.placeholder}
                   required={field.required}
-                  className="form-input border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full py-2 px-2 text-lg"
+                  className="form-input border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full py-1 px-1 text-sm mt-2"
                 />
               )}
-            </React.Fragment>
+            </div>
           ))}
           <button
             type="submit"
-            className="border-none text-white text-lg leading-normal rounded bg-[#917A68] mx-auto py-1 mt-2 shadow-lg w-1/3 hover:bg-[#282323] hover:font-bold cursor-pointer"
+            className="border-none text-white text-lg leading-normal rounded bg-[#917A68] mx-auto py-1 px-1 mt-2 shadow-lg w-2/3 hover:bg-[#282323] hover:font-bold cursor-pointer"
           >
             Save Changes
           </button>

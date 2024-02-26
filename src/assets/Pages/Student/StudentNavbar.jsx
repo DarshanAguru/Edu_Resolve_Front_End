@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Notifications from "../../Components/Notifications";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -9,8 +9,25 @@ import { BiSolidNotepad } from "react-icons/bi";
 import { RiHome3Line, RiHome3Fill, RiLoginBoxLine } from "react-icons/ri";
 import axios from "axios";
 const StudentNavbar = () => {
+  
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem("student"));
+  const [notifCount, setNotifCount] = useState(0);
+  async function getAllNotifications() {
+    
+    try {
+      const notifs = await axios.post(
+        `http://localhost:9000/students/getAllNotifications/${data._id}`,
+        { token: data.token, id: data._id }
+      );
+      setNotifCount(notifs.data.length);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  useEffect(() => {
+    getAllNotifications();
+  }, []);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -159,9 +176,11 @@ const StudentNavbar = () => {
           onClick={togglePopover}
         >
           <FaRegBell className="text-xl" />
-          <span className="  absolute -top-0.5 -right- bg-yellow-900 text-white text-xs rounded-full px-2 py-1">
-            2
-          </span>
+          {(notifCount !== 0) && 
+            <span className="  absolute -top-0.5 -right- bg-yellow-900 text-white text-xs rounded-full px-2 py-1">
+              {notifCount}
+            </span>
+          }
         </button>
         {isPopoverOpen && <Notifications data={data} />}
         <button

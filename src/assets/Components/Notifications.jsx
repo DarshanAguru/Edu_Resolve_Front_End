@@ -58,7 +58,7 @@ const Notifications = ({ data }) => {
               <div key={index} className="px-3 py-2 border">
                 <div className="flex justify-between items-center  ">
                   <p className="text-gray-500 dark:text-gray-400 flex-1">
-                    {`${notification.userName} replied to your post `}
+                    {`${notification.userName} replied to your post (${notification.count})`}
                   </p>
                   <button
                     onClick={() => deleteNotification(notification.userId)}
