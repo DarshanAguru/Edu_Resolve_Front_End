@@ -31,7 +31,6 @@ export default function PostCard({ user, refresh }) {
     upvote,
     downvote,
   } = user;
-  console.log(replies);
 
   useEffect(() => {
     setLiked(upvote.filter((user) => user === _id).length > 0);
@@ -92,7 +91,7 @@ export default function PostCard({ user, refresh }) {
       `http://localhost:9000/messages/downvote/${messageId}`,
       { token: token, id: _id, userId: _id }
     );
-    console.log(res.data);
+
     refresh();
   };
 
@@ -152,7 +151,9 @@ export default function PostCard({ user, refresh }) {
                 placeholder="Enter your answer here"
               />
               <button type="button" onClick={handleImageUpload}>
-                <TiUpload className={`absolute top-0 bottom-0 right-3 my-auto text-xl text-[#917a68d2] ${showImage&&"animate-bounce"}`} />
+                <TiUpload
+                  className={`absolute top-0 bottom-0 right-3 my-auto text-xl text-[#917a68d2] ${showImage && "animate-bounce"}`}
+                />
               </button>
             </div>
             <button

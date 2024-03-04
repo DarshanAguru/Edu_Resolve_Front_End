@@ -26,6 +26,7 @@ const Notifications = ({ data }) => {
     );
     console.log(data);
     setRefreshNotifications((prev) => !prev);
+    // window.location.reload();
   };
   console.log(notifications);
   return (

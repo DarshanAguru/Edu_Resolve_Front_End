@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Notifications from "../../Components/Notifications";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { FaRegBell, FaBell } from "react-icons/fa6";
+import { FaRegBell } from "react-icons/fa6";
 import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
 import { BiNotepad } from "react-icons/bi";
 import { BiSolidNotepad } from "react-icons/bi";
@@ -27,7 +27,7 @@ const StudentNavbar = () => {
   }
   useEffect(() => {
     getAllNotifications();
-  }, []);
+  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -36,6 +36,7 @@ const StudentNavbar = () => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false); // Popover state
 
   const togglePopover = () => {
+    getAllNotifications()
     setIsPopoverOpen((prev) => !prev); // Toggle popover visibility
   };
 
@@ -45,7 +46,7 @@ const StudentNavbar = () => {
     borderRadius: "50%",
     padding: "6px",
   };
-  const notifications = () => {};
+  // const notifications = () => {};
   async function logout() {
     try {
       const status = await axios.post(

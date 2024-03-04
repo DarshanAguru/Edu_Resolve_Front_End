@@ -33,9 +33,9 @@ const formFields = [
   },
 ];
 
-const ProfileCard = ({ data, userType, setRefresh }) => {
+const ProfileCard = ({ userType, setRefresh }) => {
   const { _id, gender, name, grade, school, age, phoneNumber, emailId, token } =
-    data;
+  JSON.parse(localStorage.getItem("student"));
   const image = useSenderImage(gender, userType);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -79,7 +79,6 @@ const ProfileCard = ({ data, userType, setRefresh }) => {
       [name]: value,
     }));
   };
-  console.log(formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -90,6 +89,12 @@ const ProfileCard = ({ data, userType, setRefresh }) => {
       console.log(response);
       if (response.status === 200) {
         setIsEditing(false);
+        console.log();
+
+        localStorage.setItem(
+          "student",
+          JSON.stringify({ ...formData, ...JSON.parse(response.config.data) })
+        );
         setRefresh();
       }
     } catch (error) {

@@ -58,7 +58,7 @@ const StudentHome = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     toast.info("Post submitted!", { position: "top-center" });
-   
+
     const data = {
       token: token,
       id: _id,
@@ -69,7 +69,7 @@ const StudentHome = () => {
       imageLink: formData.imageUrl,
       tags: "",
     };
-   
+
     await axios.post(
       `http://localhost:9000/messages/addMessage/${_id}@${uuidv4()}`,
       data
@@ -146,9 +146,12 @@ const StudentHome = () => {
             marginTop: "10px",
           }}
         >
-          {console.log(messages)}
           {messages.map((message) => (
-            <PostCard key={message.messageId} user={message} refresh={()=>setRefresh(prev=>!prev)} />
+            <PostCard
+              key={message.messageId}
+              user={message}
+              refresh={() => setRefresh((prev) => !prev)}
+            />
           ))}
         </div>
       </div>
