@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import axios from "axios";
 import { IoCloseCircle } from "react-icons/io5";
+
 // import { IoCloseCircleOutline } from "react-icons/io5";
-const Notifications = ({ data }) => {
+const Notifications = ({ data , eventHandler , eventCnt }) => {
+
   const { _id, token } = data;
   const [notifications, setNotifications] = useState([]);
   const [refreshNotifications, setRefreshNotifications] = useState(false);
@@ -19,6 +21,10 @@ const Notifications = ({ data }) => {
   }, [refreshNotifications]);
 
   const deleteNotification = async (notificationId) => {
+    if(eventHandler !== null && eventCnt !== null )
+    {
+      eventHandler(eventCnt-1);
+    }
     console.log(notificationId);
     const data = await axios.post(
       `http://localhost:9000/students/clearNotification/${_id}`,

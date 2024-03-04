@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Notifications from "../../Components/Notifications";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -36,7 +36,6 @@ const StudentNavbar = () => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false); // Popover state
 
   const togglePopover = () => {
-    getAllNotifications()
     setIsPopoverOpen((prev) => !prev); // Toggle popover visibility
   };
 
@@ -78,7 +77,7 @@ const StudentNavbar = () => {
         >
           <FaRegBell className="text-xl" />
         </button>
-        {isPopoverOpen && <Notifications data={data} />}
+        {isPopoverOpen && <Notifications data={data}  eventHandler={null} eventCnt={null} />}
         <button onClick={toggleMenu}>
           {isMenuOpen ? (
             <FaTimes className="h-6 w-6 text-black" />
@@ -183,7 +182,7 @@ const StudentNavbar = () => {
             </span>
           }
         </button>
-        {isPopoverOpen && <Notifications data={data} />}
+        {isPopoverOpen && <Notifications data={data} eventHandler={setNotifCount} eventCnt={notifCount} />}
         <button
           onClick={logout}
           className=" font-Montserrat py-2 px-3 hover:text-white hover:bg-red-500 rounded text-red-500 hover:text-lg transition duration-300 text-xl"
@@ -194,5 +193,4 @@ const StudentNavbar = () => {
     </nav>
   );
 };
-
 export default StudentNavbar;
