@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Notifications from "../../Components/Notifications";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -8,11 +8,13 @@ import { BiNotepad } from "react-icons/bi";
 import { BiSolidNotepad } from "react-icons/bi";
 import { RiHome3Line, RiHome3Fill, RiLoginBoxLine } from "react-icons/ri";
 import axios from "axios";
-const StudentNavbar = () => {
+const MentorNavbar = () => {
+  
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem("student"));
   const [notifCount, setNotifCount] = useState(0);
   async function getAllNotifications() {
+    
     try {
       const notifs = await axios.post(
         `http://localhost:9000/students/getAllNotifications/${data._id}`,
@@ -47,7 +49,7 @@ const StudentNavbar = () => {
   async function logout() {
     try {
       const status = await axios.post(
-        `http://localhost:9000/students/logout/${data._id}`,
+        `http://localhost:9000/globaladmins/logout/${data._id}`,
         { token: data.token }
       );
       if (status.data.message === "Logged out Successfully!") {
@@ -75,14 +77,7 @@ const StudentNavbar = () => {
         >
           <FaRegBell className="text-xl" />
         </button>
-        {isPopoverOpen && (
-          <Notifications
-            userType="students"
-            data={data}
-            eventHandler={null}
-            eventCnt={null}
-          />
-        )}
+        {isPopoverOpen && <Notifications userType='students' data={data}  eventHandler={null} eventCnt={null} />}
         <button onClick={toggleMenu}>
           {isMenuOpen ? (
             <FaTimes className="h-6 w-6 text-black" />
@@ -117,16 +112,7 @@ const StudentNavbar = () => {
         >
           Profile
         </NavLink>
-        <NavLink
-          to="assessments"
-          className={({ isActive }) =>
-            isActive
-              ? "block py-2 px-4 text-lg underline font-Montserrat text-white hover:text-lg"
-              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-lg"
-          }
-        >
-          Assessments
-        </NavLink>
+
         <button
           onClick={logout}
           className="w-full text-left py-2 px-4 text-sm font-Montserrat text-white hover:text-lg "
@@ -163,38 +149,20 @@ const StudentNavbar = () => {
           }
         </NavLink>
 
-        <NavLink
-          to="assessments"
-          style={({ isActive }) => (isActive ? activeStyle : null)}
-        >
-          {({ isActive }) =>
-            isActive ? (
-              <BiSolidNotepad className="text-3xl" />
-            ) : (
-              <BiNotepad className="text-xl" />
-            )
-          }
-        </NavLink>
+
 
         <button
           className="py-5 px-3 text-black  hover:underline relative"
           onClick={togglePopover}
         >
           <FaRegBell className="text-xl" />
-          {notifCount !== 0 && (
+          {(notifCount !== 0) && 
             <span className="  absolute -top-0.5 -right- bg-yellow-900 text-white text-xs rounded-full px-2 py-1">
               {notifCount}
             </span>
-          )}
+          }
         </button>
-        {isPopoverOpen && (
-          <Notifications
-            userType="students"
-            data={data}
-            eventHandler={setNotifCount}
-            eventCnt={notifCount}
-          />
-        )}
+        {isPopoverOpen && <Notifications userType='students' data={data} eventHandler={setNotifCount} eventCnt={notifCount} />}
         <button
           onClick={logout}
           className=" font-Montserrat py-2 px-3 hover:text-white hover:bg-red-500 rounded text-red-500 hover:text-lg transition duration-300 text-xl"
@@ -205,4 +173,4 @@ const StudentNavbar = () => {
     </nav>
   );
 };
-export default StudentNavbar;
+export default MentorNavbar;

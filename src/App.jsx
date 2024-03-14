@@ -24,6 +24,9 @@ import OrganisationHome from "./assets/Pages/Organisation/OrganisationHome";
 import AdminHome from "./assets/Pages/Admin/AdminHome";
 import StudentAssessments from "./assets/Pages/Student/StudentAssessments";
 import StudentProfile from "./assets/Pages/Student/StudentProfile";
+import TeacherAssessments from "./assets/Pages/Teacher/TeacherAssessments";
+import TeacherProfile from "./assets/Pages/Teacher/TeacherProfile"
+import MentorProfile from "./assets/Pages/Mentor/MentorProfile"
 
 const App = () => {
   return (
@@ -47,9 +50,13 @@ const App = () => {
       </Route>
       <Route path="mentor" element={<MentorLayout />}>
         <Route index element={<MentorHome />} />
+        <Route path="profile" element={<MentorProfile />} />
+
       </Route>
       <Route path="teacher" element={<TeacherLayout />}>
         <Route index element={<TeacherHome />} />
+        <Route path="assessments" element={<TeacherAssessments />} />
+        <Route path = "profile" element={<TeacherProfile />} />
       </Route>
       <Route path="organisation" element={<OrganisationLayout />}>
         <Route index element={<OrganisationHome />} />

@@ -2,7 +2,10 @@ import React from 'react'
 
 const MentorLayout = () => {
   return (
-    <div>MentorLayout</div>
+    <>
+    <MentorNavbar/>
+    <Outlet/>
+    </>
   )
 }
 

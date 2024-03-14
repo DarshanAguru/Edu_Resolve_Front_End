@@ -10,7 +10,7 @@ const StudentProfile = () => {
   const [messages, setMessages] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
-  
+
   useEffect(() => {
     async function getMessages() {
       try {
@@ -18,7 +18,7 @@ const StudentProfile = () => {
           `http://localhost:9000/messages/getAllMessages`,
           { token: token, id: _id }
         );
-        
+
         const filteredMessages = data
           .reverse()
           .filter((message) => message.messageId.split("@")[0] === _id);
@@ -32,7 +32,12 @@ const StudentProfile = () => {
   const setProgress = () => setShowProgress((prev) => !prev);
   return (
     <div className=" lg:mx-0 lg:grid lg:grid-cols-3 my-auto sm:mx-10 mb-10 lg:mb-0">
-      <ProfileCard className=" col-span-1" data={data} userType="students" setRefresh={()=>setRefresh(prev=>!prev)} />
+      <ProfileCard
+        className=" col-span-1"
+        data={data}
+        userType="students"
+        setRefresh={() => setRefresh((prev) => !prev)}
+      />
       <div className="col-span-2">
         <div className="flex justify-center items-start p-5 gap-10 ">
           <button
@@ -56,11 +61,15 @@ const StudentProfile = () => {
         >
           {showProgress ? (
             messages.map((message) => (
-              <PostCard
-                key={message.messageId}
-                user={message}
-                refresh={() => setRefresh((prev) => !prev)}
-              />
+              <>
+                {console.log(message)}
+                <PostCard
+                  key={message.messageId}
+                  user={message}
+                  userType="student"
+                  refresh={() => setRefresh((prev) => !prev)}
+                />
+              </>
             ))
           ) : (
             <ProgressCard />
