@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import Login from "../Components/Login";
-import axios from "axios";
-import "../../../src/index.css";
+import Login from "../../Components/Login";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const AdminLogin = () => {
+const TeacherLogin = () => {
   const navigate = useNavigate();
-  const notify = (message) => toast.error(message);
   const [formData, setFormData] = useState({
     phoneNumber: "",
     password: "",
   });
+  const notify = (message) => toast.error(message);
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
@@ -19,15 +18,24 @@ const AdminLogin = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:9000/globaladmins/login",
+        "http://localhost:9000/teachers/login",
         formData
       );
       console.log("From server", response.data);
-      localStorage.setItem("admin", JSON.stringify(response.data));
-      navigate("/admin");
+      localStorage.setItem("teacher", JSON.stringify(response.data));
+      navigate("/teacher");
     } catch (error) {
+      if(error.response.data.message === 'Pending')
+      {
+        notify("Pending: Please wait for Local Admin to approve")
+      }
+      else if(error.response.data.message==='Rejected')
+      {
+        notify("Rejected: Your request has been rejected")
+      }
+      else{
       notify("Invalid Username Or Password");
-      console.log("no user found", error);
+      }
     }
   };
 
@@ -46,14 +54,13 @@ const AdminLogin = () => {
         theme="light"
       />
       <Login
-        user="Admin"
+        user="teacher"
         data={formData}
         onChange={handleChange}
         onSubmit={handleSubmit}
-        isAdmin={true}
       />
     </>
   );
 };
 
-export default AdminLogin;
+export default TeacherLogin;

@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import Login from "../Components/Login";
+import { useState } from "react";
+import Login from "../../Components/Login";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const OrgLogin = () => {
+const StudentLogin = () => {
   const navigate = useNavigate();
-  const notify = (message) => toast.error(message);
   const [formData, setFormData] = useState({
     phoneNumber: "",
     password: "",
   });
+  const notify = (message) => toast.error(message);
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
@@ -18,12 +18,12 @@ const OrgLogin = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:9000/localadmins/login",
+        "http://localhost:9000/students/login",
         formData
       );
       console.log("From server", response.data);
-      localStorage.setItem("localAdmin", JSON.stringify(response.data));
-      navigate("/organisation");
+      localStorage.setItem("student", JSON.stringify(response.data));
+      navigate("/student");
     } catch (error) {
       notify("Invalid Username Or Password");
       console.log("no user found", error);
@@ -45,7 +45,7 @@ const OrgLogin = () => {
         theme="light"
       />
       <Login
-        user="organisation"
+        user="student"
         data={formData}
         onChange={handleChange}
         onSubmit={handleSubmit}
@@ -54,4 +54,4 @@ const OrgLogin = () => {
   );
 };
 
-export default OrgLogin;
+export default StudentLogin;

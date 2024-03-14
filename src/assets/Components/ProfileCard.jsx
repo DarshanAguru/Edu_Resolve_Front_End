@@ -44,6 +44,8 @@ const ProfileCard = ({ userType, setRefresh }) => {
     school,
     age,
     gender,
+    phoneNumber,
+    emailId
   });
   const [schools, setSchools] = useState([]);
 
@@ -89,8 +91,6 @@ const ProfileCard = ({ userType, setRefresh }) => {
       console.log(response);
       if (response.status === 200) {
         setIsEditing(false);
-        console.log();
-
         localStorage.setItem(
           "student",
           JSON.stringify({ ...formData, ...JSON.parse(response.config.data) })

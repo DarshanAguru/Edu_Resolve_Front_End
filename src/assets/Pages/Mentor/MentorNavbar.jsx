@@ -55,7 +55,7 @@ const MentorNavbar = () => {
       if (status.data.message === "Logged out Successfully!") {
         localStorage.clear();
         console.log("logged out successfully");
-        navigate("/studentLogin");
+        navigate("/mentorLogin");
       } else {
         console.log(status.data.message);
       }

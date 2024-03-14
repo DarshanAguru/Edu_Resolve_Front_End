@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FormInput from "../Components/FormInput";
-import FormCheckboxGroup from "../Components/FormCheckBoxGroup";
+import FormInput from "../../Components/FormInput";
+import FormCheckboxGroup from "../../Components/FormCheckBoxGroup";
 import axios from "axios";
 const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Login from "../Components/Login";
+import Login from "../../Components/Login";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "axios"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const TeacherLogin = () => {
+const MentorLogin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     phoneNumber: "",
@@ -14,34 +14,25 @@ const TeacherLogin = () => {
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
-  const handleSubmit = async (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:9000/teachers/login",
+        "http://localhost:9000/mentors/login",
         formData
       );
       console.log("From server", response.data);
-      localStorage.setItem("teacher", JSON.stringify(response.data));
-      navigate("/teacher");
+      localStorage.setItem("mentor", JSON.stringify(response.data));
+      navigate("/mentor");
     } catch (error) {
-      if(error.response.data.message === 'Pending')
-      {
-        notify("Pending: Please wait for Local Admin to approve")
-      }
-      else if(error.response.data.message==='Rejected')
-      {
-        notify("Rejected: Your request has been rejected")
-      }
-      else{
       notify("Invalid Username Or Password");
-      }
+      console.log("no user found", error);
     }
   };
 
   return (
     <>
-      <ToastContainer
+    <ToastContainer
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}
@@ -53,14 +44,14 @@ const TeacherLogin = () => {
         pauseOnHover
         theme="light"
       />
-      <Login
-        user="teacher"
-        data={formData}
-        onChange={handleChange}
-        onSubmit={handleSubmit}
-      />
+    <Login
+      user="mentor"
+      data={formData}
+      onChange={handleChange}
+      onSubmit={handleSubmit}
+    />
     </>
   );
 };
 
-export default TeacherLogin;
+export default MentorLogin;

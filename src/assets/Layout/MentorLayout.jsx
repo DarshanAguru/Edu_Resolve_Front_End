@@ -1,12 +1,13 @@
-import React from 'react'
-
+import React from "react";
+import MentorNavbar from "../Pages/Mentor/MentorNavbar";
+import { Outlet } from "react-router-dom";
 const MentorLayout = () => {
   return (
     <>
-    <MentorNavbar/>
-    <Outlet/>
+      <MentorNavbar />
+      <Outlet />
     </>
-  )
-}
+  );
+};
 
-export default MentorLayout
+export default MentorLayout;

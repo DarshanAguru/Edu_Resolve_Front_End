@@ -5,7 +5,12 @@ import axios from "axios";
 
 const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },
-  { label: "Email Id", id: "emailId", placeholder: "Enter Email ID", required: true },
+  {
+    label: "Email Id",
+    id: "emailId",
+    placeholder: "Enter Email ID",
+    required: true,
+  },
   {
     label: "Age",
     id: "age",
@@ -38,7 +43,9 @@ const TeacherProfileCard = ({ data, userType, setRefresh }) => {
     institution,
     age,
     gender,
-    emailId
+    emailId,
+    phoneNumber,
+    emailId,
   });
   const [schools, setSchools] = useState([]);
 
@@ -85,11 +92,12 @@ const TeacherProfileCard = ({ data, userType, setRefresh }) => {
       console.log(response);
       if (response.status === 200) {
         setIsEditing(false);
-        if (setRefresh !== null)
-        {
-          setRefresh();
-        }
 
+        localStorage.setItem(
+          "teacher",
+          JSON.stringify({ ...formData, ...JSON.parse(response.config.data) })
+        );
+        setRefresh();
       }
     } catch (error) {
       console.error("Error updating teacher details:", error);
@@ -99,7 +107,6 @@ const TeacherProfileCard = ({ data, userType, setRefresh }) => {
   return (
     <div className="border-2 p-5 m-5 mt-10 box-border rounded-2xl lg:h-[80vh] flex flex-col flex-wrap gap-5 justify-center items-center my-auto">
       {/* Profile display and edit button */}
-
       {isEditing ? (
         <form onSubmit={handleSubmit} className="flex flex-col flex-wrap gap-3">
           {formFields.map((field) => (
@@ -179,6 +186,10 @@ const TeacherProfileCard = ({ data, userType, setRefresh }) => {
 
               <p className="font-bold">
                 Age : <span className=" font-normal font-sans">{age}</span>
+              </p>
+              <p className="font-bold">
+                Gender :{" "}
+                <span className=" font-normal font-sans">{gender}</span>
               </p>
 
               <p className="font-bold">

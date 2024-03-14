@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Button from "../Components/Button";
-import FormInput from "../Components/FormInput";
+import Button from "../../Components/Button";
+import FormInput from "../../Components/FormInput";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const formFields = [
