@@ -13,9 +13,9 @@ import { TiUpload } from "react-icons/ti";
 import PostCardComments from "./PostCardComments";
 import useSenderImage from "../hooks/useSenderImage";
 
-export default function PostCard({ user, refresh }) {
+export default function PostCard({ user, userType,refresh }) {
   const { _id, name, gender, token } = JSON.parse(
-    localStorage.getItem("student")
+    localStorage.getItem(userType)
   );
   const profileImg = useSenderImage(gender, "students");
   const [showComments, setShowComments] = React.useState(false);
@@ -59,7 +59,7 @@ export default function PostCard({ user, refresh }) {
       `http://localhost:9000/messages/addreply/${messageId}`,
       {
         senderId: _id,
-        senderType: "students",
+        senderType: (userType === 'student')?'students':(userType=== 'teacher')?'teachers':'mentors',
         senderName: name,
         message: comment,
         senderGender: gender,

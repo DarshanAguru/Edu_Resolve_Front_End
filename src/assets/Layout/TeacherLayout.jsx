@@ -1,8 +1,12 @@
 import React from 'react'
-
+import { Outlet } from 'react-router-dom';
+import TeacherNavbar from '../Pages/Teacher/TeacherNavbar'
 const TeacherLayout = () => {
   return (
-    <div>TeacherLayout</div>
+    <>
+    <TeacherNavbar/>
+    <Outlet/>
+    </>
   )
 }
 

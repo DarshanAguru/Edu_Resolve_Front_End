@@ -73,7 +73,7 @@ const TeacherRegistration = () => {
   const [institutions, setInstitutions] = useState([]);
   React.useEffect(() => {
     async function fetchSchools() {
-      const res = await axios.get(
+      const res = await axios.post(
         "http://localhost:9000/teachers/getAllSchools"
       );
       setInstitutions(res.data);

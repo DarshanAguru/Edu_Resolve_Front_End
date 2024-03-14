@@ -150,6 +150,7 @@ const StudentHome = () => {
             <PostCard
               key={message.messageId}
               user={message}
+              userType="student"
               refresh={() => setRefresh((prev) => !prev)}
             />
           ))}

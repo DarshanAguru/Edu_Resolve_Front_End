@@ -3,21 +3,21 @@ import axios from "axios";
 import { IoCloseCircle } from "react-icons/io5";
 
 // import { IoCloseCircleOutline } from "react-icons/io5";
-const Notifications = ({ data , eventHandler , eventCnt }) => {
-
+const Notifications = ({ data , userType=null, eventHandler , eventCnt }) => {
   const { _id, token } = data;
   const [notifications, setNotifications] = useState([]);
   const [refreshNotifications, setRefreshNotifications] = useState(false);
   useEffect(() => {
-    async function getNotifications() {
+       async function getNotifications() {
       const { data } = await axios.post(
-        `http://localhost:9000/students/getAllNotifications/${_id}`,
+        `http://localhost:9000/${userType}/getAllNotifications/${_id}`,
         { token: token, id: _id }
       );
-
+      
       setNotifications(data);
+      
     }
-    getNotifications();
+    if(userType) getNotifications();
   }, [refreshNotifications]);
 
   const deleteNotification = async (notificationId) => {
@@ -27,7 +27,7 @@ const Notifications = ({ data , eventHandler , eventCnt }) => {
     }
     console.log(notificationId);
     const data = await axios.post(
-      `http://localhost:9000/students/clearNotification/${_id}`,
+      `http://localhost:9000/${userType}/clearNotification/${_id}`,
       { token: token, id: _id, notifId: notificationId }
     );
     console.log(data);

@@ -1,23 +1,23 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Notifications from "../../Components/Notifications";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { FaRegBell } from "react-icons/fa6";
+import { FaRegBell} from "react-icons/fa6";
 import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
 import { BiNotepad } from "react-icons/bi";
 import { BiSolidNotepad } from "react-icons/bi";
 import { RiHome3Line, RiHome3Fill, RiLoginBoxLine } from "react-icons/ri";
 import axios from "axios";
-const StudentNavbar = () => {
+const TeacherNavbar = () => {
   
   const navigate = useNavigate();
-  const data = JSON.parse(localStorage.getItem("student"));
+  const data = JSON.parse(localStorage.getItem("teacher"));
   const [notifCount, setNotifCount] = useState(0);
   async function getAllNotifications() {
     
     try {
       const notifs = await axios.post(
-        `http://localhost:9000/students/getAllNotifications/${data._id}`,
+        `http://localhost:9000/teachers/getAllNotifications/${data._id}`,
         { token: data.token, id: data._id }
       );
       setNotifCount(notifs.data.length);
@@ -27,7 +27,7 @@ const StudentNavbar = () => {
   }
   useEffect(() => {
     getAllNotifications();
-  });
+  }, []);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -45,17 +45,17 @@ const StudentNavbar = () => {
     borderRadius: "50%",
     padding: "6px",
   };
-  // const notifications = () => {};
+//   const notifications = () => {};
   async function logout() {
     try {
       const status = await axios.post(
-        `http://localhost:9000/globaladmins/logout/${data._id}`,
+        `http://localhost:9000/teachers/logout/${data._id}`,
         { token: data.token }
       );
       if (status.data.message === "Logged out Successfully!") {
         localStorage.clear();
         console.log("logged out successfully");
-        navigate("/studentLogin");
+        navigate("/teacherLogin");
       } else {
         console.log(status.data.message);
       }
@@ -77,7 +77,7 @@ const StudentNavbar = () => {
         >
           <FaRegBell className="text-xl" />
         </button>
-        {isPopoverOpen && <Notifications userType='students' data={data}  eventHandler={null} eventCnt={null} />}
+        {isPopoverOpen && <Notifications data={data} />}
         <button onClick={toggleMenu}>
           {isMenuOpen ? (
             <FaTimes className="h-6 w-6 text-black" />
@@ -182,7 +182,7 @@ const StudentNavbar = () => {
             </span>
           }
         </button>
-        {isPopoverOpen && <Notifications userType='students' data={data} eventHandler={setNotifCount} eventCnt={notifCount} />}
+        {isPopoverOpen && <Notifications userType='teachers' data={data} eventCnt={null} eventHandler={null} />}
         <button
           onClick={logout}
           className=" font-Montserrat py-2 px-3 hover:text-white hover:bg-red-500 rounded text-red-500 hover:text-lg transition duration-300 text-xl"
@@ -193,4 +193,5 @@ const StudentNavbar = () => {
     </nav>
   );
 };
-export default StudentNavbar;
+
+export default TeacherNavbar;

@@ -25,8 +25,17 @@ const TeacherLogin = () => {
       localStorage.setItem("teacher", JSON.stringify(response.data));
       navigate("/teacher");
     } catch (error) {
+      if(error.response.data.message === 'Pending')
+      {
+        notify("Pending: Please wait for Local Admin to approve")
+      }
+      else if(error.response.data.message==='Rejected')
+      {
+        notify("Rejected: Your request has been rejected")
+      }
+      else{
       notify("Invalid Username Or Password");
-      console.log("no user found", error);
+      }
     }
   };
 
