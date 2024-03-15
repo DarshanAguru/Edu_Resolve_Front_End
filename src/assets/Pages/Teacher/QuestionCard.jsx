@@ -12,6 +12,7 @@ const QuestionCard = () => {
   const [marks, setMarks] = useState("");
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
+  const [submissionDate, setSubmissionDate] = useState("");
 
   const addOption = () => {
     const newOptionId = options[options.length - 1].id + 1;
@@ -42,7 +43,15 @@ const QuestionCard = () => {
       setOptions(newOptions);
     }
   };
+  const removeQuestion = (index) => {
+    const newQuestions = [...questions];
+    newQuestions.splice(index, 1);
+    setQuestions(newQuestions);
 
+    const newAnswers = [...answers];
+    newAnswers.splice(index, 1);
+    setAnswers(newAnswers);
+  };
   const submitQuestion = () => {
     const newQuestion = {
       text: questionText,
@@ -69,6 +78,17 @@ const QuestionCard = () => {
     setMarks("");
   };
 
+  const postAssessment = () => {
+    console.log({
+      submissionDate,
+      totalQuestions: questions.length,
+      questions: questions.map((question, index) => ({
+        ...question,
+        answers: answers[index],
+      })),
+    });
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -82,11 +102,17 @@ const QuestionCard = () => {
           >
             Enter Submission Date :{"  "}
           </label>
-          <input type="date" id="submission-date" className="border mb-2 p-1" />
+          <input
+            type="date"
+            id="submission-date"
+            className="border mb-2 p-1"
+            value={submissionDate}
+            onChange={(e) => setSubmissionDate(e.target.value)}
+          />
         </div>
         <button
-          className="border-none text-white p-1 font-bold font-Montserrat px-2 rounded bg-[#917A68]  hover:bg-[#282323] hover:font-bold cursor-pointer"
-          onClick={() => console.log({ questions, answers })}
+          onClick={postAssessment}
+          className="border-none text-white p-1 font-bold font-Montserrat px-2 rounded bg-[#917A68] hover:bg-[#282323] hover:font-bold cursor-pointer"
         >
           Post Assessment
         </button>
@@ -183,6 +209,12 @@ const QuestionCard = () => {
                 <p key={ansIndex}>{answer}</p>
               ))}
             </div>
+            <button
+              onClick={() => removeQuestion(index)}
+              className="border-red-500 p-2 text-red-500 rounded-lg"
+            >
+              Remove Question
+            </button>
           </div>
         ))}
       </div>
