@@ -10,7 +10,7 @@ const FormCheckboxGroup = ({
 }) => {
   return (
     <div className="mt-10 xl:mt-3 xl:col-span-2">
-      <p className="text-2xl xl:text-xl  font-Montserrat mb-5">
+      <p className="text-sm xl:text-xl  font-Montserrat mb-5">
         {groupLabel}
         {required && (
           <p className="text-red-500">

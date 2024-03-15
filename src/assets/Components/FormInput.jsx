@@ -28,7 +28,7 @@ const FormInput = ({
         className={
           is === "dashboard"
             ? `hidden`
-            : `text-2xl xl:text-xl xl:flex xl:gap-4 xl:items-center font-Montserrat cursor-pointer`
+            : `text-sm font-semibold xl:flex xl:gap-4 xl:items-center font-Montserrat cursor-pointer`
         }
       >
         {label}
@@ -42,7 +42,7 @@ const FormInput = ({
           className={
             is === "dashboard"
               ? `form-select absolute top-48 right-auto left-auto font-Montserrat border-[#D3C9C9] bg-white shadow-lg py-2 px-2 xl:top-32 xl:right-20`
-              : `form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg`
+              : `form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-1 px-2 text-sm xl:text-sm`
           }
           onChange={onChange}
           required={required}
@@ -59,7 +59,7 @@ const FormInput = ({
           <input
             type={type === "password" && passwordVisible ? "text" : type}
             id={id}
-            className={`form-input border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg ${type === "password" ? "pr-10" : ""}`}
+            className={`form-input border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-1 py-2 px-2 text-sm xl:text-sm ${type === "password" ? "pr-10" : ""}`}
             placeholder={placeholder}
             onChange={onChange}
             required={required}
