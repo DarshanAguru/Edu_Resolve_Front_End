@@ -44,14 +44,14 @@ const Login = ({ user, onChange, data, onSubmit, isAdmin = false }) => {
               />
             ))}
             <button
-              className="text-xl hover:border-[#00000091] hover:text-[#00000091]  font-Montserrat mt-10  text-black "
+              className=" font-medium hover:border-[#00000091] hover:text-[#00000091]  font-Montserrat mt-10  text-black "
               type="button"
               onClick={() => setForgot((prev) => !prev)}
             >
               Forgot password?
             </button>
             <Button
-              style="border-none text-white font-Montserrat text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 py-1 mt-10 shadow-lg w-full py-4 hover:bg-[#282323] hover:font-bold cursor-pointer"
+              style="border-none text-white font-Montserrat text-xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 py-1 mt-5 shadow-lg w-full  hover:bg-[#282323] hover:font-bold cursor-pointer"
               type="submit"
             >
               Login
@@ -59,10 +59,10 @@ const Login = ({ user, onChange, data, onSubmit, isAdmin = false }) => {
 
             {!isAdmin && (
               <>
-                <p className="text-2xl font-light">New user?</p>
+                <p className="text-xl font-normal">New user?</p>
                 <Button
                   goTo={`/${user}Registration`}
-                  style=" bg-white font-Montserrat text-2xl leading-normal rounded-2xl text-[#917A68] my-2.5  underline underline-offset-8 mt-5 hover:text-[#917a68ab]"
+                  style=" bg-white font-Montserrat text-xl leading-normal rounded-2xl text-[#917A68] my-2.5  underline underline-offset-8 mt-5 hover:text-[#917a68ab]"
                 >
                   Sign up as a {user}
                 </Button>
@@ -71,7 +71,9 @@ const Login = ({ user, onChange, data, onSubmit, isAdmin = false }) => {
           </form>
         </div>
       )}
-      {forgot && <ForgotPassword goBack={() => setForgot((prev) => !prev)} user={user} />}
+      {forgot && (
+        <ForgotPassword goBack={() => setForgot((prev) => !prev)} user={user} />
+      )}
     </>
   );
 };

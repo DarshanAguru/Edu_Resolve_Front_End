@@ -33,18 +33,18 @@ export default function HomePage() {
             </Button>
             <br></br>
             <div className=" mt-20">
-              <div className="font-md font-Montserrat text-2xl">
+              <div className="font-md font-Montserrat text-xl">
                 For Organisation
               </div>
               <Button
-                style=" bg-white font-Montserrat text-2xl leading-normal rounded-2xl text-[#917A68] my-2.5 mx-auto px-5 underline underline-offset-8 mt-5 mx-auto "
+                style=" bg-white font-Montserrat text-xl leading-normal rounded-2xl text-[#917A68] my-2.5 mx-auto px-5 underline underline-offset-8 mt-5 mx-auto "
                 goTo="/teacherLogin"
               >
                 Login as Teacher here
               </Button>
 
               <Button
-                style=" bg-white font-Montserrat text-2xl leading-normal rounded-2xl text-[#917A68] my-2.5 mx-auto px-5 underline underline-offset-8 mt-5 mx-auto "
+                style=" bg-white font-Montserrat text-xl leading-normal rounded-2xl text-[#917A68] my-2.5 mx-auto px-5 underline underline-offset-8 mt-5 mx-auto "
                 goTo="/organisationLogin"
               >
                 Login as Organisation admin here
