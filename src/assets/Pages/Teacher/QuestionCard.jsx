@@ -1,6 +1,17 @@
 import React, { useState } from "react";
+import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
-const QuestionCard = () => {
+import axios from "axios";
+const QuestionCard = ({
+  stuclass,
+  subject,
+  id,
+  name,
+  school,
+  token,
+  refresh,
+  notify,
+}) => {
   const [questionText, setQuestionText] = useState("");
   const [questionType, setQuestionType] = useState("single");
   const [options, setOptions] = useState([
@@ -13,7 +24,6 @@ const QuestionCard = () => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [submissionDate, setSubmissionDate] = useState("");
-
   const addOption = () => {
     const newOptionId = options[options.length - 1].id + 1;
     setOptions([...options, { id: newOptionId, value: "", isChecked: false }]);
@@ -78,15 +88,26 @@ const QuestionCard = () => {
     setMarks("");
   };
 
-  const postAssessment = () => {
-    console.log({
-      submissionDate,
-      totalQuestions: questions.length,
-      questions: questions.map((question, index) => ({
-        ...question,
-        answers: answers[index],
-      })),
-    });
+  const postAssessment = async () => {
+    const res = await axios.post(
+      `http://localhost:9000/teachers/postassignment/${id}@${uuidv4()}`,
+      {
+        submissionDate,
+        totalQuestions: questions.length,
+        questions: questions.map((question, index) => ({
+          ...question,
+          answers: answers[index],
+        })),
+        grade: stuclass,
+        subject,
+        assignmentTitle: `${subject} Assessment by ${name}`,
+        school,
+        token,
+        id,
+      }
+    );
+    notify();
+    refresh();
   };
 
   return (
@@ -117,7 +138,11 @@ const QuestionCard = () => {
           Post Assessment
         </button>
       </div>
-      <div className=" shadow-md  border rounded-lg mt-3 p-5">
+      <form
+        onSubmit
+        ={submitQuestion}
+        className=" shadow-md  border rounded-lg mt-3 p-5"
+      >
         <div className="flex gap-10">
           <input
             type="text"
@@ -125,11 +150,13 @@ const QuestionCard = () => {
             value={questionText}
             onChange={(e) => setQuestionText(e.target.value)}
             className="col-span-2 mb-4 border w-1/2 p-1"
+            required
           />
           <select
             value={questionType}
             onChange={(e) => setQuestionType(e.target.value)}
             className="col-span-2 mb-4 border w-1/4 p-1"
+            required
           >
             <option value="single">Single Choice</option>
             <option value="multiple">Multiple Choice</option>
@@ -150,6 +177,7 @@ const QuestionCard = () => {
               checked={option.isChecked}
               onChange={() => toggleOptionCheck(option.id)}
               className="mr-2 border-slate-700 border-2"
+              required
             />
             <input
               type="text"
@@ -157,6 +185,7 @@ const QuestionCard = () => {
               value={option.value}
               onChange={(e) => updateOptionValue(option.id, e.target.value)}
               className="flex-grow mr-2 mb-2 border p-1"
+              required
             />
             {/* Add a button to remove the option */}
             <button
@@ -169,17 +198,15 @@ const QuestionCard = () => {
         ))}
         <button
           onClick={addOption}
+          type="button"
           className="block bg-slate-400 p-2 mt-2 text-white rounded-lg"
         >
           + Add Option
         </button>
-        <button
-          onClick={submitQuestion}
-          className="bg-slate-700 rounded-xl p-2 text-white"
-        >
+        <button className="bg-slate-700 rounded-xl p-2 text-white">
           Submit Question
         </button>
-      </div>
+      </form>
       <div className="questions-display">
         <p className="font-semibold my-3">Added Questions</p>
         {questions.map((question, index) => (

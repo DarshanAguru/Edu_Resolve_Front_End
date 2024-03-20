@@ -1,12 +1,20 @@
 import React from "react";
 import FormInput from "../../Components/FormInput";
-import Assessments from "./Assessments";
+import QuestionCard from "./QuestionCard";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const TeacherAssessments = () => {
   const [formData, setFormData] = React.useState({ subject: "", class: "" });
+  const { name, _id, token, institution } = JSON.parse(
+    localStorage.getItem("teacher")
+  );
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
+  const notify = () => toast.success(" Assessment submitted successfully");
+  console.log(formData);
   return (
     <div>
       <p className="text-xl text-center mt-4 font-bold">Post Assessments</p>
@@ -29,6 +37,7 @@ const TeacherAssessments = () => {
                 id="subject"
                 required={true}
                 onChange={handleChange}
+                value={formData.subject}
               ></FormInput>
               <FormInput
                 label="select class"
@@ -37,9 +46,22 @@ const TeacherAssessments = () => {
                 required={true}
                 id="class"
                 onChange={handleChange}
+                value={formData.class}
               ></FormInput>
             </div>
           </form>
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </div>
 
         {!(formData.class && formData.subject) ? (
@@ -48,7 +70,16 @@ const TeacherAssessments = () => {
           </div>
         ) : (
           <div className="text-center col-span-2 mt-10 ">
-            <Assessments stuclass={formData.class} subject={formData.subject} />
+            <QuestionCard
+              stuclass={formData.class}
+              subject={formData.subject}
+              name={name}
+              id={_id}
+              token={token}
+              school={institution}
+              refresh={() => setFormData({ subject: "", class: "" })}
+              notify={notify}
+            />
           </div>
         )}
       </div>

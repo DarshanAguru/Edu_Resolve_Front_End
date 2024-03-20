@@ -13,6 +13,7 @@ const FormInput = ({
   title,
   is = "",
   placeholder = "",
+  value
 }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -46,6 +47,7 @@ const FormInput = ({
           }
           onChange={onChange}
           required={required}
+          value={value}
         >
           <option value="">{placeholder || "Please select..."}</option>
           {options.map((option, index) => (
