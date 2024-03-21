@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import axios from "axios";
 const QuestionCard = ({
@@ -14,6 +16,7 @@ const QuestionCard = ({
 }) => {
   const [questionText, setQuestionText] = useState("");
   const [questionType, setQuestionType] = useState("single");
+  const [isAnyOptionChecked, setIsAnyOptionChecked] = useState(false);
   const [options, setOptions] = useState([
     { id: 1, value: "", isChecked: false },
     { id: 2, value: "", isChecked: false },
@@ -40,18 +43,20 @@ const QuestionCard = ({
   };
 
   const toggleOptionCheck = (id) => {
-    if (questionType === "single") {
-      const newOptions = options.map((option) => ({
-        ...option,
-        isChecked: option.id === id,
-      }));
-      setOptions(newOptions);
-    } else {
-      const newOptions = options.map((option) =>
-        option.id === id ? { ...option, isChecked: !option.isChecked } : option
-      );
-      setOptions(newOptions);
-    }
+    const newOptions = options.map((option) =>
+      questionType === "single"
+        ? { ...option, isChecked: option.id === id }
+        : option.id === id
+          ? { ...option, isChecked: !option.isChecked }
+          : option
+    );
+
+    // Update options as before
+    setOptions(newOptions);
+
+    // Check if any option is checked and update state
+    const anyChecked = newOptions.some((option) => option.isChecked);
+    setIsAnyOptionChecked(anyChecked);
   };
   const removeQuestion = (index) => {
     const newQuestions = [...questions];
@@ -62,7 +67,8 @@ const QuestionCard = ({
     newAnswers.splice(index, 1);
     setAnswers(newAnswers);
   };
-  const submitQuestion = () => {
+  const submitQuestion = (e) => {
+    e.preventDefault();
     const newQuestion = {
       text: questionText,
       type: questionType,
@@ -88,31 +94,53 @@ const QuestionCard = ({
     setMarks("");
   };
 
-  const postAssessment = async () => {
-    const res = await axios.post(
-      `http://localhost:9000/teachers/postassignment/${id}@${uuidv4()}`,
-      {
-        submissionDate,
-        totalQuestions: questions.length,
-        questions: questions.map((question, index) => ({
-          ...question,
-          answers: answers[index],
-        })),
-        grade: stuclass,
-        subject,
-        assignmentTitle: `${subject} Assessment by ${name}`,
-        school,
-        token,
-        id,
+  const postAssessment = async (e) => {
+    e.preventDefault();
+    if (questions.length === 0) {
+      toast.warn(
+        "Please add at least one question before posting the assessment."
+      );
+      return;
+    }
+    try {
+      const res = await axios.post(
+        `http://localhost:9000/teachers/postassignment/${id}@${uuidv4()}`,
+        {
+          submissionDate,
+          totalQuestions: questions.length,
+          questions: questions.map((question, index) => ({
+            ...question,
+            answers: answers[index],
+          })),
+          grade: stuclass,
+          subject,
+          assignmentTitle: `${subject} Assessment by ${name}`,
+          school,
+          token,
+          id,
+        }
+      );
+      console.log(res);
+      if (res.status === 201) {
+        notify();
+        refresh();
+      } else {
+        toast.error("Failed to post the assessment. Please try again.");
       }
-    );
-    notify();
-    refresh();
+    } catch (error) {
+      console.error("Error posting the assessment:", error);
+
+      toast.error("An error occurred while posting the assessment.");
+    }
   };
 
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <ToastContainer />
+      <form
+        onSubmit={postAssessment}
+        className="flex justify-between items-center"
+      >
         <p className="font-bold font-Montserrat text-[#917A68]">
           Total Questions Added: {questions.length}
         </p>
@@ -129,18 +157,15 @@ const QuestionCard = ({
             className="border mb-2 p-1"
             value={submissionDate}
             onChange={(e) => setSubmissionDate(e.target.value)}
+            required
           />
         </div>
-        <button
-          onClick={postAssessment}
-          className="border-none text-white p-1 font-bold font-Montserrat px-2 rounded bg-[#917A68] hover:bg-[#282323] hover:font-bold cursor-pointer"
-        >
+        <button className="border-none text-white p-1 font-bold font-Montserrat px-2 rounded bg-[#917A68] hover:bg-[#282323] hover:font-bold cursor-pointer">
           Post Assessment
         </button>
-      </div>
+      </form>
       <form
-        onSubmit
-        ={submitQuestion}
+        onSubmit={submitQuestion}
         className=" shadow-md  border rounded-lg mt-3 p-5"
       >
         <div className="flex gap-10">
@@ -177,7 +202,7 @@ const QuestionCard = ({
               checked={option.isChecked}
               onChange={() => toggleOptionCheck(option.id)}
               className="mr-2 border-slate-700 border-2"
-              required
+              required={!isAnyOptionChecked}
             />
             <input
               type="text"

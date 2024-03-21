@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { data } from "../../data/facts";
 import { quotes } from "../../data/quotes";
 import PostCard from "../../Components/PostCard";
-import { ToastContainer} from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
@@ -15,9 +14,8 @@ const MentorHome = () => {
   const [randomData, setRandomData] = useState("");
   const [randomQuote, setRandomQuote] = useState("");
   const [refresh, setRefresh] = useState(false);
-  const { _id, token, institution } = JSON.parse(
-    localStorage.getItem("teacher")
-  );
+  const { _id, token } = JSON.parse(localStorage.getItem("mentor"));
+  console.log(_id, token);
   const [messages, setMessages] = useState([]);
   useEffect(() => {
     setRandomData(data[Math.floor(Math.random() * data.length)]);
@@ -28,8 +26,8 @@ const MentorHome = () => {
     async function getMessages() {
       try {
         const { data } = await axios.post(
-          `http://localhost:9000/messages/getmessagesbyschool`,
-          { token: token, id: _id , school: institution}
+          `http://localhost:9000/messages/getAllMessages`,
+          { token: token, id: _id }
         );
         setMessages(data.reverse());
       } catch (e) {
@@ -39,7 +37,6 @@ const MentorHome = () => {
     getMessages();
   }, [refresh]);
 
-  
   return (
     <div className="flex flex-col md:flex-row gap-5 m-5 ">
       <ToastContainer />
@@ -75,7 +72,7 @@ const MentorHome = () => {
             <PostCard
               key={message.messageId}
               user={message}
-              userType="teacher"
+              userType="mentor"
               refresh={() => setRefresh((prev) => !prev)}
             />
           ))}

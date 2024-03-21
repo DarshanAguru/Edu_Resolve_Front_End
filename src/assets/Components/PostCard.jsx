@@ -17,7 +17,14 @@ export default function PostCard({ user, userType, refresh }) {
   const { _id, name, gender, token } = JSON.parse(
     localStorage.getItem(userType)
   );
-  const profileImg = useSenderImage(gender, (userType === 'student')?'students':(userType=== 'teacher')?'teachers':'mentors');
+  const profileImg = useSenderImage(
+    gender,
+    userType === "student"
+      ? "students"
+      : userType === "teacher"
+        ? "teachers"
+        : "mentors"
+  );
   const [showComments, setShowComments] = React.useState(false);
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
