@@ -69,6 +69,16 @@ const QuestionCard = ({
   };
   const submitQuestion = (e) => {
     e.preventDefault();
+    if (questionType === "single" && !options.some(option => option.isChecked)) {
+      toast.warn("Please select at least one option for the question.");
+      return;
+    }
+  
+    // For multiple choice questions, ensure at least one checkbox is checked
+    if (questionType === "multiple" && !isAnyOptionChecked) {
+      toast.warn("Please select at least one option for the question.");
+      return;
+    }
     const newQuestion = {
       text: questionText,
       type: questionType,
@@ -190,6 +200,7 @@ const QuestionCard = ({
             type="number"
             placeholder="Enter marks for question"
             value={marks}
+            required
             onChange={(e) => setMarks(e.target.value)}
             className="col-span-2 mb-4 border w-1/4 p-1"
           />
