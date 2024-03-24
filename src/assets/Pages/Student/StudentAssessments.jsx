@@ -10,7 +10,6 @@ const StudentAssessments = () => {
   });
   const [selectedAssessment, setSelectedAssessment] = useState("");
 
-  // Assuming the student's details are stored in localStorage
   const { name, _id, token, school, grade } = JSON.parse(
     localStorage.getItem("student")
   );
@@ -52,17 +51,18 @@ const StudentAssessments = () => {
         ...prevFormData,
         [id]: value,
       }));
+      setSelectedAssessment("");
     }
   };
 
-  const notifySuccess = () =>
-    toast.success("Assessment submitted successfully");
   const selectedAssessmentDetails = formData.assessment.find(
     (assessment) => assessment._id === selectedAssessment
   );
   return (
     <div>
-      <p className="text-xl text-center mt-4 font-bold">Post Assessments</p>
+      <p className=" font-bold text-xl font-Montserrat mt-5 text-center">
+        Post Assessments
+      </p>
       <div className="mx-10 lg:grid lg:grid-cols-3">
         <div className="lg:col-span-1">
           <form className="lg:mx-5 lg:my-10">
@@ -125,20 +125,11 @@ const StudentAssessments = () => {
           </div>
         ) : (
           <div className="text-center col-span-2 mt-10">
-            <p>
-              Assessment Selected: {selectedAssessmentDetails?.assignmentTitle}
+            <p className=" font-bold text-lg font-Montserrat my-2">
+              {selectedAssessmentDetails?.assignmentTitle}
             </p>
             {/* Pass the selected assessment details to the AssessmentCard */}
-            <AssessmentCard
-              questions={selectedAssessmentDetails?.questions}
-              // Add any other props your AssessmentCard might need
-            />
-            <button
-              onClick={notifySuccess}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Submit Assessment
-            </button>
+            <AssessmentCard questions={selectedAssessmentDetails?.questions} />
           </div>
         )}
       </div>

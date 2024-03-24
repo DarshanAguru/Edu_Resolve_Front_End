@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,7 +13,6 @@ const QuestionCard = ({
   school,
   token,
   refresh,
-  notify,
 }) => {
   const [questionText, setQuestionText] = useState("");
   const [questionType, setQuestionType] = useState("single");
@@ -69,11 +69,14 @@ const QuestionCard = ({
   };
   const submitQuestion = (e) => {
     e.preventDefault();
-    if (questionType === "single" && !options.some(option => option.isChecked)) {
+    if (
+      questionType === "single" &&
+      !options.some((option) => option.isChecked)
+    ) {
       toast.warn("Please select at least one option for the question.");
       return;
     }
-  
+
     // For multiple choice questions, ensure at least one checkbox is checked
     if (questionType === "multiple" && !isAnyOptionChecked) {
       toast.warn("Please select at least one option for the question.");
@@ -116,7 +119,7 @@ const QuestionCard = ({
       const res = await axios.post(
         `http://localhost:9000/teachers/postassignment/${id}@${uuidv4()}`,
         {
-          submissionDate,
+          deadline: `${submissionDate.split("-")[1]}/${submissionDate.split("-")[2]}/${submissionDate.split("-")[0]}`,
           totalQuestions: questions.length,
           questions: questions.map((question, index) => ({
             ...question,
@@ -131,12 +134,14 @@ const QuestionCard = ({
         }
       );
       console.log(res);
+
       if (res.status === 201) {
-        notify();
-        refresh();
-      } else {
-        toast.error("Failed to post the assessment. Please try again.");
+        toast.success(" Assessment submitted successfully", {
+          onClose: () => refresh(),
+        });
       }
+
+      // refresh();
     } catch (error) {
       console.error("Error posting the assessment:", error);
 
@@ -200,9 +205,9 @@ const QuestionCard = ({
             type="number"
             placeholder="Enter marks for question"
             value={marks}
-            required
             onChange={(e) => setMarks(e.target.value)}
             className="col-span-2 mb-4 border w-1/4 p-1"
+            required
           />
         </div>
         {options.map((option) => (

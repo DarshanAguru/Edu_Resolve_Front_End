@@ -1,8 +1,9 @@
 import React from "react";
 import FormInput from "../../Components/FormInput";
 import QuestionCard from "./QuestionCard";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AllAssignmentsCard from "./AllAssignmentsCard";
 const TeacherAssessments = () => {
   const [formData, setFormData] = React.useState({ subject: "", class: "" });
   const { name, _id, token, institution } = JSON.parse(
@@ -13,7 +14,6 @@ const TeacherAssessments = () => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
-  const notify = () => toast.success(" Assessment submitted successfully");
   console.log(formData);
   return (
     <div>
@@ -22,6 +22,7 @@ const TeacherAssessments = () => {
         <div className="lg:col-span-1">
           <form className="lg:mx-5 lg:my-10 ">
             <div className="flex gap-10 lg:block">
+              Select the Subject and Class options to post the assessment
               <FormInput
                 label="select subject"
                 type="select"
@@ -65,8 +66,8 @@ const TeacherAssessments = () => {
         </div>
 
         {!(formData.class && formData.subject) ? (
-          <div className=" col-span-2 flex items-center justify-center">
-            Select the Subject and Class options to post the assessment here
+          <div className="text-center col-span-2 mt-10">
+            <AllAssignmentsCard id={_id} token={token} />
           </div>
         ) : (
           <div className="text-center col-span-2 mt-10 ">
@@ -78,7 +79,6 @@ const TeacherAssessments = () => {
               token={token}
               school={institution}
               refresh={() => setFormData({ subject: "", class: "" })}
-              notify={notify}
             />
           </div>
         )}

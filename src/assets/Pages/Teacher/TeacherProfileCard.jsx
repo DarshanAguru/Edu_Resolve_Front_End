@@ -44,8 +44,7 @@ const TeacherProfileCard = ({ data, userType, setRefresh }) => {
     age,
     gender,
     emailId,
-    phoneNumber,
-    emailId,
+    phoneNumber
   });
   const [schools, setSchools] = useState([]);
 

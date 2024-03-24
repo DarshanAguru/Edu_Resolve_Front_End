@@ -13,18 +13,11 @@ import { TiUpload } from "react-icons/ti";
 import PostCardComments from "./PostCardComments";
 import useSenderImage from "../hooks/useSenderImage";
 
-export default function PostCard({ user, userType, refresh }) {
+export default function PostCard({ user, userType ,refresh }) {
   const { _id, name, gender, token } = JSON.parse(
     localStorage.getItem(userType)
   );
-  const profileImg = useSenderImage(
-    gender,
-    userType === "student"
-      ? "students"
-      : userType === "teacher"
-        ? "teachers"
-        : "mentors"
-  );
+  const profileImg = useSenderImage(gender, "students");
   const [showComments, setShowComments] = React.useState(false);
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
@@ -66,15 +59,10 @@ export default function PostCard({ user, userType, refresh }) {
       `http://localhost:9000/messages/addreply/${messageId}`,
       {
         senderId: _id,
-        senderType:
-          userType === "student"
-            ? "students"
-            : userType === "teacher"
-              ? "teachers"
-              : "mentors",
+        senderType: "students",
         senderName: name,
         message: comment,
-        senderGender: gender,
+        senderGender: messageSenderGender,
         imageLink: imageURL,
         token: token,
         id: _id,
@@ -99,7 +87,7 @@ export default function PostCard({ user, userType, refresh }) {
   //Handle DisLike
   const handleDisLike = async () => {
     // e.preventDefault();
-    const res = await axios.post(
+    await axios.post(
       `http://localhost:9000/messages/downvote/${messageId}`,
       { token: token, id: _id, userId: _id }
     );
@@ -181,6 +169,6 @@ export default function PostCard({ user, userType, refresh }) {
             <PostCardComments key={index} reply={reply} />
           ))}
       </div>
-    </div>
-  );
+    </div>
+  );
 }
