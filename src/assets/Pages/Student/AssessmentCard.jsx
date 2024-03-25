@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import StartPage from "./StartPage";
 import axios from "axios";
-const AssessmentCard = ({ id, token, userId }) => {
-  const [answers, setAnswers] = useState({});
+import Confetti from "react-confetti";
+const AssessmentCard = ({ id, token, userId, name }) => {
+  const [answers, setAnswers] = useState([]);
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState([]);
+  const [marks, setMarks] = useState("1/3");
   const handleStartClick = () => {
     setStart((prev) => !prev);
   };
@@ -22,23 +25,34 @@ const AssessmentCard = ({ id, token, userId }) => {
     }
     getAssignmentQuestions();
   }, []);
-  const handleOptionChange = (questionId, option, isMultiple) => {
-    if (isMultiple === "multiple") {
-      // For multiple choice, update the array of answers
-      setAnswers((prevAnswers) => ({
-        ...prevAnswers,
-        [questionId]: {
-          ...prevAnswers[questionId],
-          [option]: !prevAnswers[questionId]?.[option],
-        },
-      }));
-    } else {
-      // For single choice, directly set the answer
-      setAnswers((prevAnswers) => ({
-        ...prevAnswers,
-        [questionId]: option,
-      }));
-    }
+  const handleOptionChange = (questionIndex, option, isMultiple) => {
+    setAnswers((prevAnswers) => {
+      // Clone the previous answers to avoid direct state mutation
+      const updatedAnswers = [...prevAnswers];
+      console.log(updatedAnswers);
+      if (isMultiple === "multiple") {
+        // Ensure there's an array to work with for this question
+        if (!updatedAnswers[questionIndex]) updatedAnswers[questionIndex] = [];
+
+        const currentAnswers = updatedAnswers[questionIndex];
+        const optionIndex = currentAnswers.indexOf(option);
+
+        if (optionIndex > -1) {
+          // Option already selected, remove it
+          updatedAnswers[questionIndex] = currentAnswers.filter(
+            (opt) => opt !== option
+          );
+        } else {
+          // Option not selected, add it
+          updatedAnswers[questionIndex] = [...currentAnswers, option];
+        }
+      } else {
+        // For single choice, directly set or replace the answer
+        updatedAnswers[questionIndex] = [option];
+      }
+
+      return updatedAnswers;
+    });
   };
 
   // Example adjustment in handleSubmit for consistent identification using questionIndex
@@ -73,14 +87,54 @@ const AssessmentCard = ({ id, token, userId }) => {
     // Proceed with form submission logic...
     console.log("Submitted Answers:", answers);
     toast.success("Answers submitted successfully!");
+    async function submitAnswers() {
+      const res = await axios.post(
+        `http://localhost:9000/students/submitAssignment/${id}`,
+        {
+          token,
+          id: userId,
+          senderId: userId,
+          senderName: name,
+          assignmentAnswers: answers,
+        }
+      );
+      console.log(res);
+      setMarks(res.data.marks);
+    }
+    submitAnswers();
   };
 
   return (
     <div>
       <ToastContainer />
       {!start ? (
-        <StartPage start={handleStartClick} />
-      ) : (
+        // <StartPage start={handleStartClick} />
+        <div className=" shadow-custom rounded-lg p-10">
+          {marks.split("/")[0] > marks.split("/")[1] / 2 ? (
+            <>
+              <Confetti />
+              <p className=" font-MajorMono font-extrabold">you scored</p>
+              <p className=" font-Montserrat tracking-wider font-bold ">
+                {marks.split("/")[0]} out of {marks.split("/")[1]}
+              </p>
+              <p className=" font-Montserrat mt-20 tracking-wider">
+                Good performance, keep it up
+              </p>
+            </>
+          ) : (
+            <>
+              <p className=" font-MajorMono font-extrabold">you scored</p>
+              <p className=" font-Montserrat tracking-wider font-bold ">
+                {marks.split("/")[0]} out of {marks.split("/")[1]}
+              </p>
+              <p className=" font-Montserrat mt-20 tracking-wider">
+                Try to improve next time
+              </p>
+            </>
+          )}
+         
+        </div>
+      ) : !marks ? (
         <form
           onSubmit={handleSubmit}
           className=" shadow-md  border rounded-lg lg:mx-10 mt-3 p-5 text-left"
@@ -122,6 +176,13 @@ const AssessmentCard = ({ id, token, userId }) => {
             Submit Assessment
           </button>
         </form>
+      ) : (
+        <>
+          <Confetti />
+          <div>
+            <p>marks:{marks}</p>
+          </div>
+        </>
       )}
     </div>
   );

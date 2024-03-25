@@ -38,7 +38,7 @@ const StudentAssessments = () => {
         toast.error("Failed to fetch assignments");
       }
     };
-
+    console.log(formData);
     getAssignments();
   }, [formData.subject, grade, school, token, _id]);
 
@@ -60,8 +60,8 @@ const StudentAssessments = () => {
   );
   return (
     <div>
-      <p className=" font-bold text-xl font-Montserrat mt-5 text-center">
-        Post Assessments
+      <p className=" font-bold text-xl font-Montserrat mt-5 text-center underline-offset-8 underline ">
+        Assessments
       </p>
       <div className="mx-10 lg:grid lg:grid-cols-3">
         <div className="lg:col-span-1">
@@ -135,9 +135,12 @@ const StudentAssessments = () => {
               {selectedAssessmentDetails?.title}
             </p>
             {/* Pass the selected assessment details to the AssessmentCard */}
-            <AssessmentCard id={selectedAssessmentDetails?.id}
-            token={token}
-            userId={_id} />
+            <AssessmentCard
+              id={selectedAssessmentDetails?.id}
+              token={token}
+              userId={_id}
+              name={name}
+            />
           </div>
         )}
       </div>
