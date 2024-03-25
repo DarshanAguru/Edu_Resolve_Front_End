@@ -56,7 +56,7 @@ const StudentAssessments = () => {
   };
 
   const selectedAssessmentDetails = formData.assessment.find(
-    (assessment) => assessment._id === selectedAssessment
+    (assessment) => assessment.id === selectedAssessment
   );
   return (
     <div>
@@ -104,12 +104,18 @@ const StudentAssessments = () => {
                   id="assessment"
                   onChange={handleChange}
                   value={selectedAssessment}
-                  className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-1 px-2 text-sm xl:text-sm"
+                  className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-1 px-2 text-sm xl:text-sm text-black"
                 >
                   <option value="">Select an assessment</option>
                   {formData.assessment.map((assessment) => (
-                    <option key={assessment._id} value={assessment._id}>
-                      {assessment.assignmentTitle}
+                    <option
+                      className="text-sm"
+                      key={assessment.id}
+                      value={assessment.id}
+                    >
+                      {assessment.title.split(" ")[0] +
+                        "- " +
+                        assessment.publishDate}
                     </option>
                   ))}
                 </select>
@@ -126,10 +132,12 @@ const StudentAssessments = () => {
         ) : (
           <div className="text-center col-span-2 mt-10">
             <p className=" font-bold text-lg font-Montserrat my-2">
-              {selectedAssessmentDetails?.assignmentTitle}
+              {selectedAssessmentDetails?.title}
             </p>
             {/* Pass the selected assessment details to the AssessmentCard */}
-            <AssessmentCard questions={selectedAssessmentDetails?.questions} />
+            <AssessmentCard id={selectedAssessmentDetails?.id}
+            token={token}
+            userId={_id} />
           </div>
         )}
       </div>

@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import StartPage from "./StartPage";
-const AssessmentCard = ({ questions }) => {
+import axios from "axios";
+const AssessmentCard = ({ id, token, userId }) => {
   const [answers, setAnswers] = useState({});
   const [start, setStart] = useState(false);
+  const [questions, setQuestions] = useState([]);
   const handleStartClick = () => {
     setStart((prev) => !prev);
   };
+  useEffect(() => {
+    async function getAssignmentQuestions() {
+      const res = await axios.post(
+        `http://localhost:9000/students/getAssignment/${id}`,
+        { token, id: userId }
+      );
+      console.log(JSON.parse(localStorage.getItem("student")));
+      setQuestions(res.data._doc.questions);
+      console.log(questions);
+    }
+    getAssignmentQuestions();
+  }, []);
   const handleOptionChange = (questionId, option, isMultiple) => {
     if (isMultiple === "multiple") {
       // For multiple choice, update the array of answers
@@ -27,25 +41,36 @@ const AssessmentCard = ({ questions }) => {
     }
   };
 
+  // Example adjustment in handleSubmit for consistent identification using questionIndex
   const handleSubmit = (e) => {
     e.preventDefault();
-    const isMultipleChoiceValid = questions.every((question, index) => {
-      if (question.type === "multiple") {
-        // Get the answers for the current question from the answers state
-        const questionAnswers = answers[index] || {};
-        // Check if at least one option is selected
-        return Object.values(questionAnswers).some((isChecked) => isChecked);
+
+    const isEveryQuestionValid = questions.every((question, questionIndex) => {
+      const questionId = questionIndex.toString(); // Use questionIndex for identification
+
+      if (question.type === "single") {
+        return answers[questionId] !== undefined;
       }
 
-      return true;
+      if (question.type === "multiple") {
+        const questionAnswers = answers[questionId];
+        return (
+          questionAnswers &&
+          Object.values(questionAnswers).some((isSelected) => isSelected)
+        );
+      }
+
+      return false; // Fallback for invalid question type
     });
 
-    if (!isMultipleChoiceValid) {
+    if (!isEveryQuestionValid) {
       toast.warn(
         "Please select at least one option for all multiple choice questions."
       );
       return; // Prevent form submission if validation fails
     }
+
+    // Proceed with form submission logic...
     console.log("Submitted Answers:", answers);
     toast.success("Answers submitted successfully!");
   };
