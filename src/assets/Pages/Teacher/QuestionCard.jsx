@@ -13,6 +13,7 @@ const QuestionCard = ({
   school,
   token,
   refresh,
+  goBack,
 }) => {
   const [questionText, setQuestionText] = useState("");
   const [questionType, setQuestionType] = useState("single");
@@ -152,17 +153,33 @@ const QuestionCard = ({
   return (
     <div>
       <ToastContainer />
+      <button
+        onClick={goBack}
+        className="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded flex items-center gap-2 mb-5 hover:bg-gray-300 mr-auto"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path d="M19 11H7.414l5.293-5.293-1.414-1.414L3.586 12l7.707 7.707 1.414-1.414L7.414 13H19v-2z" />
+        </svg>
+
+        <span>Back to Assignments</span>
+      </button>
       <form
         onSubmit={postAssessment}
         className="flex justify-between items-center"
       >
-        <p className="font-bold font-Montserrat text-[#917A68]">
+        <p className="font-bold font-Montserrat text-[#917A68] tracking-wide">
           Total Questions Added: {questions.length}
         </p>
         <div>
           <label
             htmlFor="submission-date"
-            className="font-bold font-Montserrat text-[#917A68]"
+            className="font-bold font-Montserrat text-[#917A68] tracking-wide"
           >
             Enter Submission Date :{"  "}
           </label>
@@ -175,7 +192,7 @@ const QuestionCard = ({
             required
           />
         </div>
-        <button className="border-none text-white p-1 font-bold font-Montserrat px-2 rounded bg-[#917A68] hover:bg-[#282323] hover:font-bold cursor-pointer">
+        <button className="border-none text-white p-1 font-bold font-Montserrat px-2 rounded bg-[#917A68] hover:bg-[#282323] hover:font-bold cursor-pointer tracking-wider">
           Post Assessment
         </button>
       </form>

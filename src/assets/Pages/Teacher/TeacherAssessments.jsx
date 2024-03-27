@@ -9,7 +9,12 @@ const TeacherAssessments = () => {
   const { name, _id, token, institution } = JSON.parse(
     localStorage.getItem("teacher")
   );
-
+  const goBack = () => {
+    setFormData((prevFormData) => ({
+      subject: "",
+      class:""
+    }));
+  };
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
@@ -17,12 +22,16 @@ const TeacherAssessments = () => {
   console.log(formData);
   return (
     <div>
-      <p className="text-xl text-center mt-4 font-bold">Post Assessments</p>
+      <p className="text-xl text-center mt-4 font-bold font-Montserrat">
+        Post Assessments
+      </p>
       <div className="mx-10  lg:grid lg:grid-cols-3">
         <div className="lg:col-span-1">
           <form className="lg:mx-5 lg:my-10 ">
-            <div className="flex gap-10 lg:block">
-              Select the Subject and Class options to post the assessment
+            <div className="flex lg:gap-10  lg:block flex-wrap">
+              <span className="mt-5 lg:mt-2 font-semibold text-base  text-gray-500 tracking-wide font-Montserrat">
+                Select the Subject and Class options to post the assessment{" "}
+              </span>
               <FormInput
                 label="select subject"
                 type="select"
@@ -75,6 +84,7 @@ const TeacherAssessments = () => {
               stuclass={formData.class}
               subject={formData.subject}
               name={name}
+              goBack={goBack}
               id={_id}
               token={token}
               school={institution}

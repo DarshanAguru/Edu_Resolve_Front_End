@@ -1,17 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import StartPage from "./StartPage";
 import axios from "axios";
 import Confetti from "react-confetti";
-const AssessmentCard = ({ id, token, userId, name }) => {
+const AssessmentCard = ({ id, token, userId, name, goBack, deadline }) => {
   const [answers, setAnswers] = useState([]);
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState([]);
-  const [marks, setMarks] = useState("1/3");
+  const [marks, setMarks] = useState("");
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
   const handleStartClick = () => {
     setStart((prev) => !prev);
+  };
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup listener on component unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, [windowSize.width, windowSize.height]);
+  useEffect(() => {
+    if (marks) {
+      // Checks if marks are available
+      const timer = setTimeout(() => {
+        goBack();
+      }, 10000);
+      return () => clearTimeout(timer); // Cleanup on component unmount
+    }
+  }, [marks]); // Dependency array
+
+  // Function to handle direct redirect
+  const handleDirectRedirect = () => {
+    goBack(); // Immediately redirects to the assessments page
   };
   useEffect(() => {
     async function getAssignmentQuestions() {
@@ -19,19 +46,16 @@ const AssessmentCard = ({ id, token, userId, name }) => {
         `http://localhost:9000/students/getAssignment/${id}`,
         { token, id: userId }
       );
-      console.log(JSON.parse(localStorage.getItem("student")));
+
       setQuestions(res.data._doc.questions);
-      console.log(questions);
     }
     getAssignmentQuestions();
   }, []);
   const handleOptionChange = (questionIndex, option, isMultiple) => {
     setAnswers((prevAnswers) => {
-      // Clone the previous answers to avoid direct state mutation
       const updatedAnswers = [...prevAnswers];
       console.log(updatedAnswers);
       if (isMultiple === "multiple") {
-        // Ensure there's an array to work with for this question
         if (!updatedAnswers[questionIndex]) updatedAnswers[questionIndex] = [];
 
         const currentAnswers = updatedAnswers[questionIndex];
@@ -55,7 +79,6 @@ const AssessmentCard = ({ id, token, userId, name }) => {
     });
   };
 
-  // Example adjustment in handleSubmit for consistent identification using questionIndex
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -84,8 +107,10 @@ const AssessmentCard = ({ id, token, userId, name }) => {
       return; // Prevent form submission if validation fails
     }
 
-    // Proceed with form submission logic...
-    console.log("Submitted Answers:", answers);
+    let storageData = JSON.parse(localStorage.getItem("student"));
+    storageData.assignments.push(id);
+    localStorage.setItem("student", JSON.stringify(storageData));
+
     toast.success("Answers submitted successfully!");
     async function submitAnswers() {
       const res = await axios.post(
@@ -108,32 +133,11 @@ const AssessmentCard = ({ id, token, userId, name }) => {
     <div>
       <ToastContainer />
       {!start ? (
-        // <StartPage start={handleStartClick} />
-        <div className=" shadow-custom rounded-lg p-10">
-          {marks.split("/")[0] > marks.split("/")[1] / 2 ? (
-            <>
-              <Confetti />
-              <p className=" font-MajorMono font-extrabold">you scored</p>
-              <p className=" font-Montserrat tracking-wider font-bold ">
-                {marks.split("/")[0]} out of {marks.split("/")[1]}
-              </p>
-              <p className=" font-Montserrat mt-20 tracking-wider">
-                Good performance, keep it up
-              </p>
-            </>
-          ) : (
-            <>
-              <p className=" font-MajorMono font-extrabold">you scored</p>
-              <p className=" font-Montserrat tracking-wider font-bold ">
-                {marks.split("/")[0]} out of {marks.split("/")[1]}
-              </p>
-              <p className=" font-Montserrat mt-20 tracking-wider">
-                Try to improve next time
-              </p>
-            </>
-          )}
-         
-        </div>
+        <StartPage
+          start={handleStartClick}
+          goBack={goBack}
+          deadline={deadline}
+        />
       ) : !marks ? (
         <form
           onSubmit={handleSubmit}
@@ -178,9 +182,35 @@ const AssessmentCard = ({ id, token, userId, name }) => {
         </form>
       ) : (
         <>
-          <Confetti />
-          <div>
-            <p>marks:{marks}</p>
+          <div className=" shadow-custom rounded-lg p-10 mt-5">
+            {marks.split("/")[0] > marks.split("/")[1] / 2 ? (
+              <>
+                <Confetti width={windowSize.width} height={windowSize.height} />
+                <p className=" font-MajorMono font-extrabold">you scored</p>
+                <p className=" font-Montserrat tracking-wider font-bold ">
+                  {marks.split("/")[0]} out of {marks.split("/")[1]}
+                </p>
+                <p className=" font-Montserrat mt-20 tracking-wider">
+                  Good performance, keep it up
+                </p>
+              </>
+            ) : (
+              <>
+                <p className=" font-MajorMono font-extrabold">you scored</p>
+                <p className=" font-Montserrat tracking-wider font-bold ">
+                  {marks.split("/")[0]} out of {marks.split("/")[1]}
+                </p>
+                <p className=" font-Montserrat mt-20 tracking-wider">
+                  Try to improve next time
+                </p>
+              </>
+            )}
+            <button
+              onClick={handleDirectRedirect}
+              className="mt-5 text-blue-500 underline"
+            >
+              Go back to assessments now
+            </button>
           </div>
         </>
       )}

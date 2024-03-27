@@ -10,7 +10,7 @@ const StudentAssessments = () => {
   });
   const [selectedAssessment, setSelectedAssessment] = useState("");
 
-  const { name, _id, token, school, grade } = JSON.parse(
+  const { name, _id, token, school, grade, assignments } = JSON.parse(
     localStorage.getItem("student")
   );
 
@@ -29,10 +29,17 @@ const StudentAssessments = () => {
             id: _id,
           }
         );
+        const notSubmittedAssessments = response.data.filter((assessment) => {
+          
+          return !assignments.includes(assessment.id) && Date.now()<=Date.parse(assessment.deadline);
+        });
+        
+        console.lo;
         setFormData((prevFormData) => ({
           ...prevFormData,
-          assessment: response.data,
+          assessment: notSubmittedAssessments,
         }));
+        console.log(formData);
       } catch (error) {
         console.error("Failed to fetch assignments:", error);
         toast.error("Failed to fetch assignments");
@@ -58,9 +65,16 @@ const StudentAssessments = () => {
   const selectedAssessmentDetails = formData.assessment.find(
     (assessment) => assessment.id === selectedAssessment
   );
+  const disableDropdowns = formData.subject && selectedAssessment;
+  const goBack = () => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      subject: "",
+    }));
+  };
   return (
     <div>
-      <p className=" font-bold text-xl font-Montserrat mt-5 text-center underline-offset-8 underline ">
+      <p className=" font-bold text-xl font-Montserrat mt-5 text-center underline-offset-8 underline tracking-wider ">
         Assessments
       </p>
       <div className="mx-10 lg:grid lg:grid-cols-3">
@@ -76,6 +90,7 @@ const StudentAssessments = () => {
                 onChange={handleChange}
                 value={formData.subject}
                 className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-1 px-2 text-sm xl:text-sm"
+                disabled={disableDropdowns}
               >
                 <option value="">Select a subject</option>
                 {/* List of subjects */}
@@ -105,6 +120,7 @@ const StudentAssessments = () => {
                   onChange={handleChange}
                   value={selectedAssessment}
                   className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-1 px-2 text-sm xl:text-sm text-black"
+                  disabled={disableDropdowns}
                 >
                   <option value="">Select an assessment</option>
                   {formData.assessment.map((assessment) => (
@@ -131,15 +147,17 @@ const StudentAssessments = () => {
           </div>
         ) : (
           <div className="text-center col-span-2 mt-10">
-            <p className=" font-bold text-lg font-Montserrat my-2">
+            <p className=" font-bold text-lg font-Montserrat my-2 tracking-wide">
               {selectedAssessmentDetails?.title}
             </p>
             {/* Pass the selected assessment details to the AssessmentCard */}
             <AssessmentCard
               id={selectedAssessmentDetails?.id}
+              deadline={selectedAssessmentDetails.deadline}
               token={token}
               userId={_id}
               name={name}
+              goBack={goBack}
             />
           </div>
         )}
