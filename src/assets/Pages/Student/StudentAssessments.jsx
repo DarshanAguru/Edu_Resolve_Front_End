@@ -30,10 +30,12 @@ const StudentAssessments = () => {
           }
         );
         const notSubmittedAssessments = response.data.filter((assessment) => {
-          
-          return !assignments.includes(assessment.id) && Date.now()<=Date.parse(assessment.deadline);
+          return (
+            !assignments.includes(assessment.id) &&
+            Date.now() <= Date.parse(assessment.deadline)
+          );
         });
-        
+
         console.lo;
         setFormData((prevFormData) => ({
           ...prevFormData,
@@ -74,7 +76,7 @@ const StudentAssessments = () => {
   };
   return (
     <div>
-      <p className=" font-bold text-xl font-Montserrat mt-5 text-center underline-offset-8 underline tracking-wider ">
+      <p className=" font-bold text-xl font-Montserrat mt-5 text-center underline-offset-8 underline tracking-wider mb-4 lg:mb-0 ">
         Assessments
       </p>
       <div className="mx-10 lg:grid lg:grid-cols-3">
@@ -142,7 +144,7 @@ const StudentAssessments = () => {
         </div>
         {/* Display Placeholder or Selected Assessment */}
         {!formData.subject || !selectedAssessment ? (
-          <div className="col-span-2 flex items-center justify-center">
+          <div className="col-span-2 flex items-center justify-center mt-3 lg:mt-0">
             Select the Subject and Assessment to submit assessment here.
           </div>
         ) : (
