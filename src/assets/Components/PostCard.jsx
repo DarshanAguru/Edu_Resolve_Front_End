@@ -13,7 +13,7 @@ import { TiUpload } from "react-icons/ti";
 import PostCardComments from "./PostCardComments";
 import useSenderImage from "../hooks/useSenderImage";
 
-export default function PostCard({ user, userType ,refresh }) {
+export default function PostCard({ user, userType, refresh }) {
   const { _id, name, gender, token } = JSON.parse(
     localStorage.getItem(userType)
   );
@@ -87,10 +87,11 @@ export default function PostCard({ user, userType ,refresh }) {
   //Handle DisLike
   const handleDisLike = async () => {
     // e.preventDefault();
-    await axios.post(
-      `http://localhost:9000/messages/downvote/${messageId}`,
-      { token: token, id: _id, userId: _id }
-    );
+    await axios.post(`http://localhost:9000/messages/downvote/${messageId}`, {
+      token: token,
+      id: _id,
+      userId: _id,
+    });
 
     refresh();
   };
@@ -105,24 +106,28 @@ export default function PostCard({ user, userType ,refresh }) {
         </div>
       </div>
       <p>{messageData} </p>
-      <div className="flex items-center gap-2.5">
-        <button onClick={() => handleLike()}>
-          {!liked ? (
-            <AiOutlineLike className="text-blue-500 text-xl" />
-          ) : (
-            <AiFillLike className="text-blue-500 text-xl" />
-          )}
-        </button>
-        <p>{upvote.length}</p>
-        <button onClick={() => handleDisLike()}>
-          {!disliked ? (
-            <AiOutlineDislike className="text-red-500 text-xl" />
-          ) : (
-            <AiFillDislike className="text-red-500 text-xl" />
-          )}
-        </button>
+      <div className="flex  items-center gap-2.5">
+        <div className="flex">
+          <button onClick={() => handleLike()}>
+            {!liked ? (
+              <AiOutlineLike className="text-blue-500 text-xl" />
+            ) : (
+              <AiFillLike className="text-blue-500 text-xl" />
+            )}
+          </button>
+          <p>{upvote.length}</p>
+        </div>
+        <div className="flex ">
+          <button onClick={() => handleDisLike()}>
+            {!disliked ? (
+              <AiOutlineDislike className="text-red-500 text-xl" />
+            ) : (
+              <AiFillDislike className="text-red-500 text-xl" />
+            )}
+          </button>
 
-        <p>{downvote.length}</p>
+          <p>{downvote.length}</p>
+        </div>
         <button onClick={() => setShowComments((prev) => !prev)}>
           <RiQuestionAnswerLine className="text-xl" />
         </button>
@@ -169,6 +174,6 @@ export default function PostCard({ user, userType ,refresh }) {
             <PostCardComments key={index} reply={reply} />
           ))}
       </div>
-    </div>
-  );
+    </div>
+  );
 }
