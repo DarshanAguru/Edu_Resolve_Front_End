@@ -1,8 +1,9 @@
 import React from "react";
 
-const viewQuestions = () => {
+const viewQuestions = ({ questions }) => {
   return (
     <div className=" m-5 p-5 border">
+      {console.log(questions)}
       <p className=" font-semibold">
         <span>1.{"  "}</span>What is 2+2 ?
       </p>
