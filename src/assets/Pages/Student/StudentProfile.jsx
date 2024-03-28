@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import ProfileCard from "../../Components/ProfileCard";
-import ProgressCard from "../../Components/ProgressCard";
+import ProgressCard from "./ProgressCard";
+import AssessmentStatTable from "./AssessmentStatTable";
 import PostCard from "../../Components/PostCard";
 import axios from "axios";
 
 const StudentProfile = () => {
   const data = JSON.parse(localStorage.getItem("student"));
+  
   const { token, _id } = data;
   const [messages, setMessages] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -72,7 +74,10 @@ const StudentProfile = () => {
               </>
             ))
           ) : (
-            <ProgressCard />
+            <>
+              <ProgressCard />
+              <AssessmentStatTable />
+            </>
           )}
         </div>
       </div>
