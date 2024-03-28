@@ -60,7 +60,12 @@ export default function PostCard({ user, userType, refresh }) {
       `http://localhost:9000/messages/addreply/${messageId}`,
       {
         senderId: _id,
-        senderType: userType==="student"?"students":userType==="teacher"?"teachers":"mentors",
+        senderType:
+          userType === "student"
+            ? "students"
+            : userType === "teacher"
+              ? "teachers"
+              : "mentors",
         senderName: name,
         message: comment,
         senderGender: messageSenderGender,
@@ -69,7 +74,6 @@ export default function PostCard({ user, userType, refresh }) {
         id: _id,
       }
     );
-    console.log(res);
     setCommentData({ comment: "", imageURL: "" });
     refresh();
   };

@@ -1,40 +1,38 @@
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { IoCloseCircle } from "react-icons/io5";
 
 // import { IoCloseCircleOutline } from "react-icons/io5";
-const Notifications = ({ data , userType=null, eventHandler , eventCnt }) => {
+const Notifications = ({ data, userType = null, eventHandler, eventCnt }) => {
   const { _id, token } = data;
   const [notifications, setNotifications] = useState([]);
   const [refreshNotifications, setRefreshNotifications] = useState(false);
   useEffect(() => {
-       async function getNotifications() {
+    async function getNotifications() {
       const { data } = await axios.post(
         `http://localhost:9000/${userType}/getAllNotifications/${_id}`,
         { token: token, id: _id }
       );
-      
+      console.log(data);
       setNotifications(data);
-      
     }
-    if(userType) getNotifications();
+    if (userType) getNotifications();
   }, [refreshNotifications]);
 
   const deleteNotification = async (notificationId) => {
-    if(eventHandler !== null && eventCnt !== null )
-    {
-      eventHandler(eventCnt-1);
+    if (eventHandler !== null && eventCnt !== null) {
+      eventHandler(eventCnt - 1);
     }
-    console.log(notificationId);
+    // console.log(notificationId);
     const data = await axios.post(
       `http://localhost:9000/${userType}/clearNotification/${_id}`,
       { token: token, id: _id, notifId: notificationId }
     );
-    console.log(data);
+    // console.log(data);
     setRefreshNotifications((prev) => !prev);
     // window.location.reload();
   };
-  console.log(notifications);
+  // console.log(notifications);
   return (
     <div
       className="absolute right-2 top-10 md:top-16 text-left mt-2 w-96 bg-white rounded-lg border overflow-auto no-scrollbar  shadow-custom"
@@ -65,7 +63,13 @@ const Notifications = ({ data , userType=null, eventHandler , eventCnt }) => {
               <div key={index} className="px-3 py-2 border">
                 <div className="flex justify-between items-center  ">
                   <p className="text-gray-500 dark:text-gray-400 flex-1">
-                    {`${notification.userName} replied to your post (${notification.count})`}
+                    {notification.notificationType === "Reply" &&
+                      `${notification.userName} replied to your post (${notification.count})`}
+                    {notification.notificationType === "Assignment Submit" &&
+                      `${notification.userName} submitted the Assignment`}
+
+                    {notification.notificationType === "Assignment" &&
+                      `${notification.userName} posted the Assignment`}
                   </p>
                   <button
                     onClick={() => deleteNotification(notification.userId)}

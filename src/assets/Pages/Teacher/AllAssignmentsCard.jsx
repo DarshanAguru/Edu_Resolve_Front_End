@@ -16,7 +16,18 @@ const AllAssignmentsCard = ({ id, token }) => {
       console.log(e);
     }
   };
+  function getDate(dateString) {
+    const [day, month, year] = dateString.split("/");
+    const isoString = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
 
+    // Parse the ISO string
+    const timestamp = Date.parse(isoString);
+
+    // Create a Date object from the timestamp
+    const date = new Date(timestamp).toDateString();
+
+    return date;
+  }
   useEffect(() => {
     fetchData();
   }, []);
@@ -37,10 +48,10 @@ const AllAssignmentsCard = ({ id, token }) => {
     }
   }
 
-  function dateCompare(pubDate, deadline) {
-    const pubd = Date.parse(pubDate);
+  function dateCompare(deadline) {
+    const curr = Date.now();
     const dead = Date.parse(deadline);
-    return pubd > dead;
+    return curr > dead;
   }
 
   return (
@@ -58,11 +69,11 @@ const AllAssignmentsCard = ({ id, token }) => {
               key={assignment._id}
               className=" shadow-custom p-5 flex-grow flex flex-col gap-2 rounded-xl capitalize tracking-wide font-Montserrat font-medium text-sm text-left lg:ml-10 "
             >
-              {console.log(new Date(assignment.publishDate))}
+              {}
               <p>
                 <span className=" font-bold font-Montserrat"> status : </span>
-                {dateCompare(assignment.publishDate, assignment.deadline) ? (
-                  <span className=" text-red-600 font-lg">inactive</span>
+                {dateCompare(assignment.deadline) ? (
+                  <span className=" text-red-600 font-bold">Inactive</span>
                 ) : (
                   <span className=" text-emerald-600 font-bold">active</span>
                 )}
@@ -77,7 +88,7 @@ const AllAssignmentsCard = ({ id, token }) => {
                   {" "}
                   Publish date :{" "}
                 </span>
-                {new Date(assignment.publishDate).toDateString()}
+                {getDate(assignment.publishDate.split(",")[0])}
               </p>
               <p>
                 <span className=" font-bold font-Montserrat"> deadline : </span>
