@@ -54,7 +54,6 @@ const AssessmentCard = ({ id, token, userId, name, goBack, deadline }) => {
   const handleOptionChange = (questionIndex, option, isMultiple) => {
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
-      console.log(updatedAnswers);
       if (isMultiple === "multiple") {
         if (!updatedAnswers[questionIndex]) updatedAnswers[questionIndex] = [];
 
@@ -123,7 +122,6 @@ const AssessmentCard = ({ id, token, userId, name, goBack, deadline }) => {
           assignmentAnswers: answers,
         }
       );
-      console.log(res);
       setMarks(res.data.marks);
     }
     submitAnswers();

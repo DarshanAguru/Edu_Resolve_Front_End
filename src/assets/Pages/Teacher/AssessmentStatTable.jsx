@@ -31,10 +31,9 @@ const AssessmentStatTable = ({ id, token }) => {
       getAllSubmissions(currentAssignmentId);
     }
   }, [currentAssignmentId, id, token]);
-  console.log(submissions);
   function viewAssignmentSubmissions(assignment_id) {
     setView((prev) => !prev);
-    setCurrentAssignmentId(assignment_id); // Update the currentAssignmentId which triggers the effect to fetch submissions
+    setCurrentAssignmentId(assignment_id);
   }
   return (
     <div>

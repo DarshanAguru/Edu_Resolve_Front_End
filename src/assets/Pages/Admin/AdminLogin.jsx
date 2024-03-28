@@ -22,12 +22,11 @@ const AdminLogin = () => {
         "http://localhost:9000/globaladmins/login",
         formData
       );
-      console.log("From server", response.data);
       localStorage.setItem("admin", JSON.stringify(response.data));
       navigate("/admin");
     } catch (error) {
       notify("Invalid Username Or Password");
-      console.log("no user found", error);
+      console.error("no user found", error);
     }
   };
 

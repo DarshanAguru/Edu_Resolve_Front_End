@@ -7,7 +7,7 @@ import axios from "axios";
 
 const StudentProfile = () => {
   const data = JSON.parse(localStorage.getItem("student"));
-  
+  const [view, setView] = useState(true);
   const { token, _id } = data;
   const [messages, setMessages] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -26,7 +26,7 @@ const StudentProfile = () => {
           .filter((message) => message.messageId.split("@")[0] === _id);
         setMessages(filteredMessages);
       } catch (e) {
-        console.log("Messages are not retreived", e);
+        console.error("Messages are not retreived", e);
       }
     }
     getMessages();
@@ -64,7 +64,6 @@ const StudentProfile = () => {
           {showProgress ? (
             messages.map((message) => (
               <>
-                {console.log(message)}
                 <PostCard
                   key={message.messageId}
                   user={message}
@@ -75,8 +74,8 @@ const StudentProfile = () => {
             ))
           ) : (
             <>
-              <ProgressCard />
-              <AssessmentStatTable />
+              <ProgressCard view={view} />
+              <AssessmentStatTable view={view} setView={setView} />
             </>
           )}
         </div>

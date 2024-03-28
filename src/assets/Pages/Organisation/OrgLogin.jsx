@@ -21,12 +21,11 @@ const OrgLogin = () => {
         "http://localhost:9000/localadmins/login",
         formData
       );
-      console.log("From server", response.data);
       localStorage.setItem("localAdmin", JSON.stringify(response.data));
       navigate("/organisation");
     } catch (error) {
       notify("Invalid Username Or Password");
-      console.log("no user found", error);
+      console.error("no user found", error);
     }
   };
 

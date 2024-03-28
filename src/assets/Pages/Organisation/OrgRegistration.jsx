@@ -86,7 +86,6 @@ const OrgRegistration = () => {
         "http://localhost:9000/localadmins/register",
         formData
       );
-      console.log("From server", response.data);
       navigate("/organisationLogin")
     } catch (error) {
       console.error("Error submitting form", error);

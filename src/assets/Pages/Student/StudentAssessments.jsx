@@ -36,18 +36,15 @@ const StudentAssessments = () => {
           );
         });
 
-        console.lo;
         setFormData((prevFormData) => ({
           ...prevFormData,
           assessment: notSubmittedAssessments,
         }));
-        console.log(formData);
       } catch (error) {
         console.error("Failed to fetch assignments:", error);
         toast.error("Failed to fetch assignments");
       }
     };
-    console.log(formData);
     getAssignments();
   }, [formData.subject, grade, school, token, _id]);
 

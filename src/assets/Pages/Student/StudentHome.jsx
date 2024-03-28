@@ -29,11 +29,12 @@ const StudentHome = () => {
   }, []);
 
   useEffect(() => {
+    console.log(token, _id);
     async function getMessages() {
       try {
         const { data } = await axios.post(
           `http://localhost:9000/messages/getAllMessages`,
-          { token: token, id: _id }
+          { token, id: _id }
         );
         setMessages(data.reverse());
       } catch (e) {

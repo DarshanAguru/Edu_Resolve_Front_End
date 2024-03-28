@@ -17,6 +17,7 @@ export default function PostCard({ user, userType, refresh }) {
   const { _id, name, gender, token } = JSON.parse(
     localStorage.getItem(userType)
   );
+
   const profileImg = useSenderImage(gender, "students");
   const [showComments, setShowComments] = React.useState(false);
   const [liked, setLiked] = useState(false);
@@ -59,7 +60,7 @@ export default function PostCard({ user, userType, refresh }) {
       `http://localhost:9000/messages/addreply/${messageId}`,
       {
         senderId: _id,
-        senderType: "students",
+        senderType: userType==="student"?"students":userType==="teacher"?"teachers":"mentors",
         senderName: name,
         message: comment,
         senderGender: messageSenderGender,
@@ -171,7 +172,10 @@ export default function PostCard({ user, userType, refresh }) {
         </form>
         {replies.length > 0 &&
           replies.map((reply, index) => (
-            <PostCardComments key={index} reply={reply} />
+            <>
+              {console.log(reply)}
+              <PostCardComments key={index} reply={reply} />
+            </>
           ))}
       </div>
     </div>

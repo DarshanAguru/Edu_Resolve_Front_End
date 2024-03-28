@@ -1,29 +1,31 @@
 import React from "react";
-
-const AssessmentStatTable = () => {
+import ViewQuestions from "./ViewQuestions.jsx";
+const AssessmentStatTable = ({ view, setView }) => {
   return (
-    <div>
-      <p className=" drop-shadow-2xl font-bold text-center tracking-wide font-Montserrat">
-        Assessment Stat Table
-      </p>
-      <section className="container mx-auto p-6 font-mono">
-        <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-          <div className="w-full overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Age</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Date</th>
-                  <th className="px-4 py-3">view</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white">
-                <tr className="text-gray-700">
-                  <td className="px-4 py-3 border">
-                    <div className="flex items-center text-sm">
-                      <div className="relative w-8 h-8 mr-3 rounded-full md:block">
+    <>
+      {view ? (
+        <div>
+          <p className=" drop-shadow-2xl font-bold text-center tracking-wide font-Montserrat">
+            Assessment Stat Table
+          </p>
+          <section className="container mx-auto p-6 ">
+            <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+              <div className="w-full overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-xs font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600 font-Montserrat">
+                      <th className="px-4 py-3">s.no</th>
+                      <th className="px-4 py-3">Assessment name</th>
+                      <th className="px-4 py-3">Status</th>
+                      <th className="px-4 py-3">Marks</th>
+                      <th className="px-4 py-3">view assignment</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white">
+                    <tr className="text-gray-700">
+                      <td className="px-4 py-3 border">
+                        <div className="flex items-center text-sm">
+                          {/* <div className="relative w-8 h-8 mr-3 rounded-full md:block">
                         <img
                           className="object-cover w-full h-full rounded-full"
                           src="https://images.pexels.com/photos/5212324/pexels-photo-5212324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
@@ -34,88 +36,64 @@ const AssessmentStatTable = () => {
                           className="absolute inset-0 rounded-full shadow-inner"
                           aria-hidden="true"
                         ></div>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-black">Sufyan</p>
-                        <p className="text-xs text-gray-600">Developer</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-ms font-semibold border">22</td>
-                  <td className="px-4 py-3 text-xs border">
-                    <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm">
-                      {" "}
-                      Acceptable{" "}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm border">6/4/2000</td>
-                </tr>
-                <tr className="text-gray-700">
-                  <td className="px-4 py-3 border">
-                    <div className="flex items-center text-sm">
-                      <div className="relative w-8 h-8 mr-3 rounded-full">
-                        <img
-                          className="object-cover w-full h-full rounded-full"
-                          src="https://images.pexels.com/photos/5212324/pexels-photo-5212324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
-                          alt=""
-                          loading="lazy"
-                        />
-                        <div
-                          className="absolute inset-0 rounded-full shadow-inner"
-                          aria-hidden="true"
-                        ></div>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-black">Stevens</p>
-                        <p className="text-xs text-gray-600">Programmer</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-md font-semibold border">27</td>
-                  <td className="px-4 py-3 text-xs border">
-                    <span className="px-2 py-1 font-semibold leading-tight text-orange-700 bg-gray-100 rounded-sm">
-                      {" "}
-                      Pending{" "}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm border">6/10/2020</td>
-                </tr>
-                <tr className="text-gray-700">
-                  <td className="px-4 py-3 border">
-                    <div className="flex items-center text-sm">
-                      <div className="relative w-8 h-8 mr-3 rounded-full">
-                        <img
-                          className="object-cover w-full h-full rounded-full"
-                          src="https://images.pexels.com/photos/5212324/pexels-photo-5212324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
-                          alt=""
-                          loading="lazy"
-                        />
-                        <div
-                          className="absolute inset-0 rounded-full shadow-inner"
-                          aria-hidden="true"
-                        ></div>
-                      </div>
-                      <div>
-                        <p className="font-semibold">Nora</p>
-                        <p className="text-xs text-gray-600">Designer</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-md font-semibold border">17</td>
-                  <td className="px-4 py-3 text-xs border">
-                    <span className="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-sm">
-                      {" "}
-                      Nnacceptable{" "}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm border">6/10/2020</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                      </div> */}
+                          <div>
+                            <td className="px-4 py-3 text-sm ">1</td>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="px-4 py-3 text-ms font-semibold border">
+                        <p className="font-semibold text-black">
+                          Maths Assessment
+                        </p>
+                        <p className="text-xs text-gray-600">given at:</p>
+                        <p className="text-xs text-gray-600">deadline:</p>
+                      </td>
+                      <td className="px-4 py-3 text-xs border">
+                        <span className="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm">
+                          {" "}
+                          Submitted{" "}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm border">2/2</td>
+                      <td className="px-4 py-3 text-md font-semibold border">
+                        <button
+                          className=" text-blue-800 hover:text-blue-400 underline underline-offset-2"
+                          onClick={() => setView((prev) => !prev)}
+                        >
+                          view
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
-    </div>
+      ) : (
+        <div>
+          <button
+            onClick={() => setView((prev) => !prev)}
+            className="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded flex items-center gap-2 mb-5 ml-5 hover:bg-gray-300 mr-auto"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M19 11H7.414l5.293-5.293-1.414-1.414L3.586 12l7.707 7.707 1.414-1.414L7.414 13H19v-2z" />
+            </svg>
+
+            <span>Back to Assessements</span>
+          </button>
+          <ViewQuestions />
+        </div>
+      )}
+    </>
   );
 };
 

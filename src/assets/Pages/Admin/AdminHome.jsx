@@ -14,7 +14,7 @@ const AdminHome = () => {
       );
       setLocalAdmins(res.data);
     } catch (error) {
-      console.log("My error", error);
+      console.error("My error", error);
     }
   };
   const fetchMentorsData = async () => {
@@ -25,7 +25,7 @@ const AdminHome = () => {
       );
       setMentors(res.data);
     } catch (error) {
-      console.log("My error", error);
+      console.error("My error", error);
     }
   };
 
@@ -59,7 +59,6 @@ const AdminHome = () => {
           </button>
         </li>
       </ul>
-      {/* {console.log(table)} */}
       {table
         ? localAdmins && (
             <Table

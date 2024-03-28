@@ -20,7 +20,7 @@ const StudentNavbar = () => {
       );
       setNotifCount(notifs.data.length);
     } catch (err) {
-      console.log(err);
+      console.error(err)
     }
   }
   useEffect(() => {
@@ -52,13 +52,12 @@ const StudentNavbar = () => {
       );
       if (status.data.message === "Logged out Successfully!") {
         localStorage.clear();
-        console.log("logged out successfully");
         navigate("/studentLogin");
       } else {
-        console.log(status.data.message);
+        // console.log(status.data.message);
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 

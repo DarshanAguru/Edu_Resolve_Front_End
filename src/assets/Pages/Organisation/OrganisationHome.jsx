@@ -6,7 +6,6 @@ const OrganisationHome = () => {
   const { _id, token, institution } = JSON.parse(
     localStorage.getItem("localAdmin")
   );
-  console.log(_id, token, institution);
   const fetchTeachersData = async () => {
     try {
       const res = await axios.post(
@@ -15,10 +14,10 @@ const OrganisationHome = () => {
       );
       setTeachers(res.data);
     } catch (error) {
-      console.log("My error", error);
+      console.error("My error", error);
     }
   };
-  console.log(teachers);
+
   React.useEffect(() => {
     fetchTeachersData();
   }, []);

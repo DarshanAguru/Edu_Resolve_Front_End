@@ -21,12 +21,10 @@ const StudentLogin = () => {
         "http://localhost:9000/students/login",
         formData
       );
-      console.log("From server", response.data);
       localStorage.setItem("student", JSON.stringify(response.data));
       navigate("/student");
     } catch (error) {
       notify("Invalid Username Or Password");
-      console.log("no user found", error);
     }
   };
 

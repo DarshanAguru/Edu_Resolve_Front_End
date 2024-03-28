@@ -74,7 +74,6 @@ const StudentRegistration = () => {
       const res = await axios.post(
         "http://localhost:9000/students/getAllSchools"
       );
-      console.log(res.data);
       setInstitutions(res.data);
     }
     fetchSchools();
@@ -88,13 +87,11 @@ const StudentRegistration = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
     try {
       const response = await axios.post(
         "http://localhost:9000/students/register",
         formData
       );
-      console.log("From server", response.data);
       navigate("/studentLogin");
     } catch (error) {
       console.error("Error submitting form", error);
