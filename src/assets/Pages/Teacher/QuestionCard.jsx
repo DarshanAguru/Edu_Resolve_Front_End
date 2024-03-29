@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import axios from "axios";
+import api from '../../api';
 const QuestionCard = ({
   stuclass,
   subject,
@@ -117,8 +117,8 @@ const QuestionCard = ({
       return;
     }
     try {
-      const res = await axios.post(
-        `http://localhost:9000/teachers/postassignment/${id}@${uuidv4()}`,
+      const res = await api.post(
+        `/teachers/postassignment/${id}@${uuidv4()}`,
         {
           deadline: `${submissionDate.split("-")[1]}/${submissionDate.split("-")[2]}/${submissionDate.split("-")[0]}`,
           totalQuestions: questions.length,

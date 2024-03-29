@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+/* eslint-disable react/prop-types */
+import  { useState, useEffect } from "react";
+import api from "../../api";
 import Submissions from "./Submissions";
 
 const AssessmentStatTable = ({ id, token }) => {
@@ -10,8 +11,8 @@ const AssessmentStatTable = ({ id, token }) => {
   useEffect(() => {
     async function getAllAssignmentsOfTeachers() {
       console.log(id);
-      const res = await axios.post(
-        `http://localhost:9000/teachers/getassignments/${id}`,
+      const res = await api.post(
+        `/teachers/getassignments/${id}`,
         { token, id }
       );
       setData(res.data);
@@ -21,8 +22,8 @@ const AssessmentStatTable = ({ id, token }) => {
 
   useEffect(() => {
     async function getAllSubmissions(assignment_id) {
-      const res = await axios.post(
-        `http://localhost:9000/teachers/getAssignmentSubmission/${assignment_id}`,
+      const res = await api.post(
+        `/teachers/getAssignmentSubmission/${assignment_id}`,
         { token, id }
       );
       setSubmissions(res.data);

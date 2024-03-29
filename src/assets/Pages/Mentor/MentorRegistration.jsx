@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import FormInput from "../../Components/FormInput";
 import FormCheckboxGroup from "../../Components/FormCheckBoxGroup";
-import axios from "axios";
+import api from '../../api';
 import { useNavigate } from "react-router-dom";
 
 const formFields = [
@@ -121,8 +121,8 @@ const MentorRegistration = () => {
     }
     console.log(formData);
     try {
-      const res = await axios.post(
-        "http://localhost:9000/mentors/register",
+      const res = await api.post(
+        "/mentors/register",
         formData
       );
       console.log("Form Data submitted successfully", res.data);

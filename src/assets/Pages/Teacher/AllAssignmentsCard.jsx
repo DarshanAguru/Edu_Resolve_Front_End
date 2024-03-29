@@ -2,13 +2,13 @@
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import api from '../../api';
 const AllAssignmentsCard = ({ id, token }) => {
   const [allAssignments, setAssignments] = useState([]);
   const fetchData = async () => {
     try {
-      const data = await axios.post(
-        `http://localhost:9000/teachers/getassignments/${id}`,
+      const data = await api.post(
+        `/teachers/getassignments/${id}`,
         { token, id }
       );
       setAssignments(data.data);
@@ -34,8 +34,8 @@ const AllAssignmentsCard = ({ id, token }) => {
 
   async function deleteAssignment(assignmentId) {
     try {
-      const res = await axios.post(
-        `http://localhost:9000/teachers/deleteAssignment/${assignmentId}`,
+      const res = await api.post(
+        `/teachers/deleteAssignment/${assignmentId}`,
         { token, id }
       );
       if (res.status === 200) {

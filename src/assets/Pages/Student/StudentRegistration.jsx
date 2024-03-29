@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../../Components/Button";
 import FormInput from "../../Components/FormInput";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from '../../api';
 const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },
   {
@@ -71,8 +71,8 @@ const StudentRegistration = () => {
   });
   React.useEffect(() => {
     async function fetchSchools() {
-      const res = await axios.post(
-        "http://localhost:9000/students/getAllSchools"
+      const res = await api.post(
+        "/students/getAllSchools"
       );
       setInstitutions(res.data);
     }
@@ -88,8 +88,8 @@ const StudentRegistration = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:9000/students/register",
+      await api.post(
+        "/students/register",
         formData
       );
       navigate("/studentLogin");

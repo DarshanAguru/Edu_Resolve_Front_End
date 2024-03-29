@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import useSenderImage from "../hooks/useSenderImage";
 const PostCardComments = ({ reply }) => {
   const { senderGender, senderName, senderType, message } = reply;

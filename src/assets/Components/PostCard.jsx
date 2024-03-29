@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import {
   AiOutlineLike,
@@ -6,7 +8,7 @@ import {
   AiFillDislike,
 } from "react-icons/ai";
 import { RiQuestionAnswerLine } from "react-icons/ri";
-import axios from "axios";
+import api from '../api'
 import { IoMdSend } from "react-icons/io";
 import { TiUpload } from "react-icons/ti";
 
@@ -56,8 +58,8 @@ export default function PostCard({ user, userType, refresh }) {
     e.preventDefault();
 
     const { comment, imageURL } = commentData;
-    const res = await axios.post(
-      `http://localhost:9000/messages/addreply/${messageId}`,
+    const res = await api.post(
+      `/messages/addreply/${messageId}`,
       {
         senderId: _id,
         senderType:
@@ -81,8 +83,8 @@ export default function PostCard({ user, userType, refresh }) {
   //Handle Like
   const handleLike = async () => {
     // e.preventDefault();
-    const res = await axios.post(
-      ` http://localhost:9000/messages/upvote/${messageId}`,
+    const res = await api.post(
+      `/messages/upvote/${messageId}`,
       { token: token, id: _id, userId: _id }
     );
     console.log(res.data);
@@ -92,7 +94,7 @@ export default function PostCard({ user, userType, refresh }) {
   //Handle DisLike
   const handleDisLike = async () => {
     // e.preventDefault();
-    await axios.post(`http://localhost:9000/messages/downvote/${messageId}`, {
+    await api.post(`/messages/downvote/${messageId}`, {
       token: token,
       id: _id,
       userId: _id,

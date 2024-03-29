@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import StartPage from "./StartPage";
-import axios from "axios";
+import api from '../../api';
 import Confetti from "react-confetti";
 const AssessmentCard = ({ id, token, userId, name, goBack, deadline }) => {
   const [answers, setAnswers] = useState([]);
@@ -42,8 +43,8 @@ const AssessmentCard = ({ id, token, userId, name, goBack, deadline }) => {
   };
   useEffect(() => {
     async function getAssignmentQuestions() {
-      const res = await axios.post(
-        `http://localhost:9000/students/getAssignment/${id}`,
+      const res = await api.post(
+        `/students/getAssignment/${id}`,
         { token, id: userId }
       );
 
@@ -112,8 +113,8 @@ const AssessmentCard = ({ id, token, userId, name, goBack, deadline }) => {
 
     toast.success("Answers submitted successfully!");
     async function submitAnswers() {
-      const res = await axios.post(
-        `http://localhost:9000/students/submitAssignment/${id}`,
+      const res = await api.post(
+        `/students/submitAssignment/${id}`,
         {
           token,
           id: userId,

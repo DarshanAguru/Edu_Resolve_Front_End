@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../Components/FormInput";
 import FormCheckboxGroup from "../../Components/FormCheckBoxGroup";
-import axios from "axios";
+import api from '../../api';
 const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },
   {
@@ -73,8 +73,8 @@ const TeacherRegistration = () => {
   const [institutions, setInstitutions] = useState([]);
   React.useEffect(() => {
     async function fetchSchools() {
-      const res = await axios.post(
-        "http://localhost:9000/teachers/getAllSchools"
+      const res = await api.post(
+        "/teachers/getAllSchools"
       );
       setInstitutions(res.data);
     }
@@ -125,8 +125,8 @@ const TeacherRegistration = () => {
     }
 
     try {
-      const res = await axios.post(
-        "http://localhost:9000/teachers/register",
+      const res = await api.post(
+        "/teachers/register",
         formData
       );
       console.log("Form Data submitted successfully", res.data);

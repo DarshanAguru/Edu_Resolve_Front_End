@@ -1,8 +1,7 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 
 const Submissions = ({ submissions }) => {
   const { submitted, unsubmitted } = submissions;
-  console.log(submitted, unsubmitted);
   return (
     <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
       <div className="w-full overflow-x-auto">

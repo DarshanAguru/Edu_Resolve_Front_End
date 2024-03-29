@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Table from "../../Components/Table";
-import axios from "axios";
+import api from '../../api';
 const AdminHome = () => {
   const [localAdmins, setLocalAdmins] = React.useState([]);
   const [mentors, setMentors] = React.useState([]);
@@ -8,8 +8,8 @@ const AdminHome = () => {
   const { _id, token } = JSON.parse(localStorage.getItem("admin"));
   const fetchLocalAdminsData = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:9000/globaladmins/getAllLocalAdmins",
+      const res = await api.post(
+        "/globaladmins/getAllLocalAdmins",
         { token: token, id: _id }
       );
       setLocalAdmins(res.data);
@@ -19,8 +19,8 @@ const AdminHome = () => {
   };
   const fetchMentorsData = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:9000/globaladmins/getAllMentors",
+      const res = await api.post(
+        "/globaladmins/getAllMentors",
         { token: token, id: _id }
       );
       setMentors(res.data);

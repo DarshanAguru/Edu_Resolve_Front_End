@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+/* eslint-disable no-unused-vars */
+import  { useState } from "react";
 import FormInput from "../../Components/FormInput";
-import axios from "axios";
+import api from '../../api';
 import { useNavigate } from "react-router-dom";
 const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },
@@ -82,8 +83,8 @@ const OrgRegistration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:9000/localadmins/register",
+      await api.post(
+        "/localadmins/register",
         formData
       );
       navigate("/organisationLogin")

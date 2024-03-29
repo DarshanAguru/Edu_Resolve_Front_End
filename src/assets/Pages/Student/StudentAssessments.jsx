@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import  { useEffect, useState } from "react";
+import api from '../../api'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AssessmentCard from "./AssessmentCard";
@@ -19,8 +19,8 @@ const StudentAssessments = () => {
 
     const getAssignments = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:9000/students/getallassignments",
+        const response = await api.post(
+          "/students/getallassignments",
           {
             subject: formData.subject,
             school,

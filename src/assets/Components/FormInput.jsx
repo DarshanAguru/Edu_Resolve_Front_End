@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 

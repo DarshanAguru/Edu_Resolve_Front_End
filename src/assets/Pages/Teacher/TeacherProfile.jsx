@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import TeacherProfileCard from "./TeacherProfileCard";
 import AssessmentStatTable from "./AssessmentStatTable";

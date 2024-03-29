@@ -4,7 +4,7 @@ import { quotes } from "../../data/quotes";
 import PostCard from "../../Components/PostCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import api from '../../api';
 
 const MentorHome = () => {
   const backgroundImages = [
@@ -25,8 +25,8 @@ const MentorHome = () => {
   useEffect(() => {
     async function getMessages() {
       try {
-        const { data } = await axios.post(
-          `http://localhost:9000/messages/getAllMessages`,
+        const { data } = await api.post(
+          `/messages/getAllMessages`,
           { token: token, id: _id }
         );
         setMessages(data.reverse());

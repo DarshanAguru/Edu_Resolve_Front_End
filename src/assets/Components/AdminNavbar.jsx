@@ -1,14 +1,14 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from '../api'
 const AdminNavbar = ({ user }) => {
   const navigate = useNavigate();
   async function logout() {
     if (user === "globalAdmin") {
       const data = JSON.parse(localStorage.getItem("admin"));
       try {
-        const status = await axios.post(
-          `http://localhost:9000/globaladmins/logout/${data._id}`,
+        const status = await api.post(
+          `/globaladmins/logout/${data._id}`,
           { token: data.token }
         );
         if (status.data.message === "Logged out Successfully!") {
@@ -24,8 +24,8 @@ const AdminNavbar = ({ user }) => {
     } else {
       const data = JSON.parse(localStorage.getItem("localAdmin"));
       try {
-        const status = await axios.post(
-          `http://localhost:9000/localadmins/logout/${data._id}`,
+        const status = await api.post(
+          `/localadmins/logout/${data._id}`,
           { token: data.token }
         );
         if (status.data.message === "Logged out Successfully!") {

@@ -5,7 +5,7 @@ import { quotes } from "../../data/quotes";
 import PostCard from "../../Components/PostCard";
 import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import api from '../../api';
 
 const TeacherHome = () => {
   const backgroundImages = [
@@ -27,8 +27,8 @@ const TeacherHome = () => {
   useEffect(() => {
     async function getMessages() {
       try {
-        const { data } = await axios.post(
-          `http://localhost:9000/messages/getmessagesbyschool`,
+        const { data } = await api.post(
+          `/messages/getmessagesbyschool`,
           { token: token, id: _id , school: institution}
         );
         setMessages(data.reverse());

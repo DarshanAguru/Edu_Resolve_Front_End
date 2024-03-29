@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import { data } from "../../data/facts";
 import { quotes } from "../../data/quotes";
@@ -7,7 +6,7 @@ import { TiUpload } from "react-icons/ti";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
-import axios from "axios";
+import api from "../../api";
 
 const StudentHome = () => {
   const backgroundImages = [
@@ -32,8 +31,8 @@ const StudentHome = () => {
     console.log(token, _id);
     async function getMessages() {
       try {
-        const { data } = await axios.post(
-          `http://localhost:9000/messages/getAllMessages`,
+        const { data } = await api.post(
+          `/messages/getAllMessages`,
           { token, id: _id }
         );
         setMessages(data.reverse());
@@ -71,8 +70,8 @@ const StudentHome = () => {
       tags: "",
     };
 
-    await axios.post(
-      `http://localhost:9000/messages/addMessage/${_id}@${uuidv4()}`,
+    await api.post(
+      `/messages/addMessage/${_id}@${uuidv4()}`,
       data
     );
     setFormData({ postText: "", imageUrl: "" });

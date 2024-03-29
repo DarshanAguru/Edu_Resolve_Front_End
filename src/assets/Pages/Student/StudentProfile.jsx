@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ProfileCard from "../../Components/ProfileCard";
 import ProgressCard from "./ProgressCard";
 import AssessmentStatTable from "./AssessmentStatTable";
 import PostCard from "../../Components/PostCard";
-import axios from "axios";
+import api from '../../api';
 
 const StudentProfile = () => {
   const data = JSON.parse(localStorage.getItem("student"));
@@ -16,8 +16,8 @@ const StudentProfile = () => {
   useEffect(() => {
     async function getMessages() {
       try {
-        const { data } = await axios.post(
-          `http://localhost:9000/messages/getAllMessages`,
+        const { data } = await api.post(
+          `/messages/getAllMessages`,
           { token: token, id: _id }
         );
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Login from "../../Components/Login";
-import axios from "axios";
+import api from "../../api";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,8 +17,8 @@ const StudentLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:9000/students/login",
+      const response = await api.post(
+        "/students/login",
         formData
       );
       localStorage.setItem("student", JSON.stringify(response.data));

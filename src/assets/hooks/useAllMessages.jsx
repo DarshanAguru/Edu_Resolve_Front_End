@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
+import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
 const useMessages = (token, userId, refreshToggle) => {
   const [messages, setMessages] = useState([]);
@@ -10,8 +11,8 @@ const useMessages = (token, userId, refreshToggle) => {
     const getMessages = async () => {
       try {
         setLoading(true);
-        const response = await axios.post(
-          `http://localhost:9000/messages/getAllMessages`,
+        const response = await api.post(
+          `/messages/getAllMessages`,
           { token, id: userId }
         );
         setMessages(response.data.reverse());
@@ -27,8 +28,8 @@ const useMessages = (token, userId, refreshToggle) => {
 
   const postMessage = async (messageData) => {
     try {
-      await axios.post(
-        `http://localhost:9000/messages/addMessage/${userId}@${uuidv4()}`,
+      await api.post(
+        `/messages/addMessage/${userId}@${uuidv4()}`,
         messageData
       );
     } catch (error) {

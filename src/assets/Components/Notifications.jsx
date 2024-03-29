@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from '../api'
 import { IoCloseCircle } from "react-icons/io5";
 
 // import { IoCloseCircleOutline } from "react-icons/io5";
@@ -9,8 +11,8 @@ const Notifications = ({ data, userType = null, eventHandler, eventCnt }) => {
   const [refreshNotifications, setRefreshNotifications] = useState(false);
   useEffect(() => {
     async function getNotifications() {
-      const { data } = await axios.post(
-        `http://localhost:9000/${userType}/getAllNotifications/${_id}`,
+      const { data } = await api.post(
+        `/${userType}/getAllNotifications/${_id}`,
         { token: token, id: _id }
       );
       console.log(data);
@@ -24,8 +26,8 @@ const Notifications = ({ data, userType = null, eventHandler, eventCnt }) => {
       eventHandler(eventCnt - 1);
     }
     // console.log(notificationId);
-    const data = await axios.post(
-      `http://localhost:9000/${userType}/clearNotification/${_id}`,
+    const data = await api.post(
+      `/${userType}/clearNotification/${_id}`,
       { token: token, id: _id, notifId: notificationId }
     );
     // console.log(data);

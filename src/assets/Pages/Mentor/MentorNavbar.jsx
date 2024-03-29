@@ -4,10 +4,8 @@ import Notifications from "../../Components/Notifications";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { FaRegBell } from "react-icons/fa6";
 import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
-import { BiNotepad } from "react-icons/bi";
-import { BiSolidNotepad } from "react-icons/bi";
 import { RiHome3Line, RiHome3Fill, RiLoginBoxLine } from "react-icons/ri";
-import axios from "axios";
+import api from '../../api';
 const MentorNavbar = () => {
   
   const navigate = useNavigate();
@@ -16,8 +14,8 @@ const MentorNavbar = () => {
   async function getAllNotifications() {
     
     try {
-      const notifs = await axios.post(
-        `http://localhost:9000/students/getAllNotifications/${data._id}`,
+      const notifs = await api.post(
+        `/students/getAllNotifications/${data._id}`,
         { token: data.token, id: data._id }
       );
       setNotifCount(notifs.data.length);
@@ -48,8 +46,8 @@ const MentorNavbar = () => {
   // const notifications = () => {};
   async function logout() {
     try {
-      const status = await axios.post(
-        `http://localhost:9000/globaladmins/logout/${data._id}`,
+      const status = await api.post(
+        `/globaladmins/logout/${data._id}`,
         { token: data.token }
       );
       if (status.data.message === "Logged out Successfully!") {

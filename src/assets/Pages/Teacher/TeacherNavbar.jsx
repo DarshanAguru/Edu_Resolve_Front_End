@@ -7,7 +7,7 @@ import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
 import { BiNotepad } from "react-icons/bi";
 import { BiSolidNotepad } from "react-icons/bi";
 import { RiHome3Line, RiHome3Fill, RiLoginBoxLine } from "react-icons/ri";
-import axios from "axios";
+import api from '../../api';
 const TeacherNavbar = () => {
   
   const navigate = useNavigate();
@@ -16,8 +16,8 @@ const TeacherNavbar = () => {
   async function getAllNotifications() {
     
     try {
-      const notifs = await axios.post(
-        `http://localhost:9000/teachers/getAllNotifications/${data._id}`,
+      const notifs = await api.post(
+        `/teachers/getAllNotifications/${data._id}`,
         { token: data.token, id: data._id }
       );
       setNotifCount(notifs.data.length);
@@ -48,8 +48,8 @@ const TeacherNavbar = () => {
 //   const notifications = () => {};
   async function logout() {
     try {
-      const status = await axios.post(
-        `http://localhost:9000/teachers/logout/${data._id}`,
+      const status = await api.post(
+        `/teachers/logout/${data._id}`,
         { token: data.token }
       );
       if (status.data.message === "Logged out Successfully!") {

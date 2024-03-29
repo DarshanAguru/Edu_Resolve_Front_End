@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import Login from "../../Components/Login";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from '../../api';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const TeacherLogin = () => {
@@ -17,8 +17,8 @@ const TeacherLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:9000/teachers/login",
+      const response = await api.post(
+        "/teachers/login",
         formData
       );
       console.log("From server", response.data);

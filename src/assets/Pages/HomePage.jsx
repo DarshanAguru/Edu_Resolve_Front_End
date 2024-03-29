@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
 import { useNavigate } from "react-router-dom";
 import Button from "../Components/Button";
 

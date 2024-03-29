@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import Login from "../../Components/Login";
-import axios from "axios";
+import api from '../../api';
 import "../../../index.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -18,8 +18,8 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:9000/globaladmins/login",
+      const response = await api.post(
+        "/globaladmins/login",
         formData
       );
       localStorage.setItem("admin", JSON.stringify(response.data));

@@ -1,5 +1,3 @@
-import React from "react";
-
 const viewQuestions = ({ questions }) => {
   console.log(questions);
   const { AssignmentData, studentData } = questions;
@@ -15,7 +13,7 @@ const viewQuestions = ({ questions }) => {
           </div>
           {AssignmentData.map((assignment, index1) => {
             return (
-              <div>
+              <div key={index1}>
                 <p className=" font-semibold">
                   <span className=" font-medium tracking-wide">
                     {index1 + 1}
@@ -26,7 +24,6 @@ const viewQuestions = ({ questions }) => {
 
                 <div className="flex flex-wrap gap-2 mt-1 mb-4">
                   {assignment.options.map((option, index) => {
-                    console.log(option);
                     const style =
                       option.isChecked &&
                       studentData.studentAnswers[index1].includes(option.value)
@@ -43,7 +40,7 @@ const viewQuestions = ({ questions }) => {
                             ? "bg-red-200 text-red-950 font-semibold px-2 py-1 rounded-lg "
                             : "";
                     return (
-                      <p
+                      <p key={index}
                         className={`flex-grow ${style}`}
                       >{`${String.fromCharCode(index + 97)}) ${option.value}`}</p>
                     );

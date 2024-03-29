@@ -1,4 +1,3 @@
-import React from "react";
 import MentorNavbar from "../Pages/Mentor/MentorNavbar";
 import { Outlet } from "react-router-dom";
 const MentorLayout = () => {

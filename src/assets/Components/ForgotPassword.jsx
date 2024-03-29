@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import Button from "./Button";
 import FormInput from "./FormInput";
-import axios from "axios";
+import api from '../api';
 import { IoMdArrowBack } from "react-icons/io";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -89,9 +90,9 @@ const ForgotPassword = ({ goBack, user }) => {
       return;
     }
 
-    const otpUrl = "http://localhost:9000/global/forgotPassword";
+    const otpUrl = "/global/forgotPassword";
     try {
-      const response = await axios.post(otpUrl, {
+      const response = await api.post(otpUrl, {
         email: data.email,
         type: data.type,
         query: "generateOTP",
@@ -117,9 +118,9 @@ const ForgotPassword = ({ goBack, user }) => {
       toast.error("Passwords do not match");
       return;
     }
-    const resetPasswordUrl = "http://localhost:9000/global/forgotPassword";
+    const resetPasswordUrl = "/global/forgotPassword";
     try {
-      const response = await axios.post(resetPasswordUrl, {
+      const response = await api.post(resetPasswordUrl, {
         type: data.type,
         otp: data.otp,
         password: data.newPassword,

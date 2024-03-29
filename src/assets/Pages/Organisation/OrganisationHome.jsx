@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Table from "../../Components/Table";
-import axios from "axios";
+import api from '../../api';
 const OrganisationHome = () => {
   const [teachers, setTeachers] = React.useState([]);
   const { _id, token, institution } = JSON.parse(
@@ -8,8 +8,8 @@ const OrganisationHome = () => {
   );
   const fetchTeachersData = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:9000/localadmins/getTeachers",
+      const res = await api.post(
+        "/localadmins/getTeachers",
         { token: token, id: _id, school: institution }
       );
       setTeachers(res.data);

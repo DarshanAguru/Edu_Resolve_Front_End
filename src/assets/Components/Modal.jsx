@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react/prop-types */
+import  { useState, useEffect } from "react";
+import api from '../api'
 const Modal = ({ isOpen, onClose, user, type, refreshUsers }) => {
   if (!isOpen) return null;
   const [data, setData] = useState(null);
@@ -24,8 +27,8 @@ const Modal = ({ isOpen, onClose, user, type, refreshUsers }) => {
 
       const admin =
         userType === "verifyTeacher" ? "localadmins" : "globaladmins";
-      const status = await axios.post(
-        `http://localhost:9000/${admin}/${userType}/${user._id}`,
+      const status = await api.post(
+        `/${admin}/${userType}/${user._id}`,
         { token: data.token, id: data._id }
       );
 
@@ -45,8 +48,8 @@ const Modal = ({ isOpen, onClose, user, type, refreshUsers }) => {
             : "rejectTeacher";
       const admin =
         userType === "rejectTeacher" ? "localadmins" : "globaladmins";
-      const status = await axios.post(
-        `http://localhost:9000/${admin}/${userType}/${user._id}`,
+      const status = await api.post(
+        `/${admin}/${userType}/${user._id}`,
         { token: data.token, id: data._id }
       );
       refreshUsers();

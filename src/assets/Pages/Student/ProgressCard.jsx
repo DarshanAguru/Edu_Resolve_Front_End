@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
 import right from "../../images/Right.svg";
 import Denied from "../../images/Denied.svg";
 import False from "../../images/False.svg";
-import axios from 'axios';
+import api from '../../api';
 const ProgressCard = ({ view }) => {
   const { _id, token, grade, school, assignments } = JSON.parse(localStorage.getItem("student"))
   // useEffect(()=>{
@@ -27,7 +28,7 @@ const ProgressCard = ({ view }) => {
           let s = 0;
           let p = 0;
           let ns = 0;
-          const res = await axios.post('http://localhost:9000/students//getAllAssignmentsForClass',{id: _id, token:token, grade: grade, school: school});
+          const res = await api.post('/students//getAllAssignmentsForClass',{id: _id, token:token, grade: grade, school: school});
           res.data.forEach((assign)=>{
             if(assignments.includes(assign.assignmentId))
             {
