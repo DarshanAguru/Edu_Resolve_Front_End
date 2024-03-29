@@ -9,10 +9,10 @@ export default function HomePage() {
       <div className="flex flex-col gap-5  xl:flex-row-reverse xl:justify-between xl:items-center">
         <div
           style={{ backgroundImage: `url(${homeImage})` }}
-          className=" h-[40vh] w-5/5 rounded-b-full bg-cover bg-center xl:h-[100vh]  xl:w-3/6  xl:bg-cover xl:bg-left-top flex xl:rounded-l-full  "
+          className=" h-[50vh] w-5/5 rounded-b-full bg-cover bg-center xl:h-[100vh]  xl:w-3/6  xl:bg-cover xl:bg-left-top flex xl:rounded-l-full  "
         ></div>
-        <div className="flex flex-col mx-auto mx-5 ">
-          <h1 className="font-MajorMono font-bold text-2xl xl:text-7xl text-center">
+        <div className="flex flex-col mx-5 ">
+          <h1 className="font-MajorMono font-bold text-3xl xl:text-7xl text-center">
             Edu resolve
           </h1>
           <p className=" md:text-xl lg:text-3xl text-lg tracking-wide xl:text-3xl font-light text-center mt-4 ">
@@ -25,7 +25,7 @@ export default function HomePage() {
             >
               Login as Student
             </Button>
-            <p className="text-2xl font-light capitalize text-center mt-2">
+            <p className="text-lg font-light capitalize text-center mt-2">
               or
             </p>
             <Button
@@ -36,18 +36,18 @@ export default function HomePage() {
             </Button>
             <br></br>
             <div className=" mt-20">
-              <div className="font-md font-Montserrat text-xl">
+              <div className="font-md font-Montserrat text-lg">
                 For Organisation
               </div>
               <Button
-                style=" bg-white font-Montserrat text-xl leading-normal rounded-2xl text-[#917A68] my-2.5 mx-auto px-5 underline underline-offset-8 mt-5 mx-auto "
+                style=" bg-white font-Montserrat text-lg leading-normal rounded-2xl text-[#917A68] my-2.5 mx-auto px-5 underline underline-offset-8 mt-5 mx-auto "
                 goTo="/teacherLogin"
               >
                 Login as Teacher here
               </Button>
 
               <Button
-                style=" bg-white font-Montserrat text-xl leading-normal rounded-2xl text-[#917A68] my-2.5 mx-auto px-5 underline underline-offset-8 mt-5 mx-auto "
+                style=" bg-white font-Montserrat text-lg leading-normal rounded-2xl text-[#917A68] my-2.5 mx-auto px-5 underline underline-offset-8 mt-5 mx-auto "
                 goTo="/organisationLogin"
               >
                 Login as Organisation admin here
