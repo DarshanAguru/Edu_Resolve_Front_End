@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { useNavigate } from "react-router-dom";
 import Button from "../Components/Button";
-
+import homeImage from "../images/homepageimg.jpg";
 export default function HomePage() {
   const navigate = useNavigate();
   return (
     <>
       <div className="flex flex-col gap-5  xl:flex-row-reverse xl:justify-between xl:items-center">
-        <div className="bg-homeImage h-[60vh] w-5/5 rounded-b-full bg-cover bg-center xl:h-[100vh]  xl:w-3/6  xl:bg-cover xl:bg-left-top flex xl:rounded-l-full  "></div>
+        <div  style={{ backgroundImage: `url(${homeImage})` }} className=" h-[60vh] w-5/5 rounded-b-full bg-cover bg-center xl:h-[100vh]  xl:w-3/6  xl:bg-cover xl:bg-left-top flex xl:rounded-l-full  "></div>
         <div className="flex flex-col mx-auto ">
           <h1 className="font-MajorMono font-bold text-5xl xl:text-7xl text-center">
             Edu resolve
