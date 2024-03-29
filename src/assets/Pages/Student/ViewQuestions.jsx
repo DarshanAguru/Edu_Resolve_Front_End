@@ -3,6 +3,7 @@ import React from "react";
 const viewQuestions = ({ questions }) => {
   console.log(questions);
   const { AssignmentData, studentData } = questions;
+  console.log(AssignmentData, studentData);
   return (
     <>
       {Object.entries(questions).length > 0 && (
@@ -18,25 +19,15 @@ const viewQuestions = ({ questions }) => {
                   {assignment.text}
                 </p>
 
-                <div className="flex gap-2 mb-2">
+                <div className="flex flex-wrap gap-2 mt-1 mb-4">
                   {assignment.options.map((option, index) => {
                     return (
-                      <p className="">{`${String.fromCharCode(index + 97)}) ${option.value}`}</p>
+                      <p
+                        className={`flex-grow  ${option.isChecked ? "bg-emerald-200 text-emerald-950 font-semibold px-2 py-1 rounded-lg" : ""}`}
+                      >{`${String.fromCharCode(index + 97)}) ${option.value}`}</p>
                     );
                   })}
                 </div>
-                {/* <div className="flex gap-10">
-                  <div>
-                    <p className=" font-semibold">Correct Answers</p>
-                    <p>4</p>
-                    <p>four</p>
-                  </div>
-                  <div>
-                    <p className=" font-semibold">Your answers</p>
-                    <p>4</p>
-                    <p>four</p>
-                  </div>
-                </div> */}
               </div>
             );
           })}
