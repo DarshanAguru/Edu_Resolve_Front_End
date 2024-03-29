@@ -39,8 +39,10 @@ const AssessmentStatTable = ({ view, setView }) => {
   async function fetchData() {
     try {
       let subassigns = [];
-      const res = await axios.post(
-        "http://localhost:9000/students/getAllAssignmentsForClass",
+      let penassigns = [];
+      let misassigns = [];
+      const res = await api.post(
+        "/students/getAllAssignmentsForClass",
         { id: _id, token: token, grade: grade, school: school }
       );
       res.data.forEach((assign) => {
