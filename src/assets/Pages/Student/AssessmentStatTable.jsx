@@ -127,7 +127,20 @@ const AssessmentStatTable = ({ view, setView }) => {
 
             <span>Back to all assignments</span>
           </button>
-          <ViewQuestions questions = {questions}/>
+          <div className="font-semibold text-xs tracking-wider uppercase font-Montserrat flex gap-5 flex-wrap items-center">
+            <p>color schema:</p>
+            <div className="px-2 py-2 bg-red-200 text-red-950 rounded-lg">
+              Wrongly selected answers
+            </div>
+            <div className="px-2 py-2 bg-emerald-200 text-emerald-950 rounded-lg">
+              Correctly selected answers
+            </div>
+            <div className="px-2 py-2 bg-yellow-200 text-yellow-950 rounded-lg">
+              {" "}
+              Not selected correct answers
+            </div>
+          </div>
+          <ViewQuestions questions={questions} />
         </div>
       )}
     </>

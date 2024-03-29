@@ -8,12 +8,17 @@ const viewQuestions = ({ questions }) => {
     <>
       {Object.entries(questions).length > 0 && (
         <div className=" m-5 p-5 border">
-          {AssignmentData.map((assignment, index) => {
+          <div className=" border-b-2 mb-5 pb-2">
+            <p className="font-semibold text-sm tracking-wider uppercase font-Montserrat">
+              scored marks:{studentData.marks}
+            </p>
+          </div>
+          {AssignmentData.map((assignment, index1) => {
             return (
               <div>
                 <p className=" font-semibold">
                   <span className=" font-medium tracking-wide">
-                    {index + 1}
+                    {index1 + 1}
                     {")  "}
                   </span>
                   {assignment.text}
@@ -21,9 +26,25 @@ const viewQuestions = ({ questions }) => {
 
                 <div className="flex flex-wrap gap-2 mt-1 mb-4">
                   {assignment.options.map((option, index) => {
+                    console.log(option);
+                    const style =
+                      option.isChecked &&
+                      studentData.studentAnswers[index1].includes(option.value)
+                        ? "bg-emerald-200 text-emerald-950 font-semibold px-2 py-1 rounded-lg"
+                        : option.isChecked &&
+                            !studentData.studentAnswers[index1].includes(
+                              option.value
+                            )
+                          ? "bg-yellow-200 text-yellow-950 font-semibold px-2 py-1 rounded-lg"
+                          : !option.isChecked &&
+                              studentData.studentAnswers[index1].includes(
+                                option.value
+                              )
+                            ? "bg-red-200 text-red-950 font-semibold px-2 py-1 rounded-lg "
+                            : "";
                     return (
                       <p
-                        className={`flex-grow  ${option.isChecked ? "bg-emerald-200 text-emerald-950 font-semibold px-2 py-1 rounded-lg" : ""}`}
+                        className={`flex-grow ${style}`}
                       >{`${String.fromCharCode(index + 97)}) ${option.value}`}</p>
                     );
                   })}
