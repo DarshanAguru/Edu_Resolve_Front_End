@@ -7,12 +7,15 @@ export default function HomePage() {
   return (
     <>
       <div className="flex flex-col gap-5  xl:flex-row-reverse xl:justify-between xl:items-center">
-        <div  style={{ backgroundImage: `url(${homeImage})` }} className=" h-[60vh] w-5/5 rounded-b-full bg-cover bg-center xl:h-[100vh]  xl:w-3/6  xl:bg-cover xl:bg-left-top flex xl:rounded-l-full  "></div>
-        <div className="flex flex-col mx-auto ">
-          <h1 className="font-MajorMono font-bold text-5xl xl:text-7xl text-center">
+        <div
+          style={{ backgroundImage: `url(${homeImage})` }}
+          className=" h-[40vh] w-5/5 rounded-b-full bg-cover bg-center xl:h-[100vh]  xl:w-3/6  xl:bg-cover xl:bg-left-top flex xl:rounded-l-full  "
+        ></div>
+        <div className="flex flex-col mx-auto mx-5 ">
+          <h1 className="font-MajorMono font-bold text-2xl xl:text-7xl text-center">
             Edu resolve
           </h1>
-          <p className=" md:text-2xl lg:text-3xl text-xl xl:text-3xl font-light text-center mt-4 ">
+          <p className=" md:text-xl lg:text-3xl text-lg tracking-wide xl:text-3xl font-light text-center mt-4 ">
             collab with the students,teachers and mentors
           </p>
           <div className="mx-auto text-center">
