@@ -87,7 +87,6 @@ export default function PostCard({ user, userType, refresh }) {
       `/messages/upvote/${messageId}`,
       { token: token, id: _id, userId: _id }
     );
-    console.log(res.data);
     refresh();
   };
 
@@ -179,7 +178,6 @@ export default function PostCard({ user, userType, refresh }) {
         {replies.length > 0 &&
           replies.map((reply, index) => (
             <>
-              {console.log(reply)}
               <PostCardComments key={index} reply={reply} />
             </>
           ))}

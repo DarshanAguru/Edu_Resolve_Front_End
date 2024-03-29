@@ -28,7 +28,6 @@ const StudentHome = () => {
   }, []);
 
   useEffect(() => {
-    console.log(token, _id);
     async function getMessages() {
       try {
         const { data } = await api.post(
