@@ -8,6 +8,8 @@ const AssessmentStatTable = ({ view, setView }) => {
   const [assignmentId, setAssignmentId] = useState("");
   const [questions, setQuestions] = useState({});
   const [submittedAssigns, setSubmittedAssigns] = useState([]);
+  const [pendingAssignments, setPendingAssignments] = useState([]);
+  const [missedAssignments, setMissedAssignments] = useState([]);
   function viewAssignment(assignId) {
     setAssignmentId(assignId);
     setView((prev) => !prev);
@@ -25,9 +27,19 @@ const AssessmentStatTable = ({ view, setView }) => {
       getAssignmentQA(assignmentId);
     }
   }, [assignmentId]);
+
+  function isEnded(date)
+  {
+    const a = Date.parse(date)
+    const b = Date.now()
+    return b  > a ? true: false;
+  }
+
   async function fetchData() {
     try {
       let subassigns = [];
+      let penassigns = [];
+      let misassigns = [];
       const res = await axios.post(
         "http://localhost:9000/students/getAllAssignmentsForClass",
         { id: _id, token: token, grade: grade, school: school }
@@ -36,7 +48,18 @@ const AssessmentStatTable = ({ view, setView }) => {
         if (assignments.includes(assign.assignmentId)) {
           subassigns.push(assign);
         }
+        else{
+          if(isEnded(assign.deadline))
+          {
+            misassigns.push(assign);
+          }
+          else{
+            penassigns.push(assign);
+          }
+        }
       });
+      setMissedAssignments(misassigns)
+      setPendingAssignments(penassigns)
       setSubmittedAssigns(subassigns);
     } catch (err) {
       console.error(err);
@@ -95,7 +118,13 @@ const AssessmentStatTable = ({ view, setView }) => {
                         </td>
                         <td className="px-4 py-3 text-sm border">
                           <button
-                            onClick={() => viewAssignment(assign.assignmentId)}
+                            onClick={() => {
+                              if(isEnded(assign.deadline)) {
+                                return viewAssignment(assign.assignmentId)
+                              }
+                              else{
+                                  return alert("Got you there! Please Wait until the assignment deadline has passed... 😜")
+                              }}}
                             className=" text-blue-800 hover:text-blue-400 underline underline-offset-2"
                           >
                             View
@@ -103,6 +132,80 @@ const AssessmentStatTable = ({ view, setView }) => {
                         </td>
                       </tr>
                     ))}
+                    {
+                      pendingAssignments.map((assign)=>(
+                        <tr key={assign.assignmentId} className="text-gray-700">
+                        <td className="px-4 py-3 border">
+                          <div className="flex items-center text-sm">
+                            <div>
+                              <p className="font-semibold text-black">
+                                {assign.assignmentTitle}
+                              </p>
+                              <p className="text-xs text-gray-600">
+                                Posted at: {assign.publishDate}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-xs border">
+                          <span className="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-sm">
+                            {" "}
+                            Pending{" "}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-ms font-semibold border">
+                          {
+                            "TBD"
+                          }
+                        </td>
+                        <td className="px-4 py-3 text-sm border">
+                          <button
+                            onClick={() => (alert('Hey! Please Navigate to assignments section and select the appropriate assignment and submit it before the deadline hits. 😇'))}
+                            className=" text-blue-800 hover:text-blue-400 underline underline-offset-2"
+                          >
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                      ))
+                    }
+                    {
+                      missedAssignments.map((assign)=>(
+                        <tr key={assign.assignmentId} className="text-gray-700">
+                        <td className="px-4 py-3 border">
+                          <div className="flex items-center text-sm">
+                            <div>
+                              <p className="font-semibold text-black">
+                                {assign.assignmentTitle}
+                              </p>
+                              <p className="text-xs text-gray-600">
+                                Posted at: {assign.publishDate}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-xs border">
+                          <span className="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-sm">
+                            {" "}
+                            Missed{" "}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-ms font-semibold border">
+                          {
+                            "0"
+                          }
+                        </td>
+                        <td className="px-4 py-3 text-sm border">
+                          <button
+                            onClick={() => (alert('OMG! you missed it!! You have not submitted the assignment on time.. Please make sure to submit the assignment on time next time..🤗'))}
+                            className=" text-blue-800 hover:text-blue-400 underline underline-offset-2"
+                          >
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                      ))
+                    }
                   </tbody>
                 </table>
               </div>
@@ -128,7 +231,7 @@ const AssessmentStatTable = ({ view, setView }) => {
             <span>Back to all assignments</span>
           </button>
           <div className="font-semibold text-xs tracking-wider uppercase font-Montserrat flex gap-5 flex-wrap items-center">
-            <p>color schema:</p>
+            <p>Legend :</p>
             <div className="px-2 py-2 bg-red-200 text-red-950 rounded-lg">
               Wrongly selected answers
             </div>
