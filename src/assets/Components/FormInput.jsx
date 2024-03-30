@@ -14,7 +14,7 @@ const FormInput = ({
   title,
   is = "",
   placeholder = "",
-  value
+  value,
 }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -71,7 +71,7 @@ const FormInput = ({
           />
           {type === "password" && (
             <div
-              className="absolute inset-y-12 right-0 xl:inset-y-8 xl:right-0 flex  px-2"
+              className="absolute inset-y-8 right-0 xl:inset-y-8 xl:right-0 flex  px-2"
               onClick={togglePasswordVisibility}
             >
               {passwordVisible ? (

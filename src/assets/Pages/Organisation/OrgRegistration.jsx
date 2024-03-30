@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import  { useState } from "react";
+import { useState } from "react";
 import FormInput from "../../Components/FormInput";
-import api from '../../api';
+import api from "../../api";
 import { useNavigate } from "react-router-dom";
 const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },
@@ -60,7 +60,7 @@ const formFields = [
 ];
 
 const OrgRegistration = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     phoneNumber: "",
     name: "",
@@ -83,11 +83,8 @@ const OrgRegistration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post(
-        "/localadmins/register",
-        formData
-      );
-      navigate("/organisationLogin")
+      await api.post("/localadmins/register", formData);
+      navigate("/organisationLogin");
     } catch (error) {
       console.error("Error submitting form", error);
     }
@@ -111,7 +108,7 @@ const OrgRegistration = () => {
           />
         ))}
         <button
-          className="border-none text-white font-Montserrat text-3xl xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 mt-2 shadow-lg w-full py-4 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
+          className="border-none text-white font-Montserrat text-xl xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10  shadow-lg w-full py-2 mt-5 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
           type="submit"
         >
           Sign up
