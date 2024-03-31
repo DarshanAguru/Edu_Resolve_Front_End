@@ -8,7 +8,7 @@ import {
   AiFillDislike,
 } from "react-icons/ai";
 import { RiQuestionAnswerLine } from "react-icons/ri";
-import api from '../api'
+import api from "../api";
 import { IoMdSend } from "react-icons/io";
 import { TiUpload } from "react-icons/ti";
 
@@ -58,24 +58,21 @@ export default function PostCard({ user, userType, refresh }) {
     e.preventDefault();
 
     const { comment, imageURL } = commentData;
-    const res = await api.post(
-      `/messages/addreply/${messageId}`,
-      {
-        senderId: _id,
-        senderType:
-          userType === "student"
-            ? "students"
-            : userType === "teacher"
-              ? "teachers"
-              : "mentors",
-        senderName: name,
-        message: comment,
-        senderGender: messageSenderGender,
-        imageLink: imageURL,
-        token: token,
-        id: _id,
-      }
-    );
+    const res = await api.post(`/messages/addreply/${messageId}`, {
+      senderId: _id,
+      senderType:
+        userType === "student"
+          ? "students"
+          : userType === "teacher"
+            ? "teachers"
+            : "mentors",
+      senderName: name,
+      message: comment,
+      senderGender: messageSenderGender,
+      imageLink: imageURL,
+      token: token,
+      id: _id,
+    });
     setCommentData({ comment: "", imageURL: "" });
     refresh();
   };
@@ -83,10 +80,11 @@ export default function PostCard({ user, userType, refresh }) {
   //Handle Like
   const handleLike = async () => {
     // e.preventDefault();
-    const res = await api.post(
-      `/messages/upvote/${messageId}`,
-      { token: token, id: _id, userId: _id }
-    );
+    const res = await api.post(`/messages/upvote/${messageId}`, {
+      token: token,
+      id: _id,
+      userId: _id,
+    });
     refresh();
   };
 
@@ -158,18 +156,18 @@ export default function PostCard({ user, userType, refresh }) {
                 name="comment"
                 onChange={handleChange}
                 value={commentData.comment}
-                className="border border-[#917a686f] pl-4 pt-2 text-lg w-full resize-none box-border h-16"
+                className="border border-[#917a686f] pl-4 pt-2 text-lg w-full resize-none box-border h-12"
                 placeholder="Enter your answer here"
               />
-              <button type="button" onClick={handleImageUpload}>
+              {/* <button type="button" onClick={handleImageUpload}>
                 <TiUpload
                   className={`absolute top-0 bottom-0 right-3 my-auto text-xl text-[#917a68d2] ${showImage && "animate-bounce"}`}
                 />
-              </button>
+              </button> */}
             </div>
             <button
               type="submit"
-              className="text-[#917A68] border border-[#917a686f] rounded-r-full  px-5 h-16  hover:bg-[#917A68] hover:text-white"
+              className="text-[#917A68] border border-[#917a686f] rounded-r-full  px-5 h-12  hover:bg-[#917A68] hover:text-white"
             >
               <IoMdSend />
             </button>

@@ -1,17 +1,14 @@
 import React from "react";
-import { Audio } from "react-loader-spinner";
+import image from "../images/loading_gif.gif";
 const Loader = () => {
-  return <div>
-    <Audio
-  height="80"
-  width="80"
-  radius="9"
-  color="green"
-  ariaLabel="three-dots-loading"
-  wrapperStyle
-  wrapperClass
-/>
-  </div>;
+  return (
+    <div className="flex flex-col justify-center h-[100vh] mx-5 items-center">
+      <img src={image} className=" max-h-[40vh]" />
+      <p className=" font-MajorMono font-bold text-center">
+        please wait, the content is loading....
+      </p>
+    </div>
+  );
 };
 
 export default Loader;
