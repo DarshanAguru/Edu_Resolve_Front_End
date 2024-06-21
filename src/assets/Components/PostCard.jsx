@@ -192,14 +192,14 @@ export default function PostCard({ user, userType, refresh }) {
                 name="comment"
                 onChange={handleChange}
                 value={commentData.comment}
-                className="border border-[#917a686f] pl-4 pt-2 text-lg w-full resize-none box-border h-16"
+                className="border border-[#917a686f] pl-4 pt-2 text-lg w-full resize-none box-border h-12"
                 placeholder="Enter your answer here"
               />
             
             </div>
             <button
               type="submit"
-              className="text-[#917A68] border border-[#917a686f] rounded-r-full  px-5 h-16  hover:bg-[#917A68] hover:text-white"
+              className="text-[#917A68] border border-[#917a686f] rounded-r-full  px-5 h-12  hover:bg-[#917A68] hover:text-white"
             >
               <IoMdSend />
             </button>

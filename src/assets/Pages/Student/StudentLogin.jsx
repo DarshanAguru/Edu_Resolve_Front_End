@@ -10,12 +10,14 @@ const StudentLogin = () => {
     phoneNumber: "",
     password: "",
   });
+  const [loading,setLoading]=useState(false)
   const notify = (message) => toast.error(message);
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(prev=>!prev)
     try {
       const response = await api.post(
         "/students/login",
@@ -23,8 +25,10 @@ const StudentLogin = () => {
       );
       localStorage.setItem("student", JSON.stringify(response.data));
       navigate("/student");
+      setLoading(prev=>!prev)
     } catch (error) {
       notify("Invalid Username Or Password");
+      setLoading((prev) => !prev)
     }
   };
 
@@ -47,6 +51,8 @@ const StudentLogin = () => {
         data={formData}
         onChange={handleChange}
         onSubmit={handleSubmit}
+        loading={loading}
+        setLoading={setLoading}
       />
     </>
   );

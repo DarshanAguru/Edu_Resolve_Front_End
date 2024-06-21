@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../../Components/Button";
 import FormInput from "../../Components/FormInput";
 import { useNavigate } from "react-router-dom";
-import api from '../../api';
+import api from "../../api";
 const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },
   {
@@ -71,9 +71,7 @@ const StudentRegistration = () => {
   });
   React.useEffect(() => {
     async function fetchSchools() {
-      const res = await api.post(
-        "/students/getAllSchools"
-      );
+      const res = await api.post("/students/getAllSchools");
       setInstitutions(res.data);
     }
     fetchSchools();
@@ -112,13 +110,13 @@ const StudentRegistration = () => {
             <div key={index} className="mt-10 xl:mt-3">
               <label
                 htmlFor={field.id}
-                className="text-2xl xl:text-xl xl:flex xl:gap-4 xl:items-center font-Montserrat cursor-pointer"
+                className="text-md font-semibold xl:flex xl:gap-4 xl:items-center font-Montserrat cursor-pointer"
               >
                 {field.label}
               </label>
               <select
                 id={field.id}
-                className="form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-5 px-2 text-xl xl:text-lg"
+                className={`form-select border font-Montserrat border-[#D3C9C9] bg-white shadow-lg w-full mt-5 xl:py-2 py-1 px-2 text-sm xl:text-sm`}
                 onChange={handleChange}
                 value={formData[field.id]}
                 required={field.required}
@@ -137,7 +135,7 @@ const StudentRegistration = () => {
         )}
         <Button
           type="submit"
-          style="border-none text-white font-Montserrat text-3xl xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 mt-2 shadow-lg w-full py-4 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
+          style="border-none text-white font-Montserrat text-xl mt-5 xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 mt-2 shadow-lg w-full py-2 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
         >
           Sign up
         </Button>

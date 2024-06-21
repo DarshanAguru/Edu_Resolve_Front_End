@@ -1,7 +1,7 @@
-import  { useState } from "react";
+import { useState } from "react";
 import FormInput from "../../Components/FormInput";
 import FormCheckboxGroup from "../../Components/FormCheckBoxGroup";
-import api from '../../api';
+import api from "../../api";
 import { useNavigate } from "react-router-dom";
 
 const formFields = [
@@ -86,7 +86,7 @@ const MentorRegistration = () => {
     phoneNumber: "",
     password: "",
   });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [isSubjectExpertiseValid, setIsSubjectExpertiseValid] = useState(true);
   //* State to track if subject expertise validation passes
 
@@ -111,7 +111,7 @@ const MentorRegistration = () => {
       }));
     }
   };
-// *on submit the form
+  // *on submit the form
   const handleSubmit = async (e) => {
     e.preventDefault();
     //* Check if at least one checkbox is checked
@@ -126,7 +126,7 @@ const MentorRegistration = () => {
         formData
       );
       console.log("Form Data submitted successfully", res.data);
-      navigate("/mentorLogin")
+      navigate("/mentorLogin");
     } catch (error) {
       console.log("Error submitting registration form", error);
     }
@@ -155,7 +155,7 @@ const MentorRegistration = () => {
         )}
 
         <button
-          className="border-none text-white font-Montserrat text-3xl xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 mt-2 shadow-lg w-full py-4 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
+          className="border-none text-white font-Montserrat text-xl xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10  shadow-lg w-full py-2 mt-5 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
           type="submit"
         >
           Sign up
