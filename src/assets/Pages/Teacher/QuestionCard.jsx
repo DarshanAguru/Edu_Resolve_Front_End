@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import api from '../../api';
+import api from "../../api";
 const QuestionCard = ({
   stuclass,
   subject,
@@ -117,7 +117,7 @@ const QuestionCard = ({
       return;
     }
     try {
-      const res = await api.post(
+      const res = await api.put(
         `/teachers/postassignment/${id}@${uuidv4()}`,
         {
           deadline: `${submissionDate.split("-")[1]}/${submissionDate.split("-")[2]}/${submissionDate.split("-")[0]}`,
@@ -171,7 +171,7 @@ const QuestionCard = ({
       </button>
       <form
         onSubmit={postAssessment}
-        className="flex justify-between items-center"
+        className="flex justify-center gap-5 md:gap-2 md:justify-between items-center flex-wrap "
       >
         <p className="font-bold font-Montserrat text-[#917A68] tracking-wide">
           Total Questions Added: {questions.length}
@@ -200,19 +200,19 @@ const QuestionCard = ({
         onSubmit={submitQuestion}
         className=" shadow-md  border rounded-lg mt-3 p-5"
       >
-        <div className="flex gap-10">
+        <div className="flex sm:gap-5 gap-2 flex-wrap sm:flex-nowrap">
           <input
             type="text"
             placeholder="Enter Question here"
             value={questionText}
             onChange={(e) => setQuestionText(e.target.value)}
-            className="col-span-2 mb-4 border w-1/2 p-1"
+            className="col-span-2 mb-4 border w-1/2 p-1 flex-grow"
             required
           />
           <select
             value={questionType}
             onChange={(e) => setQuestionType(e.target.value)}
-            className="col-span-2 mb-4 border w-1/4 p-1"
+            className="col-span-2 mb-4 border w-1/4 p-1 flex-grow"
             required
           >
             <option value="single">Single Choice</option>
@@ -223,12 +223,15 @@ const QuestionCard = ({
             placeholder="Enter marks for question"
             value={marks}
             onChange={(e) => setMarks(e.target.value)}
-            className="col-span-2 mb-4 border w-1/4 p-1"
+            className="col-span-2 mb-4 border w-1/4 p-1 flex-grow"
             required
           />
         </div>
         {options.map((option) => (
-          <div key={option.id} className="flex items-center col-span-2">
+          <div
+            key={option.id}
+            className="flex flex-wrap items-center col-span-2"
+          >
             <input
               type={questionType === "single" ? "radio" : "checkbox"}
               name="questionOption"
@@ -261,7 +264,7 @@ const QuestionCard = ({
         >
           + Add Option
         </button>
-        <button className="bg-slate-700 rounded-xl p-2 text-white">
+        <button className="bg-slate-700 rounded-xl p-2 mt-5 text-white">
           Submit Question
         </button>
       </form>

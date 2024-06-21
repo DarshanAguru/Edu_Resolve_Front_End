@@ -113,7 +113,7 @@ const AssessmentCard = ({ id, token, userId, name, goBack, deadline }) => {
 
     toast.success("Answers submitted successfully!");
     async function submitAnswers() {
-      const res = await api.post(
+      const res = await api.put(
         `/students/submitAssignment/${id}`,
         {
           token,

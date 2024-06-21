@@ -27,10 +27,11 @@ import StudentProfile from "./assets/Pages/Student/StudentProfile";
 import TeacherAssessments from "./assets/Pages/Teacher/TeacherAssessments";
 import TeacherProfile from "./assets/Pages/Teacher/TeacherProfile"
 import MentorProfile from "./assets/Pages/Mentor/MentorProfile"
-
+import Loader from "./assets/Components/Loader";
 const App = () => {
   return (
     <Routes>
+      <Route path="/loader" element={<Loader />}/>
       <Route path="/" element={<HomePage />} />
       <Route element={<LoginSignupLayout />}>
         <Route path="studentLogin" element={<StudentLogin />} />

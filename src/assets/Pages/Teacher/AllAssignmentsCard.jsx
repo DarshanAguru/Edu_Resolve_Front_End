@@ -34,7 +34,7 @@ const AllAssignmentsCard = ({ id, token }) => {
 
   async function deleteAssignment(assignmentId) {
     try {
-      const res = await api.post(
+      const res = await api.delete(
         `/teachers/deleteAssignment/${assignmentId}`,
         { token, id }
       );

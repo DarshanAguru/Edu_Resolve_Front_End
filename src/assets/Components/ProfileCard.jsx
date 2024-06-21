@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import useSenderImage from "../hooks/useSenderImage";
-import api from 'api'
+import api from '../api'
 
 const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },
@@ -85,7 +85,7 @@ const ProfileCard = ({ userType, setRefresh }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post(
+      const response = await api.patch(
         `/students/editDetails/${_id}`,
         { ...formData, token: token, id: _id }
       );

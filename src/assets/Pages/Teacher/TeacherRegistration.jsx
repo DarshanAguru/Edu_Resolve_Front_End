@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../Components/FormInput";
 import FormCheckboxGroup from "../../Components/FormCheckBoxGroup";
-import api from '../../api';
+import api from "../../api";
 const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },
   {
@@ -73,9 +73,7 @@ const TeacherRegistration = () => {
   const [institutions, setInstitutions] = useState([]);
   React.useEffect(() => {
     async function fetchSchools() {
-      const res = await api.post(
-        "/teachers/getAllSchools"
-      );
+      const res = await api.post("/teachers/getAllSchools");
       setInstitutions(res.data);
     }
     fetchSchools();
@@ -125,7 +123,7 @@ const TeacherRegistration = () => {
     }
 
     try {
-      const res = await api.post(
+      const res = await api.put(
         "/teachers/register",
         formData
       );
@@ -161,9 +159,7 @@ const TeacherRegistration = () => {
                 value={formData[field.id]}
                 required={field.required}
               >
-                <option value="">
-                   Please select...
-                </option>
+                <option value="">Please select...</option>
                 {institutions.map((ele, index) => (
                   <option key={index} value={ele.institution}>
                     {ele.institution}
@@ -184,7 +180,7 @@ const TeacherRegistration = () => {
         )}
 
         <button
-          className="border-none text-white font-Montserrat text-3xl xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10 mt-2 shadow-lg w-full py-4 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
+          className="border-none text-white font-Montserrat text-xl xl:text-2xl leading-normal rounded bg-[#917A68] my-2.5 mx-auto px-10  shadow-lg w-full py-2 mt-5 hover:bg-[#282323] hover:font-bold cursor-pointer col-span-2"
           type="submit"
         >
           Sign up
