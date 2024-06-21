@@ -28,7 +28,6 @@ const StudentHome = () => {
   }, []);
 
   useEffect(() => {
-    console.log(token, _id);
     async function getMessages() {
       try {
         const { data } = await api.post(
@@ -113,12 +112,12 @@ const StudentHome = () => {
             required
           ></textarea>
           <div>
-            <div
+            {/* <div
               className={`absolute top-5 right-3 cursor-pointer ${showImageUpload ? " text-cyan-700 animate-bounce" : " text-cyan-500"}`}
               onClick={handleUploadImageClick}
             >
               <TiUpload className=" text-xl text-[#917a68d2]" />
-            </div>
+            </div> */}
             {showImageUpload && (
               <div>
                 <input

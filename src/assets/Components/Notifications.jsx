@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import api from '../api'
+import api from "../api";
 import { IoCloseCircle } from "react-icons/io5";
 
 // import { IoCloseCircleOutline } from "react-icons/io5";
@@ -21,18 +21,23 @@ const Notifications = ({ data, userType = null, eventHandler, eventCnt }) => {
     if (userType) getNotifications();
   }, [refreshNotifications]);
 
-  const deleteNotification = async (notificationId) => {
-    if (eventHandler !== null && eventCnt !== null) {
-      eventHandler(eventCnt - 1);
+  const deleteNotification = async (event, notificationId) => {
+    event.stopPropagation();
+    if (eventHandler !== null && typeof eventCnt === "number") {
+      eventHandler(Math.max(0, eventCnt - 1));
     }
-    // console.log(notificationId);
-    const data = await api.post(
-      `/${userType}/clearNotification/${_id}`,
-      { token: token, id: _id, notifId: notificationId }
-    );
-    // console.log(data);
-    setRefreshNotifications((prev) => !prev);
-    // window.location.reload();
+    try {
+      const response = await api.post(`/${userType}/clearNotification/${_id}`, {
+        token: token,
+        id: _id,
+        notifId: notificationId,
+      });
+      console.log(response.data);
+      // Refresh notifications to reflect the deletion without reloading the page
+      setRefreshNotifications((prev) => !prev);
+    } catch (error) {
+      console.error("Failed to delete notification:", error);
+    }
   };
   // console.log(notifications);
   return (
@@ -74,7 +79,9 @@ const Notifications = ({ data, userType = null, eventHandler, eventCnt }) => {
                       `${notification.userName} posted the Assignment`}
                   </p>
                   <button
-                    onClick={() => deleteNotification(notification.userId)}
+                    onClick={(event) =>
+                      deleteNotification(event, notification.userId)
+                    }
                     className="text-red-600 cursor-pointer"
                   >
                     <IoCloseCircle className="text-2xl" />

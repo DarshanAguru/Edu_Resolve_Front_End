@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import useSenderImage from "../hooks/useSenderImage";
-import api from 'api'
+import api from '../api'
 
 const formFields = [
   { label: "Name", id: "name", placeholder: "Enter name", required: true },

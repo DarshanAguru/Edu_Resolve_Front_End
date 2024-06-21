@@ -1,20 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Notifications from "../../Components/Notifications";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { FaRegBell} from "react-icons/fa6";
+import { FaRegBell } from "react-icons/fa6";
 import { FaRegUserCircle, FaUserCircle } from "react-icons/fa";
 import { BiNotepad } from "react-icons/bi";
 import { BiSolidNotepad } from "react-icons/bi";
 import { RiHome3Line, RiHome3Fill, RiLoginBoxLine } from "react-icons/ri";
-import api from '../../api';
+import api from "../../api";
 const TeacherNavbar = () => {
-  
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem("teacher"));
   const [notifCount, setNotifCount] = useState(0);
+  const mobileMenuRef = useRef();
+  const popoverRef = useRef();
+
+  // Function to close the mobile menu if the click happened outside
+  const handleClickOutsideMobileMenu = (event) => {
+    if (
+      mobileMenuRef.current &&
+      !mobileMenuRef.current.contains(event.target)
+    ) {
+      setIsMenuOpen(false);
+    }
+    if (popoverRef.current && !popoverRef.current.contains(event.target)) {
+      setIsPopoverOpen(false); // Close notifications if click is outside
+    }
+  };
+  useEffect(() => {
+    // Add click event listener for the mobile menu
+    document.addEventListener("mousedown", handleClickOutsideMobileMenu);
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", handleClickOutsideMobileMenu);
+    };
+  }, []);
   async function getAllNotifications() {
-    
     try {
       const notifs = await api.post(
         `/teachers/getAllNotifications/${data._id}`,
@@ -45,13 +66,12 @@ const TeacherNavbar = () => {
     borderRadius: "50%",
     padding: "6px",
   };
-//   const notifications = () => {};
+  //   const notifications = () => {};
   async function logout() {
     try {
-      const status = await api.post(
-        `/teachers/logout/${data._id}`,
-        { token: data.token }
-      );
+      const status = await api.post(`/teachers/logout/${data._id}`, {
+        token: data.token,
+      });
       if (status.data.message === "Logged out Successfully!") {
         localStorage.clear();
         console.log("logged out successfully");
@@ -72,12 +92,25 @@ const TeacherNavbar = () => {
       {/* Toggle button */}
       <div className="md:hidden flex items-center ">
         <button
-          className="py-5 px-3 text-black font-Montserrat hover:underline"
+          className="py-5 px-3 text-black  hover:underline relative"
           onClick={togglePopover}
+          ref={popoverRef}
         >
           <FaRegBell className="text-xl" />
+          {notifCount !== 0 && (
+            <span className="  absolute -top-0.5 -right- bg-yellow-900 text-white text-xs rounded-full px-2 py-1">
+              {notifCount}
+            </span>
+          )}
         </button>
-        {isPopoverOpen && <Notifications data={data} />}
+        {isPopoverOpen && (
+          <Notifications
+            userType="teachers"
+            data={data}
+            eventHandler={setNotifCount}
+            eventCnt={notifCount}
+          />
+        )}
         <button onClick={toggleMenu}>
           {isMenuOpen ? (
             <FaTimes className="h-6 w-6 text-black" />
@@ -88,15 +121,17 @@ const TeacherNavbar = () => {
       </div>
       {/* Mobile Menu*/}
       <div
+        ref={mobileMenuRef}
         className={`${isMenuOpen ? "block" : "hidden"} z-50 absolute top-[3.5rem] w-full left-0 right-0  bg-[#615353]  md:hidden rounded-sm py-4 `}
       >
         <NavLink
           to="."
           end
+          onClick={() => setIsMenuOpen((prev) => !prev)}
           className={({ isActive }) =>
-            isActive
-              ? "block py-2 px-4 text-lg underline font-Montserrat text-white hover:text-lg"
-              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-lg"
+          isActive
+          ? "block py-2 px-4 text-base  font-Montserrat font-bold text-white "
+          : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-base"
           }
         >
           Home
@@ -104,20 +139,22 @@ const TeacherNavbar = () => {
 
         <NavLink
           to="profile"
+          onClick={() => setIsMenuOpen((prev) => !prev)}
           className={({ isActive }) =>
-            isActive
-              ? "block py-2 px-4 text-lg underline font-Montserrat text-white hover:text-lg"
-              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-lg"
+          isActive
+          ? "block py-2 px-4 text-base  font-Montserrat font-bold text-white "
+          : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-base"
           }
         >
           Profile
         </NavLink>
         <NavLink
           to="assessments"
+          onClick={() => setIsMenuOpen((prev) => !prev)}
           className={({ isActive }) =>
-            isActive
-              ? "block py-2 px-4 text-lg underline font-Montserrat text-white hover:text-lg"
-              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-lg"
+          isActive
+          ? "block py-2 px-4 text-base  font-Montserrat font-bold text-white "
+          : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-base"
           }
         >
           Assessments
@@ -174,15 +211,23 @@ const TeacherNavbar = () => {
         <button
           className="py-5 px-3 text-black  hover:underline relative"
           onClick={togglePopover}
+          ref={popoverRef}
         >
           <FaRegBell className="text-xl" />
-          {(notifCount !== 0) && 
+          {notifCount !== 0 && (
             <span className="  absolute -top-0.5 -right- bg-yellow-900 text-white text-xs rounded-full px-2 py-1">
               {notifCount}
             </span>
-          }
+          )}
         </button>
-        {isPopoverOpen && <Notifications userType='teachers' data={data} eventCnt={null} eventHandler={null} />}
+        {isPopoverOpen && (
+          <Notifications
+            userType="teachers"
+            data={data}
+            eventHandler={setNotifCount}
+            eventCnt={notifCount}
+          />
+        )}
         <button
           onClick={logout}
           className=" font-Montserrat py-2 px-3 hover:text-white hover:bg-red-500 rounded text-red-500 hover:text-lg transition duration-300 text-xl"

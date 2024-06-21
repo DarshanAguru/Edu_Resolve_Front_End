@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Notifications from "../../Components/Notifications";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -12,6 +12,30 @@ const StudentNavbar = () => {
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem("student"));
   const [notifCount, setNotifCount] = useState(0);
+  const mobileMenuRef = useRef();
+  const popoverRef = useRef();
+
+  // Function to close the mobile menu if the click happened outside
+  const handleClickOutsideMobileMenu = (event) => {
+    if (
+      mobileMenuRef.current &&
+      !mobileMenuRef.current.contains(event.target)
+    ) {
+      setIsMenuOpen(false);
+    }
+    if (popoverRef.current && !popoverRef.current.contains(event.target)) {
+      setIsPopoverOpen(false); // Close notifications if click is outside
+    }
+  };
+
+  useEffect(() => {
+    // Add click event listener for the mobile menu
+    document.addEventListener("mousedown", handleClickOutsideMobileMenu);
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", handleClickOutsideMobileMenu);
+    };
+  }, []);
   async function getAllNotifications() {
     try {
       const notifs = await api.post(
@@ -20,7 +44,7 @@ const StudentNavbar = () => {
       );
       setNotifCount(notifs.data.length);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   }
   useEffect(() => {
@@ -46,10 +70,9 @@ const StudentNavbar = () => {
   // const notifications = () => {};
   async function logout() {
     try {
-      const status = await api.post(
-        `/students/logout/${data._id}`,
-        { token: data.token }
-      );
+      const status = await api.post(`/students/logout/${data._id}`, {
+        token: data.token,
+      });
       if (status.data.message === "Logged out Successfully!") {
         localStorage.clear();
         navigate("/studentLogin");
@@ -71,9 +94,11 @@ const StudentNavbar = () => {
         <button
           className="py-5 px-3 text-black font-Montserrat hover:underline"
           onClick={togglePopover}
+          ref={popoverRef}
         >
           <FaRegBell className="text-xl" />
         </button>
+        <div ref={popoverRef}>
         {isPopoverOpen && (
           <Notifications
             userType="students"
@@ -81,7 +106,8 @@ const StudentNavbar = () => {
             eventHandler={null}
             eventCnt={null}
           />
-        )}
+          )}
+          </div>
         <button onClick={toggleMenu}>
           {isMenuOpen ? (
             <FaTimes className="h-6 w-6 text-black" />
@@ -92,15 +118,17 @@ const StudentNavbar = () => {
       </div>
       {/* Mobile Menu*/}
       <div
-        className={`${isMenuOpen ? "block" : "hidden"} z-50 absolute top-[3.5rem] w-full left-0 right-0  bg-[#615353]  md:hidden rounded-sm py-4 `}
+        ref={mobileMenuRef}
+        className={`${isMenuOpen ? "block" : "hidden"} z-50 absolute top-[3.5rem] w-full left-0 right-0 bg-[#615252] md:hidden rounded-sm py-4 `}
       >
         <NavLink
           to="."
           end
+          onClick={() => setIsMenuOpen((prev) => !prev)}
           className={({ isActive }) =>
             isActive
-              ? "block py-2 px-4 text-lg underline font-Montserrat text-white hover:text-lg"
-              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-lg"
+              ? "block py-2 px-4 text-base  font-Montserrat font-bold text-white "
+              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-base"
           }
         >
           Home
@@ -108,27 +136,29 @@ const StudentNavbar = () => {
 
         <NavLink
           to="profile"
+          onClick={() => setIsMenuOpen((prev) => !prev)}
           className={({ isActive }) =>
             isActive
-              ? "block py-2 px-4 text-lg underline font-Montserrat text-white hover:text-lg"
-              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-lg"
+              ? "block py-2 px-4 text-base  font-Montserrat font-bold text-white "
+              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-base"
           }
         >
           Profile
         </NavLink>
         <NavLink
           to="assessments"
+          onClick={() => setIsMenuOpen((prev) => !prev)}
           className={({ isActive }) =>
             isActive
-              ? "block py-2 px-4 text-lg underline font-Montserrat text-white hover:text-lg"
-              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-lg"
+              ? "block py-2 px-4 text-base  font-Montserrat font-bold text-white "
+              : "block py-2 px-4 text-sm font-Montserrat text-white hover:text-base"
           }
         >
           Assessments
         </NavLink>
         <button
           onClick={logout}
-          className="w-full text-left py-2 px-4 text-sm font-Montserrat text-white hover:text-lg "
+          className="w-full text-left py-2 px-4 text-sm font-Montserrat text-white hover:text-base"
         >
           Logout
         </button>
@@ -178,6 +208,7 @@ const StudentNavbar = () => {
         <button
           className="py-5 px-3 text-black  hover:underline relative"
           onClick={togglePopover}
+          ref={popoverRef}
         >
           <FaRegBell className="text-xl" />
           {notifCount !== 0 && (
@@ -187,12 +218,14 @@ const StudentNavbar = () => {
           )}
         </button>
         {isPopoverOpen && (
+          <div ref={popoverRef}>
           <Notifications
             userType="students"
             data={data}
             eventHandler={setNotifCount}
             eventCnt={notifCount}
           />
+          </div>
         )}
         <button
           onClick={logout}
