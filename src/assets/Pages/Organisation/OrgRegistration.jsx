@@ -83,7 +83,7 @@ const OrgRegistration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post(
+      await api.put(
         "/localadmins/register",
         formData
       );

@@ -121,7 +121,7 @@ const MentorRegistration = () => {
     }
     console.log(formData);
     try {
-      const res = await api.post(
+      const res = await api.put(
         "/mentors/register",
         formData
       );

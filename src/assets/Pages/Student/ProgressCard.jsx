@@ -28,7 +28,7 @@ const ProgressCard = ({ view }) => {
           let s = 0;
           let p = 0;
           let ns = 0;
-          const res = await api.post('/students//getAllAssignmentsForClass',{id: _id, token:token, grade: grade, school: school});
+          const res = await api.post('/students/getAllAssignmentsForClass',{id: _id, token:token, grade: grade, school: school});
           res.data.forEach((assign)=>{
             if(assignments.includes(assign.assignmentId))
             {

@@ -84,7 +84,7 @@ const TeacherProfileCard = ({ data, userType, setRefresh }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post(
+      const response = await api.patch(
         `/teachers/editDetails/${_id}`,
         { ...formData, token: token, id: _id }
       );

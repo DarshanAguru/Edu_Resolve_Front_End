@@ -5,8 +5,11 @@ import PostCard from "../../Components/PostCard";
 import { TiUpload } from "react-icons/ti";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+import { v4 as uuidv4 } from "uuid"
 import api from "../../api";
+import { ColorRing } from 'react-loader-spinner'
+
+
 
 const StudentHome = () => {
   const backgroundImages = [
@@ -18,6 +21,7 @@ const StudentHome = () => {
   const [randomData, setRandomData] = useState("");
   const [randomQuote, setRandomQuote] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [uploader, setUpload] = useState(false);
   const { _id, name, token, gender, school } = JSON.parse(
     localStorage.getItem("student")
   );
@@ -27,8 +31,9 @@ const StudentHome = () => {
     setRandomQuote(quotes[Math.floor(Math.random() * quotes.length)]);
   }, []);
 
+  const [file , setFile] = useState(null);
+
   useEffect(() => {
-    console.log(token, _id);
     async function getMessages() {
       try {
         const { data } = await api.post(
@@ -47,6 +52,10 @@ const StudentHome = () => {
     setShowImageUpload((prev) => !prev);
   };
 
+  const handleFileChange = (event) =>{
+      setFile(event.target.files[0]);
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -55,9 +64,32 @@ const StudentHome = () => {
     }));
   };
 
+  
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    toast.info("Post submitted!", { position: "top-center" });
+    let imageLink = undefined;
+    if(file != null && showImageUpload == true)
+      {
+          try{
+            const formDataa = new FormData();
+          formDataa.append("filee", file)
+          formDataa.append("id", _id)
+          formDataa.append("token", token)
+          setUpload(true)
+          imageLink = await api.put('/messages/uploadImg', formDataa, {headers: {
+          'Content-Type': 'multipart/form-data'
+          }});
+          if(imageLink)
+            {
+              setUpload(false)
+            }
+        }catch(err)
+        {
+          console.log(err)
+          setUpload(false)
+          toast.error("Something went wrong please try again later", {position : "top-center"})
+        }
+      }
 
     const data = {
       token: token,
@@ -66,20 +98,39 @@ const StudentHome = () => {
       messageData: formData.postText,
       gender: gender,
       name: name,
-      imageLink: formData.imageUrl,
+      imageLink: (imageLink!==undefined)?imageLink.data.key : undefined,
       tags: "",
     };
-
-    await api.post(
+    try{
+    await api.put(
       `/messages/addMessage/${_id}@${uuidv4()}`,
       data
     );
+    toast.success("Post submitted!", { position: "top-center" });
+    }
+    catch(err){
+        console.log(err);
+        toast.error("Something went wrong please try again later", { position : "top-center"})
+    }
     setFormData({ postText: "", imageUrl: "" });
+    setFile(null);
+    setShowImageUpload(false);
     setRefresh((prev) => !prev);
   };
 
   return (
     <div className="flex flex-col md:flex-row gap-5 m-5 ">
+      {(uploader) && (<div className="fixed bg-white/60 z-50 w-full h-full"><ColorRing
+  visible={true}
+  height="100"
+  width="100"
+  ariaLabel="color-ring-loading"
+  wrapperStyle={{position: "fixed", top: "45%", left: "45%"}}
+  wrapperClass="color-ring-wrapper"
+  colors={['#000000']}
+  />
+  <p style={{position: "fixed", top: "56%", left:"46%"}}>Uploading...</p>
+  </div>)}
       <ToastContainer />
       {/* Maths and Science Facts */}
       <div
@@ -121,14 +172,15 @@ const StudentHome = () => {
             </div>
             {showImageUpload && (
               <div>
-                <input
-                  type="text"
-                  name="imageUrl"
-                  placeholder="Enter image URL here (optional)"
-                  value={formData.imageUrl}
-                  onChange={handleInputChange}
-                  className="border border-gray-300 shadow-lg py-2 px-2 text-lg w-full"
-                />
+                 <input 
+                  className="border border-gray-300 shadow-lg py-2 px-2 text-lg w-full" 
+                  type="file" 
+                  id="file"
+                  name="file" 
+                  accept="image/jpeg"
+                  onChange={handleFileChange}
+                  placeholder="Upload Image"
+            />
               </div>
             )}
           </div>
@@ -138,7 +190,7 @@ const StudentHome = () => {
           >
             upload
           </button>
-        </form>
+        </form> 
         <div
           style={{
             maxHeight: `${!showImageUpload ? "calc(100vh - 16rem)" : "calc(100vh - 19rem)"}`,

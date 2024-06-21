@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -117,7 +117,7 @@ const QuestionCard = ({
       return;
     }
     try {
-      const res = await api.post(
+      const res = await api.put(
         `/teachers/postassignment/${id}@${uuidv4()}`,
         {
           deadline: `${submissionDate.split("-")[1]}/${submissionDate.split("-")[2]}/${submissionDate.split("-")[0]}`,

@@ -72,6 +72,8 @@ const Notifications = ({ data, userType = null, eventHandler, eventCnt }) => {
 
                     {notification.notificationType === "Assignment" &&
                       `${notification.userName} posted the Assignment`}
+
+                      {notification.notificationType === "Report" && `${notification.userName}: A message of yours was removed due to a violation of our guidelines or multiple user reports. `}
                   </p>
                   <button
                     onClick={() => deleteNotification(notification.userId)}

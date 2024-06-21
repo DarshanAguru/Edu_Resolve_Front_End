@@ -1,16 +1,17 @@
 import axios  from 'axios';
-import dotenv from 'dotenv'
-import process from 'process'
+// import  axiosRetry  from 'axios-retry';
 
-dotenv.config()
+
 
 const api = axios.create({
-    baseURL: process.env.BASEURL,
+    // baseURL: 'https://appbackendserver.onrender.com',
+    baseURL: "http://localhost:9000",
     withCredentials: true,
     headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
     }
 });
+// axiosRetry(api , { retries: 1, retryDelay: axiosRetry.exponentialDelay})
 
 export default api;

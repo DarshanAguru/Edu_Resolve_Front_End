@@ -21,7 +21,6 @@ const TeacherLogin = () => {
         "/teachers/login",
         formData
       );
-      console.log("From server", response.data);
       localStorage.setItem("teacher", JSON.stringify(response.data));
       navigate("/teacher");
     } catch (error) {

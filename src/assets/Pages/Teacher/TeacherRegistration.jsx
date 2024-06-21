@@ -125,7 +125,7 @@ const TeacherRegistration = () => {
     }
 
     try {
-      const res = await api.post(
+      const res = await api.put(
         "/teachers/register",
         formData
       );

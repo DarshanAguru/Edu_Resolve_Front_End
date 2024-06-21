@@ -88,7 +88,7 @@ const StudentRegistration = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await api.post(
+      await api.put(
         "/students/register",
         formData
       );
